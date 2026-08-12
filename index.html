@@ -402,24 +402,24 @@
 
   <div class="tiles">
     <div class="tile">
-      <div class="tile-label">Commanders</div>
-      <div class="tile-value">63</div>
-      <div class="tile-sub">53 with THP recorded</div>
+      <div class="tile-label" id="tileLabel0">Commanders</div>
+      <div class="tile-value" id="tileValue0">—</div>
+      <div class="tile-sub" id="tileSub0"></div>
     </div>
     <div class="tile">
-      <div class="tile-label">Leader (THP)</div>
-      <div class="tile-value">18.29M</div>
-      <div class="tile-sub">NISSI ᵀᴹ</div>
+      <div class="tile-label" id="tileLabel1">Leader</div>
+      <div class="tile-value" id="tileValue1">—</div>
+      <div class="tile-sub" id="tileSub1"></div>
     </div>
     <div class="tile">
-      <div class="tile-label">Combined THP</div>
-      <div class="tile-value">503.9M</div>
-      <div class="tile-sub">sum of the 53 recorded</div>
+      <div class="tile-label" id="tileLabel2">Combined</div>
+      <div class="tile-value" id="tileValue2">—</div>
+      <div class="tile-sub" id="tileSub2"></div>
     </div>
     <div class="tile">
-      <div class="tile-label">Median THP</div>
-      <div class="tile-value">8.76M</div>
-      <div class="tile-sub">alliance midpoint</div>
+      <div class="tile-label" id="tileLabel3">Median</div>
+      <div class="tile-value" id="tileValue3">—</div>
+      <div class="tile-sub" id="tileSub3"></div>
     </div>
   </div>
 
@@ -851,6 +851,83 @@
     fspRowsEl.appendChild(tr);
   });
 
+  // ── Top stat tiles: recomputed per tab from the same arrays that feed the tables below,
+  // so they never need a manual daily edit and can never drift out of sync with the tables.
+  function fmtAbbrev(n) {
+    const v = Number(n) || 0;
+    const sign = v < 0 ? "-" : "";
+    const a = Math.abs(v);
+    if (a >= 1e9) return sign + (a / 1e9).toFixed(2) + "B";
+    if (a >= 1e6) return sign + (a / 1e6).toFixed(2) + "M";
+    if (a >= 1e3) return sign + (a / 1e3).toFixed(2) + "K";
+    return sign + a.toLocaleString("en-US");
+  }
+  function medianOf(nums) {
+    if (!nums.length) return 0;
+    const s = [...nums].sort((a, b) => a - b);
+    const mid = Math.floor(s.length / 2);
+    return s.length % 2 === 0 ? (s[mid - 1] + s[mid]) / 2 : s[mid];
+  }
+  function sumOf(nums) {
+    return nums.reduce((a, b) => a + b, 0);
+  }
+
+  const totalRoster = withThp.length + noThp.length;
+
+  const TILE_CONFIGS = {
+    thp: () => {
+      const vals = withThp.map(r => r[3]);
+      const leader = withThp[0];
+      return [
+        { label: "Commanders", value: String(totalRoster), sub: `${withThp.length} with THP recorded` },
+        { label: "Leader (THP)", value: fmtAbbrev(leader[3]), sub: leader[0] },
+        { label: "Combined THP", value: fmtAbbrev(sumOf(vals)), sub: `sum of the ${withThp.length} recorded` },
+        { label: "Median THP", value: fmtAbbrev(medianOf(vals)), sub: "alliance midpoint" },
+      ];
+    },
+    kills: () => {
+      const vals = killsRanked.map(r => r[2]);
+      const leader = killsRanked[0];
+      return [
+        { label: "Commanders", value: String(totalRoster), sub: `${killsRanked.length} with Kills confirmed` },
+        { label: "Leader (Kills)", value: fmtAbbrev(leader[2]), sub: leader[0] },
+        { label: "Combined Kills", value: fmtAbbrev(sumOf(vals)), sub: `sum of the ${killsRanked.length} recorded` },
+        { label: "Median Kills", value: fmtAbbrev(medianOf(vals)), sub: "alliance midpoint" },
+      ];
+    },
+    fsp: () => {
+      const vals = withThp.map(r => estimateFsp(r[3]));
+      const leaderName = withThp[0][0];
+      return [
+        { label: "Commanders", value: String(totalRoster), sub: `${withThp.length} with FSP estimated` },
+        { label: "Leader (Est. FSP)", value: fmtAbbrev(vals[0]), sub: leaderName },
+        { label: "Combined FSP", value: fmtAbbrev(sumOf(vals)), sub: `sum of the ${withThp.length} estimated` },
+        { label: "Median FSP", value: fmtAbbrev(medianOf(vals)), sub: "alliance midpoint" },
+      ];
+    },
+    alliances: () => {
+      const vals = allianceRanked.map(r => r[3]);
+      const leader = allianceRanked[0];
+      const leaderSub = leader[0] === OWN_ALLIANCE_TAG ? `${leader[1]} (Us)` : leader[1];
+      return [
+        { label: "Alliances", value: String(allianceRanked.length), sub: "on server #2300" },
+        { label: "Leader (Power)", value: fmtAbbrev(leader[3]), sub: leaderSub },
+        { label: "Combined Power", value: fmtAbbrev(sumOf(vals)), sub: `sum of all ${allianceRanked.length}` },
+        { label: "Median Power", value: fmtAbbrev(medianOf(vals)), sub: "server midpoint" },
+      ];
+    },
+  };
+
+  function renderTiles(tabKey) {
+    const cfg = TILE_CONFIGS[tabKey];
+    if (!cfg) return;
+    cfg().forEach((t, i) => {
+      document.getElementById(`tileLabel${i}`).textContent = t.label;
+      document.getElementById(`tileValue${i}`).textContent = t.value;
+      document.getElementById(`tileSub${i}`).textContent = t.sub;
+    });
+  }
+
   const tabButtons = document.querySelectorAll(".tab-btn");
   const tabPanels = document.querySelectorAll(".tab-panel");
   tabButtons.forEach(btn => {
@@ -860,8 +937,11 @@
       btn.classList.add("active");
       btn.setAttribute("aria-selected", "true");
       document.getElementById(btn.getAttribute("aria-controls")).classList.add("active");
+      renderTiles(btn.dataset.tab);
     });
   });
+
+  renderTiles("thp");
 </script>
 </body>
 </html>
