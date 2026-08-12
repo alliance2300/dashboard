@@ -428,6 +428,7 @@
       <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-thp" id="tab-thp" data-tab="thp">THP Ranking</button>
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-kills" id="tab-kills" data-tab="kills">Kills Ranking</button>
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fsp" id="tab-fsp" data-tab="fsp">FSP Ranking</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-server200" id="tab-server200" data-tab="server200">Server Ranking</button>
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-alliances" id="tab-alliances" data-tab="alliances">Alliance Rankings</button>
     </div>
 
@@ -512,6 +513,36 @@
             </tr>
           </thead>
           <tbody id="fspRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-server200" role="tabpanel" aria-labelledby="tab-server200">
+      <div class="panel-head">
+        <h2>Full Server Ranking — Hero Power</h2>
+        <span id="server200PanelSub"></span>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          Every commander with a confirmed Hero Power (THP) report across <b>the entire server #2300</b>, not just our
+          alliance — sourced the same way as our own roster (lwservers.com, "confirmed" reports only, so this is a
+          floor on the server's real population, not a full census). Rows from our alliance are highlighted and tagged "Us".
+        </span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th>Commander</th>
+              <th>Alliance</th>
+              <th>Country</th>
+              <th class="num">THP</th>
+              <th class="bar-cell"></th>
+            </tr>
+          </thead>
+          <tbody id="server200Rows"></tbody>
         </table>
       </div>
     </div>
@@ -658,6 +689,229 @@
     ["Irish Clan","US",null]
   ];
 
+  // Every commander on server #2300 with a confirmed THP report (not just our alliance), sorted by thp desc.
+  // Each row: [name, alliance, country, thp, type, isDefaultHero]
+  const server200 = [
+    ["Cap Myrtie","D1GS","US",20989582,"air",false],
+    ["NISSI  ᵀᴹ","2300","TT",18285581,"air",false],
+    ["Nachopocalypse","TKVR","US",17400083,"air",false],
+    ["JP BRAZIL","2300","BR",16550306,"tank",false],
+    ["BKPearl","Thou","TW",16133753,"tank",false],
+    ["Brąnd","2300","US",16054439,"tank",false],
+    ["LLoydddd","OGGA","GB",14666184,"air",false],
+    ["ShuShii","OGGA","BG",14220629,"tank",false],
+    ["RhinoXXX","KFB","US",14164478,"air",false],
+    ["The Headline II","OGGA","US",13878511,"tank",false],
+    ["ട Ḻ y ツ","TKVR","PH",13856941,"air",false],
+    ["ᏞᎬᏉᎥᏁᎪ","2300","US",13229122,"tank",false],
+    ["m19elevenn","2300","US",13167147,"tank",false],
+    ["THE DREADED","REOR","KR",13002196,"tank",false],
+    ["Golden P","2300","US",12954825,"tank",false],
+    ["TheTadpole69","nn2g","US",12874281,"tank",false],
+    ["DaddyDredge","Aura","US",12870255,"tank",false],
+    ["NïkÖ","2300","SI",12737969,"tank",false],
+    ["yona 요나","MEL0","KR",12208230,"tank",true],
+    ["페기 ࡔ PEGGY","MEL0","KR",12187900,"air",false],
+    ["xx CROOK FACTORY xx","Thou","IT",11992798,"air",false],
+    ["يور سلف","DESt","SA",11549231,"tank",true],
+    ["FacePartDeux","Smog","US",11310339,"tank",false],
+    ["Morvois","OGGA","CH",11298362,"tank",false],
+    ["카이 Sky","MEL0","KR",11256367,"tank",true],
+    ["Just call me Ad","OGGA","KR",11088632,"tank",true],
+    ["B E C","OGGA","ENG",10905723,"air",false],
+    ["Gilbert Bougainville","TKVR","UN",10860059,"air",false],
+    ["Vgssa","VRG1","SA",10853103,"tank",false],
+    ["Bizz NY","Thou","US",10813048,"air",false],
+    ["RubiSs","2300","UN",10782448,"missile",false],
+    ["NoRagrets00","TKVR","US",10368881,"tank",true],
+    ["Pyro Teknik","OGGA","US",10348073,"tank",false],
+    ["JET 72","D1GS","US",10340814,"tank",true],
+    ["BamaBelle","OGGA","US",10301470,"air",false],
+    ["Sec War","D1GS","US",10235069,"tank",false],
+    ["xBlackWidowx","2300","US",10218732,"tank",false],
+    ["Blue ᵀᴹ","2300","US",10214504,"air",false],
+    ["SwampFunk","2300","US",10186138,"tank",true],
+    ["Candy ᴹᴵᴺᴵ","2300","US",10174031,"tank",false],
+    ["2CTrashhh","2300","US",10161603,"air",false],
+    ["ᘏᗢʚThe Redɞ","MEL0","KR",10147751,"tank",false],
+    ["Bombinø","2300","LB",10037810,"tank",true],
+    ["أعرابـي","DESt","SA",10019444,null,false],
+    ["ODESZAᵀᴸᴳ","2300","US",9985124,"tank",false],
+    ["LucisB","2300","VN",9973478,"tank",true],
+    ["KindaYourFault","2300","US",9898113,"tank",true],
+    ["ID Lemongrass ᵀᴹ","2300","VN",9882412,"tank",true],
+    ["Right Tùrn Clydè","2300","US",9869140,"air",false],
+    ["Champ1918","NyXX","TH",9847783,"air",false],
+    ["효담 Hyodam","MEL0","KR",9844560,"tank",false],
+    ["Brasilena","OGGA","FR",9819012,"air",false],
+    ["Icēman","2300","US",9816534,"air",false],
+    ["ZZO뽀찌","MEL0","MN",9766821,"tank",false],
+    ["C4LUM","OGGA","SCO",9741569,"tank",false],
+    ["Ʀᴇᴍ","OGGA","GB",9663158,"tank",true],
+    ["Tam 담","MEL0","HK",9576778,"air",false],
+    ["쓰나미70","MEL0","KR",9470885,null,false],
+    ["iTarget Destroyed","VRG1","AE",9435521,"tank",false],
+    ["Sharky0726","OGGA","DE",9432332,"tank",true],
+    ["Fénrír","OGGA","SE",9362954,"tank",true],
+    ["Siiilvaa7","GOBY","PT",9328265,"tank",false],
+    ["Shai Lá","2300","PT",9305174,"tank",false],
+    ["KaRTôōN","2300","US",9293226,"tank",false],
+    ["Bõb Bêlcher","FBl","US",9171034,"tank",true],
+    ["boot1967","KFB","US",9133887,"tank",false],
+    ["THE PHILOTIMO","OGGA","KW",9114710,"tank",false],
+    ["케로로 Sgt Keroro","MEL0","UN",9109899,null,false],
+    ["ʇɥɓıspuıH","Thou","US",9074427,"air",false],
+    ["zDavez","DESt","DE",9007480,null,false],
+    ["엿먹어 Sineru","D1GS","NL",8982744,null,false],
+    ["Jollŷ","2300","US",8966879,"tank",true],
+    ["bubu2300","MEL0","JP",8959884,"air",false],
+    ["ChubbiieChicken","2300","US",8948470,"tank",true],
+    ["scooter71","OGGA","ENG",8915983,"tank",false],
+    ["Papa FlucK","OGGA","US",8884269,null,false],
+    ["Nonobass2","OGGA","FR",8851644,"tank",false],
+    ["Kommando Pïepmatz","2300","UN",8759837,null,false],
+    ["Chief PiKi","Aura","US",8757879,"tank",true],
+    ["DocJayG2","KFB","US",8728655,"tank",false],
+    ["4CHUBBS","OGGA","US",8686955,"tank",false],
+    ["Yazzyybadazzyy","OGGA","AE",8686059,"tank",false],
+    ["Sțríker","2300","US",8606905,"tank",false],
+    ["IRONREAP3R","2300","US",8494569,null,false],
+    ["l Exo l","OGGA","UN",8462747,"tank",true],
+    ["L1quid0","OGGA","NL",8460279,"tank",true],
+    ["Lord Pharmingtøn","D1GS","US",8452436,null,false],
+    ["PERCTHIRTY","TKVR","US",8404159,"tank",false],
+    ["Ɓσυʀηᴇ","2300","US",8393477,"tank",true],
+    ["undercovermario","2300","NL",8384935,"tank",false],
+    ["달 ల Moon","REOR","KR",8354322,"tank",true],
+    ["mark gorilla","OGGA","JP",8339587,"tank",false],
+    ["삐야기  Chicken","MEL0","KR",8337314,"tank",false],
+    ["PirateBoo","KFB","US",8320472,"tank",true],
+    ["Squam1jo","D1GS","US",8318660,"tank",false],
+    ["C A p","OGGA","US",8317331,null,false],
+    ["Talal T8","VRG1","AE",8315726,"tank",false],
+    ["spicyqueso","OGGA","US",8269829,null,false],
+    ["HeavyDmech","TKVR","CA",8197195,null,false],
+    ["Spit0","OGGA","NL",8179186,"air",false],
+    ["JSG13","GOBY","ES",8177171,null,false],
+    ["XLUX","2300","TR",8171514,null,false],
+    ["Frank the Falcon","Aura","NL",8140368,"tank",true],
+    ["Kongostán","GOBY","ES",8134941,null,false],
+    ["ʚKasaharaɞ","2300","JP",8131627,null,false],
+    ["Engroda716","2300","US",8111375,null,false],
+    ["Nobre rj","2300","UN",8093048,null,false],
+    ["Captain  JACk","Smog","US",8073810,"tank",false],
+    ["DaddyTizzle","OGGA","UN",8024891,null,false],
+    ["Ļeonidas","2300","US",8005139,null,false],
+    ["222 J","2300","US",7992861,null,false],
+    ["sugar2cube 1efda2300","AMRB","UN",7989154,"air",false],
+    ["PDrilla","AMRB","CA",7985799,null,false],
+    ["스물스물v","REOR","KR",7981663,null,false],
+    ["PeachBomb","FBl","AU",7981339,null,false],
+    ["Zoeek","GOBY","ES",7971179,"tank",true],
+    ["jjamesbond","2300","BR",7962651,"tank",false],
+    ["Barış19","2300","TR",7934145,null,false],
+    ["Ontozry","NyXX","PL",7933710,null,false],
+    ["KillaKells2","2300","CA",7905039,null,false],
+    ["SofaKingCool2","TKVR","US",7891096,"air",false],
+    ["マル金ᵞᵀᴳ","Ytg","JP",7889658,null,false],
+    ["Flodzzzz","2300","FR",7874079,"tank",true],
+    ["다봉bb","MEL0","KR",7873656,null,false],
+    ["きんさん2300","Ytg","JP",7871950,null,false],
+    ["Chigx","OGGA","MX",7835653,null,false],
+    ["Dead Hand","DESt","GB",7806227,null,false],
+    ["POYRAZ02","TKVR","TR",7791946,null,false],
+    ["Witch UA","2300","UA",7787715,null,false],
+    ["Wow Lau Lau","TKVR","US",7779987,null,false],
+    ["Pearlys Baby","OGGA","DE",7712916,null,false],
+    ["ArmednReady","TKVR","US",7693947,null,false],
+    ["ᴘᴀɴɪᴄ","TKVR","SA",7656225,null,false],
+    ["Luca厉飞雨","2300","SG",7608794,"tank",true],
+    ["Blakes Badboys","KFB","US",7608586,null,false],
+    ["Jůğğy","Aura","US",7601073,"tank",false],
+    ["Glitch King","TKVR","US",7600939,null,false],
+    ["BDJSs","OGGA","HK",7598354,null,false],
+    ["Henry Ngô","OGGA","VN",7588634,null,false],
+    ["othm1","DESt","SA",7582649,null,false],
+    ["A T h e n a","2300","US",7572752,null,false],
+    ["Milsxo","TKVR","GB",7537469,null,false],
+    ["4 ŵ D","AMRB","TH",7510370,"tank",true],
+    ["BRIAN PMD","IWC1","ID",7496055,null,false],
+    ["Dűcky","TKVR","US",7480096,"tank",true],
+    ["Yankees222","KFB","US",7479230,"tank",false],
+    ["Gökan29","2300","TR",7459296,null,false],
+    ["Silent Sneako","Smog","AU",7382894,"tank",false],
+    ["Jenx2","DESt","NL",7377858,null,false],
+    ["Ƥ么Ｎᗪ么么","DESt","GB",7356531,"air",false],
+    ["Sloth xoxo","2300","US",7323917,null,false],
+    ["Ariel Evergarden","TKVR","UN",7303774,null,false],
+    ["DEVIL MOON 2","LOLx","DE",7293157,null,false],
+    ["JSaturday","Thou","US",7240324,null,false],
+    ["Dreackz","TKVR","UN",7223036,null,false],
+    ["Nerea CC","GOBY","ES",7206367,null,false],
+    ["D精神與你同在","KRIS","TW",7195689,null,false],
+    ["KirriKat","TKVR","US",7194874,"tank",false],
+    ["AnDreA","OGGA","RO",7171895,"air",false],
+    ["bito微糖","MEL0","JP",7165769,null,false],
+    ["Jim シ","OGGA","GB",7159181,null,false],
+    ["Uncle JoJo 14","Aura","MY",7125031,null,false],
+    ["PoTaToo","TKVR","LB",7123441,null,false],
+    ["AToz","2300","US",7113087,null,false],
+    ["Sotå","Thou","US",7106183,null,false],
+    ["Thracian Mercenary","2300","US",7088532,null,false],
+    ["大きいです","Ytg","TW",7083309,null,false],
+    ["Mínahasa","OGGA","ENG",7068257,null,false],
+    ["THE GOAT M10","GOBY","MX",7045975,null,false],
+    ["Lashesnashes","TKVR","US",7020640,null,false],
+    ["Leeeenaa","LOLx","DE",7008747,null,false],
+    ["YuN meow lord","IWC1","ID",7005051,null,false],
+    ["O TO","OGGA","MO",6968305,null,false],
+    ["BaoWao","Thou","US",6912964,null,false],
+    ["mea culpa","LOLx","DE",6910076,null,false],
+    ["Edgars Father I","IdM","ID",6907771,null,false],
+    ["Tunnel5","D1GS","US",6898302,null,false],
+    ["El Je","TKVR","PT",6889547,"tank",false],
+    ["CryptoAnarch","D1GS","US",6886954,null,false],
+    ["FoxyXO","OGGA","UN",6885603,null,false],
+    ["Sukuna80","OGGA","UN",6876303,null,false],
+    ["CeMoX","TKVR","TR",6875178,null,false],
+    ["HiếuMét74","SDC1","VN",6872614,null,false],
+    ["dancyyy","DESt","ID",6838420,null,false],
+    ["GoldRanger1","-","US",6827397,null,false],
+    ["Shmugles","D1GS","CA",6819873,null,false],
+    ["Google FCz","2300","VN",6817701,"tank",true],
+    ["어뿡이","REOR","KR",6799518,null,false],
+    ["AegisPrime","Thou","US",6796049,"tank",false],
+    ["PemburuCrown","DESt","ID",6785813,null,false],
+    ["VSîm","2300","US",6769284,null,false],
+    ["Iggy Stooges","D1GS","CA",6764404,null,false],
+    ["Big Banners","D1GS","US",6762541,null,false],
+    ["HipnotiC","2300","UN",6731341,null,false],
+    ["Peppa Ronie","2300","AU",6725967,null,false],
+    ["Seiqurin","OGGA","ID",6700985,null,false],
+    ["Mr Sun 1998","MEL0","VN",6687544,null,false],
+    ["M D 티치  Teach","MEL0","KR",6686076,null,false],
+    ["Mr ALdY","REOR","UN",6678384,null,false],
+    ["BangDannn","OGGA","GE",6676293,null,false],
+    ["Rudyeah","DESt","ID",6670903,null,false],
+    ["Gi G","OGGA","GB",6630478,null,false],
+    ["xÖx","xUFO","AU",6601833,null,false],
+    ["Dark Little Darling","2300","US",6587766,null,false],
+    ["Angel0014","Smog","US",6572424,null,false],
+    ["Strawburi","OGGA","SCO",6555780,"tank",false],
+    ["James989","NyXX","US",6546496,null,false],
+    ["bn222","KFB","CA",6539839,"tank",false],
+    ["xBodyGuarD75","DESt","TR",6467164,null,false],
+    ["Pondasda","REOR","KR",6371263,null,false],
+    ["HomiePA","OGGA","US",6270039,null,false],
+    ["Nelos36","GOBY","ES",6255735,null,false],
+    ["Rachey 2300","Thou","US",6200462,null,false],
+    ["naba33","FRAn","CI",6180777,null,false],
+    ["행복한달님","MEL0","KR",6148870,null,false],
+    ["Kid Trollio","Smog","US",6126302,null,false],
+    ["Roman Montana","VKAO","ID",3030025,null,false],
+    ["edinocheeta","NlPh","NL",2226708,null,false]
+  ];
+
   // All alliances on server #2300 (not just ours), sorted by power desc.
   // Each row: [tag, name, country, power, kills, dPower1d, dPower7d, dPower30d, dKills1d, dKills7d, dKills30d, missingSince]
   const allianceRanked = [
@@ -792,6 +1046,27 @@
     return `<td>${span}<span class="missing-tag" title="No longer reported by the source as of this date">left ${missingSince}</span></td>`;
   }
 
+  document.getElementById("server200PanelSub").textContent =
+    `${server200.length} confirmed commanders · sorted by THP highest to lowest`;
+
+  const maxServerThp = server200[0][3];
+  const server200RowsEl = document.getElementById("server200Rows");
+  server200.forEach((r, i) => {
+    const [name, alliance, country, thp, type, isDefaultHero] = r;
+    const pct = Math.max((thp / maxServerThp) * 100, 3);
+    const tr = document.createElement("tr");
+    if (alliance === OWN_ALLIANCE_TAG) tr.classList.add("own-alliance-row");
+    tr.innerHTML = `
+      <td class="col-pos">${i + 1}</td>
+      ${nameCell(name, null, type, isDefaultHero)}
+      ${tagCell(alliance, null)}
+      <td class="col-country">${country}</td>
+      <td class="num">${thp.toLocaleString("en-US")}</td>
+      <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></td>
+    `;
+    server200RowsEl.appendChild(tr);
+  });
+
   document.getElementById("alliancesPanelSub").textContent =
     `${allianceRanked.length} alliances on server #2300 · sorted by power highest to lowest`;
 
@@ -914,6 +1189,18 @@
         { label: "Leader (Power)", value: fmtAbbrev(leader[3]), sub: leaderSub },
         { label: "Combined Power", value: fmtAbbrev(sumOf(vals)), sub: `sum of all ${allianceRanked.length}` },
         { label: "Median Power", value: fmtAbbrev(medianOf(vals)), sub: "server midpoint" },
+      ];
+    },
+    server200: () => {
+      const vals = server200.map(r => r[3]);
+      const leader = server200[0];
+      const ours = server200.filter(r => r[1] === OWN_ALLIANCE_TAG).length;
+      const leaderSub = leader[1] === OWN_ALLIANCE_TAG ? `${leader[0]} (Us)` : `${leader[0]} [${leader[1]}]`;
+      return [
+        { label: "Confirmed", value: String(server200.length), sub: `${ours} from our alliance` },
+        { label: "Leader (THP)", value: fmtAbbrev(leader[3]), sub: leaderSub },
+        { label: "Combined THP", value: fmtAbbrev(sumOf(vals)), sub: `sum of all ${server200.length}` },
+        { label: "Median THP", value: fmtAbbrev(medianOf(vals)), sub: "server midpoint" },
       ];
     },
   };
