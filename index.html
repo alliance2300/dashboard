@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alliance 2300 — THP Dashboard</title>
+<style>
+  :root {
+    --bg: #f3efe2;
+    --panel: #ffffff;
+    --panel-2: #ece5d2;
+    --line: #ddd4bc;
+    --text: #1c2430;
+    --text-dim: #6b6250;
+    --accent: #a97a1f;
+    --accent-soft: #f0dfb8;
+    --accent2: #2f6f8f;
+    --accent2-soft: #d9e9ef;
+    --bar-track: #e6ddc4;
+    --good: #3f7d52;
+    --bad: #b3492f;
+    --type-tank: #5c7a4a;
+    --type-tank-soft: #e2ead9;
+    --type-air: #3a7ca5;
+    --type-air-soft: #dcedf5;
+    --type-missile: #b5502e;
+    --type-missile-soft: #f5ddd2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f151d;
+      --panel: #161f2a;
+      --panel-2: #1c2733;
+      --line: #2b3947;
+      --text: #eef1f4;
+      --text-dim: #8fa0b0;
+      --accent: #d8ab52;
+      --accent-soft: #3a2f18;
+      --accent2: #6fb8d8;
+      --accent2-soft: #16303c;
+      --bar-track: #24303d;
+      --good: #6fbf8b;
+      --bad: #e0806a;
+      --type-tank: #8fbf72;
+      --type-tank-soft: #24301c;
+      --type-air: #7fc4e8;
+      --type-air-soft: #163040;
+      --type-missile: #e8916a;
+      --type-missile-soft: #3a2015;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f151d;
+    --panel: #161f2a;
+    --panel-2: #1c2733;
+    --line: #2b3947;
+    --text: #eef1f4;
+    --text-dim: #8fa0b0;
+    --accent: #d8ab52;
+    --accent-soft: #3a2f18;
+    --accent2: #6fb8d8;
+    --accent2-soft: #16303c;
+    --bar-track: #24303d;
+    --good: #6fbf8b;
+    --bad: #e0806a;
+    --type-tank: #8fbf72;
+    --type-tank-soft: #24301c;
+    --type-air: #7fc4e8;
+    --type-air-soft: #163040;
+    --type-missile: #e8916a;
+    --type-missile-soft: #3a2015;
+  }
+  :root[data-theme="light"] {
+    --bg: #f3efe2;
+    --panel: #ffffff;
+    --panel-2: #ece5d2;
+    --line: #ddd4bc;
+    --text: #1c2430;
+    --text-dim: #6b6250;
+    --accent: #a97a1f;
+    --accent-soft: #f0dfb8;
+    --accent2: #2f6f8f;
+    --accent2-soft: #d9e9ef;
+    --bar-track: #e6ddc4;
+    --good: #3f7d52;
+    --type-tank: #5c7a4a;
+    --type-tank-soft: #e2ead9;
+    --type-air: #3a7ca5;
+    --type-air-soft: #dcedf5;
+    --type-missile: #b5502e;
+    --type-missile-soft: #f5ddd2;
+    --bad: #b3492f;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding: clamp(16px, 3vw, 40px);
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+
+  .masthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+  .eyebrow {
+    font: 700 12px/1 "Bahnschrift SemiCondensed", "Arial Narrow", system-ui, sans-serif;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 6px;
+  }
+  h1 {
+    font: 800 clamp(26px, 4vw, 36px)/1.05 "Bahnschrift SemiCondensed", "Arial Narrow", system-ui, sans-serif;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .meta {
+    text-align: right;
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .meta b { color: var(--text); font-variant-numeric: tabular-nums; }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .tile {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+  .tile-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .tile-value {
+    font: 700 24px/1.1 "Bahnschrift SemiCondensed", "Arial Narrow", system-ui, sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+  .tile-sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .panel-head {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .panel-head h2 {
+    font: 700 14px/1 system-ui, sans-serif;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .panel-head span {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    padding: 0 18px;
+    background: var(--panel-2);
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  .tab-btn {
+    appearance: none;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-dim);
+    font: 700 12px/1 system-ui, sans-serif;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 13px 6px;
+    cursor: pointer;
+    flex: none;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-btn-alt { color: var(--accent2); }
+  .tab-btn-alt.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+  #panel-alliances .panel-head { border-bottom-color: var(--accent2); }
+  #panel-alliances .panel-head h2 { color: var(--accent2); }
+  #panel-alliances .bar-fill { background: var(--accent2); }
+  #panel-alliances thead th { color: var(--accent2); }
+  .tab-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 640px; }
+  thead th {
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    font-weight: 600;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--line);
+    background: var(--panel-2);
+    position: sticky;
+    top: 0;
+  }
+  tbody td {
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--panel-2); }
+  .col-pos { color: var(--text-dim); font-variant-numeric: tabular-nums; width: 40px; }
+  .col-player { font-weight: 600; }
+  .type-badge {
+    display: inline-block;
+    margin-left: 7px;
+    font: 700 9px/1 system-ui, sans-serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 2px 5px;
+    border-radius: 3px;
+    vertical-align: middle;
+  }
+  .type-tank { background: var(--type-tank-soft); color: var(--type-tank); }
+  .type-air { background: var(--type-air-soft); color: var(--type-air); }
+  .type-missile { background: var(--type-missile-soft); color: var(--type-missile); }
+  .type-badge.type-default { opacity: 0.65; }
+  .name-missing { text-decoration: line-through; color: var(--text-dim); font-weight: 600; }
+  .missing-tag {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--bad);
+    border: 1px solid var(--bad);
+    border-radius: 3px;
+    padding: 1px 5px;
+    text-decoration: none;
+  }
+  .col-country { color: var(--text-dim); font-size: 12px; }
+  .col-tag {
+    font: 700 12px/1 system-ui, sans-serif;
+    letter-spacing: 0.03em;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 3px 7px;
+    white-space: nowrap;
+  }
+  tr.own-alliance-row { background: var(--accent2-soft); }
+  tr.own-alliance-row:hover { background: var(--accent2-soft); }
+  tr.own-alliance-row .col-tag { background: var(--accent2); border-color: var(--accent2); color: var(--bg); }
+  .own-tag {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent2);
+  }
+  .num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+  .delta { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; font-size: 12.5px; color: var(--text-dim); }
+  .delta.up { color: var(--good); }
+  .delta.down { color: var(--bad); }
+  .bar-cell { min-width: 160px; }
+  .bar-track {
+    background: var(--bar-track);
+    border-radius: 3px;
+    height: 8px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+  }
+
+  .no-thp-notice {
+    border-top: 1px solid var(--line);
+    background: var(--panel-2);
+    padding: 12px 18px 14px;
+  }
+  .no-thp-notice-label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .no-thp-list {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+  .no-thp-list b { color: var(--text); font-weight: 600; }
+
+  .notice {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text);
+  }
+  .notice-icon {
+    flex: none;
+    font: 700 11px/1 system-ui, sans-serif;
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+  .notice b { color: var(--text); }
+
+  footer {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+    margin-top: 8px;
+  }
+  footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <div>
+      <p class="eyebrow">Battle Intelligence · Server #2300</p>
+      <h1>Alliance 2300 — THP Ranking</h1>
+    </div>
+    <div class="meta">
+      Captured on <b>2026-08-12</b><br>
+      Daily automatic update <b>23:05 BRT</b>
+      <br><span style="font-size: 11px;">Brasília time · the game's daily reset</span>
+    </div>
+  </div>
+
+  <div class="notice">
+    <span class="notice-icon" aria-hidden="true">i</span>
+    <span>
+      <b>Why doesn't everyone show a THP value?</b> lwservers.com only carries Hero Power (THP) for commanders it has a
+      "confirmed" report for — a crowd-sourced capture, not an automatic scan of every account. A commander with no
+      confirmed report simply has no THP figure here, even though their real Hero Power is nonzero; it's not missing
+      because of anything alliance-specific. The same applies to Kills, which is confirmed for only a subset of
+      commanders. These commanders still appear in the notice below the THP table and in the full snapshot sheet.
+    </span>
+  </div>
+
+  <div class="tiles">
+    <div class="tile">
+      <div class="tile-label">Commanders</div>
+      <div class="tile-value">63</div>
+      <div class="tile-sub">53 with THP recorded</div>
+    </div>
+    <div class="tile">
+      <div class="tile-label">Leader (THP)</div>
+      <div class="tile-value">18.29M</div>
+      <div class="tile-sub">NISSI ᵀᴹ</div>
+    </div>
+    <div class="tile">
+      <div class="tile-label">Combined THP</div>
+      <div class="tile-value">503.9M</div>
+      <div class="tile-sub">sum of the 53 recorded</div>
+    </div>
+    <div class="tile">
+      <div class="tile-label">Median THP</div>
+      <div class="tile-value">8.76M</div>
+      <div class="tile-sub">alliance midpoint</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="tabs" role="tablist">
+      <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-thp" id="tab-thp" data-tab="thp">THP Ranking</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-kills" id="tab-kills" data-tab="kills">Kills Ranking</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fsp" id="tab-fsp" data-tab="fsp">FSP Ranking</button>
+      <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-alliances" id="tab-alliances" data-tab="alliances">Alliance Rankings</button>
+    </div>
+
+    <div class="tab-panel active" id="panel-thp" role="tabpanel" aria-labelledby="tab-thp">
+      <div class="panel-head">
+        <h2>THP Ranking</h2>
+        <span id="thpPanelSub"></span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th>Commander</th>
+              <th>Country</th>
+              <th class="num">THP</th>
+              <th class="delta">Δ 1d</th>
+              <th class="delta">Δ 7d</th>
+              <th class="delta">Δ 30d</th>
+              <th class="bar-cell"></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="no-thp-notice">
+        <span class="no-thp-notice-label" id="noThpPanelSub"></span>
+        <div class="no-thp-list" id="noThpList"></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-kills" role="tabpanel" aria-labelledby="tab-kills">
+      <div class="panel-head">
+        <h2>Kills Ranking</h2>
+        <span id="killsPanelSub"></span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th>Commander</th>
+              <th>Country</th>
+              <th class="num">Kills</th>
+              <th class="delta">Δ 1d</th>
+              <th class="delta">Δ 7d</th>
+              <th class="delta">Δ 30d</th>
+              <th class="bar-cell"></th>
+            </tr>
+          </thead>
+          <tbody id="killsRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-fsp" role="tabpanel" aria-labelledby="tab-fsp">
+      <div class="panel-head">
+        <h2>Estimated FSP Ranking</h2>
+        <span id="fspPanelSub"></span>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          <b>FSP (First Squad Power) is not a stat the game publishes</b> — even lwservers.com, which coined this
+          estimate, computes it from Hero Power (THP) with a calibrated formula rather than reading it off any
+          player profile. We reuse that same published formula (a quadratic fit through 70 real (THP → FSP)
+          samples, calibrated for the 150M–275M THP range, linear beyond it) applied to each commander's own THP.
+          Our alliance's commanders mostly sit below that calibration range, so treat these numbers as a
+          reasonable estimate, not a precise one.
+        </span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th>Commander</th>
+              <th>Country</th>
+              <th class="num">THP</th>
+              <th class="num">Est. FSP</th>
+              <th class="bar-cell"></th>
+            </tr>
+          </thead>
+          <tbody id="fspRows"></tbody>
+        </table>
+      </div>
+    <div class="tab-panel" id="panel-alliances" role="tabpanel" aria-labelledby="tab-alliances">
+      <div class="panel-head">
+        <h2>Alliance Rankings — Server #2300</h2>
+        <span id="alliancesPanelSub"></span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th>Tag</th>
+              <th>Alliance</th>
+              <th class="num">Power</th>
+              <th class="delta">Δ 1d</th>
+              <th class="delta">Δ 7d</th>
+              <th class="delta">Δ 30d</th>
+              <th class="num">Kills</th>
+              <th class="delta">Δ 1d</th>
+              <th class="delta">Δ 7d</th>
+              <th class="delta">Δ 30d</th>
+              <th class="bar-cell"></th>
+            </tr>
+          </thead>
+          <tbody id="allianceRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    </div>
+  </div>
+
+  <footer>
+    Commander data (THP Ranking, Kills Ranking, FSP Ranking): <a href="https://www.lwservers.com/ranking" target="_blank" rel="noopener">lwservers.com</a>, filtered to alliance 2300 on server #2300 by account ID. As of 2026-08-10 this replaced lastrank.fun as the source — it confirms Hero Power for more of our roster (60 commanders vs. 48 before), so growth (Δ) columns restarted from this date.
+    Alliance Rankings (all alliances on the server): <a href="https://lastrank.fun/rankings/alliances?server=2300" target="_blank" rel="noopener">lastrank.fun</a>, sorted by Power.
+    Kills are only confirmed for some commanders — the Kills Ranking above lists only those with a recorded value.
+    Δ columns compare against the closest earlier capture in the daily history log; they read "—" until enough days have been logged.
+    A struck-through name with a "left YYYY-MM-DD" tag means the source stopped reporting that commander on that date — they're kept listed for 30 days (in case it's a temporary blip) and removed automatically after that if they never reappear. Renames are tracked by the game's own account ID, so a commander keeps their history even after changing their display name.
+    Estimated FSP uses the public THP→FSP formula published by lwservers.com — see the note in the FSP Ranking tab.
+    The colored Tank/Air/Missile badge next to a name shows their strongest hero's squad type (Air beats Tank beats Missile beats Air) — lwservers.com only confirms this for about half the roster, so a name with no badge just means that data point isn't confirmed, not that the commander lacks a squad. A dimmed badge means the strongest hero is Kimberly, the game's default starting hero — still a real Tank, but a weaker signal of intentional squad choice.
+    This dashboard is republished automatically every day at 23:05 Brasília time (BRT) — the game's daily reset — with the latest capture from both sources.
+  </footer>
+</div>
+
+<script>
+  // Each row: [name, country, kills, thp, dThp1d, dThp7d, dThp30d, dKills1d, dKills7d, dKills30d, missingSince, type, isDefaultHero]
+  // Delta fields are null until the daily history log has enough prior captures to compare against.
+  // missingSince: null while the commander is in the alliance; set to "YYYY-MM-DD" (the day the
+  // source stopped reporting them) once they drop off the roster. Kept listed with a struck-through
+  // name for up to 30 days in case it was a temporary blip or a rename that didn't resolve automatically.
+  // type: 'tank' | 'air' | 'missile' | null (no confirmed strongest-hero id — most of the roster).
+  // isDefaultHero: true when the strongest hero is Kimberly, the game's default progression hero —
+  // still a valid Tank in combat, but a weak signal of intended squad type (badge rendered dimmed).
+  const withThp = [
+    ["NISSI  ᵀᴹ","TT",null,18285581,2407321,null,null,null,null,null,null,"air",false],
+    ["JP BRAZIL","BR",316443,16550306,1033366,null,null,0,null,null,null,"tank",false],
+    ["Brąnd","US",null,16054439,656547,null,null,null,null,null,null,"tank",false],
+    ["ᏞᎬᏉᎥᏁᎪ","US",null,13229122,736050,null,null,null,null,null,null,"tank",false],
+    ["m19elevenn","US",null,13167147,908146,null,null,null,null,null,null,"tank",false],
+    ["Golden P","US",null,12954825,1199368,null,null,null,null,null,null,"tank",false],
+    ["TheTadpole69","US",null,12805513,0,null,null,null,null,null,"2026-08-12",null,false],
+    ["NïkÖ","SI",193668,12737969,945516,null,null,0,null,null,null,"tank",false],
+    ["xBesii","AL",480013,12018244,0,null,null,0,null,null,"2026-08-12",null,false],
+    ["RubiSs","UN",179885,10782448,1111332,null,null,14840,null,null,null,"missile",false],
+    ["xBlackWidowx","US",null,10218732,1019694,null,null,null,null,null,null,"tank",false],
+    ["Blue ᵀᴹ","US",408581,10214504,629931,null,null,80763,null,null,null,"air",false],
+    ["SwampFunk","US",null,10186138,482115,null,null,null,null,null,null,"tank",true],
+    ["Candy ᴹᴵᴺᴵ","US",null,10174031,115419,null,null,null,null,null,null,"tank",false],
+    ["2CTrashhh","US",292799,10161603,1102397,null,null,2644,null,null,null,"air",false],
+    ["Bombinø","LB",null,10037810,600795,null,null,null,null,null,null,"tank",true],
+    ["ODESZAᵀᴸᴳ","US",null,9985124,770539,null,null,null,null,null,null,"tank",false],
+    ["LucisB","VN",202022,9973478,769322,null,null,3975,null,null,null,"tank",true],
+    ["KindaYourFault","US",null,9898113,923357,null,null,null,null,null,null,"tank",true],
+    ["ID Lemongrass ᵀᴹ","VN",578198,9882412,377647,null,null,13824,null,null,null,"tank",true],
+    ["Right Tùrn Clydè","US",170026,9869140,1375123,null,null,1125,null,null,null,"air",false],
+    ["Icēman","US",null,9816534,892890,null,null,null,null,null,null,"air",false],
+    ["Shai Lá","PT",null,9305174,854930,null,null,null,null,null,null,"tank",false],
+    ["KaRTôōN","US",null,9293226,937582,null,null,null,null,null,null,"tank",false],
+    ["Jollŷ","US",null,8966879,403438,null,null,null,null,null,null,"tank",true],
+    ["ChubbiieChicken","US",225686,8948470,510115,null,null,1198,null,null,null,"tank",true],
+    ["Kommando Pïepmatz","UN",null,8759837,862885,null,null,null,null,null,null,null,false],
+    ["Sțríker","US",null,8606905,652578,null,null,null,null,null,null,"tank",false],
+    ["IRONREAP3R","US",null,8494569,1234395,null,null,null,null,null,null,null,false],
+    ["Ɓσυʀηᴇ","US",202261,8393477,330897,null,null,804,null,null,null,"tank",true],
+    ["undercovermario","NL",null,8384935,683373,null,null,null,null,null,null,"tank",false],
+    ["XLUX","TR",281233,8171514,803153,null,null,256,null,null,null,null,false],
+    ["ʚKasaharaɞ","JP",null,8131627,526543,null,null,null,null,null,null,null,false],
+    ["Engroda716","US",null,8111375,538680,null,null,null,null,null,null,null,false],
+    ["Nobre rj","UN",203488,8093048,975621,null,null,6736,null,null,null,null,false],
+    ["Ļeonidas","US",null,8005139,563319,null,null,null,null,null,null,null,false],
+    ["222 J","US",null,7992861,425465,null,null,null,null,null,null,null,false],
+    ["jjamesbond","BR",null,7962651,626419,null,null,null,null,null,null,"tank",false],
+    ["Barış19","TR",null,7934145,270304,null,null,null,null,null,null,null,false],
+    ["KillaKells2","CA",null,7905039,633054,null,null,null,null,null,null,null,false],
+    ["Flodzzzz","FR",172484,7874079,566703,null,null,1562,null,null,null,"tank",true],
+    ["Witch UA","UA",null,7787715,1402770,null,null,null,null,null,null,null,false],
+    ["Luca厉飞雨","SG",null,7608794,null,null,null,null,null,null,null,"tank",true],
+    ["A T h e n a","US",null,7572752,518950,null,null,null,null,null,null,null,false],
+    ["Gökan29","TR",null,7459296,562480,null,null,null,null,null,null,null,false],
+    ["Sloth xoxo","US",null,7323917,549659,null,null,null,null,null,null,null,false],
+    ["AToz","US",null,7113087,835500,null,null,null,null,null,null,null,false],
+    ["Thracian Mercenary","US",183075,7088532,714666,null,null,7551,null,null,null,null,false],
+    ["Google FCz","VN",null,6817701,443944,null,null,null,null,null,null,"tank",true],
+    ["VSîm","US",null,6769284,401073,null,null,null,null,null,null,null,false],
+    ["HipnotiC","UN",null,6731341,498026,null,null,null,null,null,null,null,false],
+    ["Peppa Ronie","AU",null,6725967,null,null,null,null,null,null,null,null,false],
+    ["Dark Little Darling","US",null,6587766,229372,null,null,null,null,null,null,null,false]
+  ];
+
+  // Same commanders, restricted to those with a recorded kills value, sorted by kills desc.
+  // Each row: [name, country, kills, dKills1d, dKills7d, dKills30d, missingSince]
+  const killsRanked = [
+    ["ID Lemongrass ᵀᴹ","VN",578198,13824,null,null,null,"tank",true],
+    ["xBesii","AL",480013,0,null,null,"2026-08-12",null,false],
+    ["Blue ᵀᴹ","US",408581,80763,null,null,null,"air",false],
+    ["JP BRAZIL","BR",316443,0,null,null,null,"tank",false],
+    ["2CTrashhh","US",292799,2644,null,null,null,"air",false],
+    ["XLUX","TR",281233,256,null,null,null,null,false],
+    ["ChubbiieChicken","US",225686,1198,null,null,null,"tank",true],
+    ["Gusinnn","ID",205784,6207,null,null,null,null,false],
+    ["Nobre rj","UN",203488,6736,null,null,null,null,false],
+    ["Ɓσυʀηᴇ","US",202261,804,null,null,null,"tank",true],
+    ["LucisB","VN",202022,3975,null,null,null,"tank",true],
+    ["YXMIFFX V2","US",195060,13466,null,null,null,null,false],
+    ["NïkÖ","SI",193668,0,null,null,null,"tank",false],
+    ["Thracian Mercenary","US",183075,7551,null,null,null,null,false],
+    ["RubiSs","UN",179885,14840,null,null,null,"missile",false],
+    ["Flodzzzz","FR",172484,1562,null,null,null,"tank",true],
+    ["Right Tùrn Clydè","US",170026,1125,null,null,null,"air",false]
+  ];
+  const noThp = [
+    ["Consent Was Given","NO",null],
+    ["Bilbō Bagginŝ","NZ",null],
+    ["Embrツ","US",null],
+    ["Kenny케니이","KR",null],
+    ["YXMIFFX V2","US",195060],
+    ["TATIi","BR",null],
+    ["Gusinnn","ID",205784],
+    ["MangoTheDog","US",null],
+    ["Masar063","TR",null],
+    ["Irish Clan","US",null]
+  ];
+
+  // All alliances on server #2300 (not just ours), sorted by power desc.
+  // Each row: [tag, name, country, power, kills, dPower1d, dPower7d, dPower30d, dKills1d, dKills7d, dKills30d, missingSince]
+  const allianceRanked = [
+    ["2300","2300","UN",1892351691,7231113,54255707,null,null,-161504,null,null,null],
+    ["OGGA","OGs Go Again","UN",1877552156,7106869,144757909,null,null,167515,null,null,null],
+    ["TKVR","Takeover","US",1743548209,7326045,118474651,null,null,756490,null,null,null],
+    ["MEL0","For melon","KR",1654434085,6356650,167817451,null,null,599827,null,null,null],
+    ["DESt","Destiny of Glory","ID",1630983571,5903851,151044950,null,null,123330,null,null,null],
+    ["GOBY","Golden Abyss","ES",1346119402,5193050,169148391,null,null,-495900,null,null,null],
+    ["Thou","Digital Saints","US",1296119895,4516993,222268893,null,null,886898,null,null,null],
+    ["WPGx","Warteg Pak Gembus","ID",1277534076,2965113,133961426,null,null,103851,null,null,null],
+    ["D1GS","The Digtators","US",1248378779,2989420,134855725,null,null,87844,null,null,null],
+    ["REOR","Respect Each Other","KR",1245133521,2897462,220410999,null,null,437032,null,null,null],
+    ["IWC1","IndonesiaWorldClass","ID",1013189178,3244258,205333569,null,null,521293,null,null,null],
+    ["Aura","The Lightbringers","UN",969021652,2307188,105027004,null,null,91633,null,null,null],
+    ["AMRB","Army Rabbit","TH",966529642,1972657,74634069,null,null,37240,null,null,null],
+    ["VRG1","VanguardRisingGlory","SA",963256383,2679111,70189097,null,null,31420,null,null,null],
+    ["FBl","FriendsBound inUnity","UN",834281173,2508011,50670943,null,null,2054,null,null,null],
+    ["LOLx","Legends of the Loyal","DE",809275655,1585218,68040741,null,null,46389,null,null,null],
+    ["KFB","KA FKN BOOM","US",760145874,1652611,67235132,null,null,49306,null,null,null],
+    ["IdM","Indonesian Manuver","ID",742247683,2159748,64991505,null,null,135417,null,null,null],
+    ["Smog","Shenanigan Gang","US",737494957,2700548,70920272,null,null,66448,null,null,null],
+    ["KRIS","Karma Legion","ID",705642208,2089811,58205279,null,null,39009,null,null,null],
+    ["FRAn","Les Franco Folie","FR",573887712,1163477,56792905,null,null,30378,null,null,null],
+    ["SDC1","The Coyote","VN",572663092,1579408,64746642,null,null,37563,null,null,null],
+    ["Ytg","八 咫 烏","JP",571470737,940945,46293691,null,null,43898,null,null,null],
+    ["NyXX","Children of Nemesis","US",556886562,1644944,-471922959,null,null,-2095735,null,null,null],
+    ["RBBT","うさぎ騎士団","JP",480532845,365478,13056097,null,null,-83451,null,null,null],
+    ["Pow","Pirates of war","BR",361649674,589921,49581939,null,null,33950,null,null,null],
+    ["xUFO","United Fighters Org","AU",358301419,595580,8585790,null,null,-8885,null,null,null],
+    ["HUGS","Definitely Friendly","US",308552119,528364,6011434,null,null,14171,null,null,null],
+    ["SonS","SONS OF ANARCHY","IT",283899331,904739,94158836,null,null,647962,null,null,null],
+    ["Ro3b","LAST DREAM 2","UN",258878236,196005,5164612,null,null,-11700,null,null,null],
+    ["Om2","Sugar Dadys Club","ID",220152791,338450,24764270,null,null,162930,null,null,null],
+    ["nn2g","dyufrweqq","US",198935607,79806,35489574,null,null,10233,null,null,null],
+    ["ADEN","anak indo","ID",172847109,350942,79272988,null,null,101013,null,null,null],
+    ["ACHU","Air Cushion","TH",168205955,139211,14981594,null,null,5398,null,null,null],
+    ["BG4L","BG4L","US",128705476,2172208,-37592630,null,null,-22955,null,null,null],
+    ["BDSq","Boyband Death Squad","UN",118676096,112093,null,null,null,null,null,null,null],
+    ["PMD","PEMIMPIN MASA DEPAN","ID",117589133,61836,-7561389,null,null,-2957,null,null,null],
+    ["h3h4","hahahqw","ID",107903692,255427,-60372726,null,null,24807,null,null,null],
+    ["gizz","gizem","TR",105302264,395008,null,null,null,null,null,null,null],
+    ["HAVN","Life Comes First","GB",102395857,668111,6893474,null,null,102741,null,null,null],
+    ["zyk","ksblzdjd","US",93728997,null,13554121,null,null,null,null,null,null],
+    ["TWCN","小號連盟","JP",87877212,90762,-17311006,null,null,-14500,null,null,null],
+    ["lyl3","lyl","US",86503346,64719,1048009,null,null,66,null,null,null],
+    ["TAAA","TOP air","IN",73327651,null,-10070236,null,null,null,null,null,null],
+    ["DEAr","Destroyer Army","UN",63193137,null,-4606731,null,null,null,null,null,null],
+    ["txqv","okel","US",60375572,null,-3662972,null,null,null,null,null,null],
+    ["QUNE","QUANTUM NEXUS","ID",57110340,89372,0,null,null,0,null,null,"2026-08-12"],
+    ["DMF1","DOOM FALCONS","IR",56571246,null,-5234454,null,null,null,null,null,null],
+    ["SLA","UNIVERS","SK",55722897,null,-1034675,null,null,null,null,null,null],
+    ["xDL","XDarkLegionX","DE",55009365,null,-23431588,null,null,null,null,null,null],
+    ["QMhx","ALLIANCE 49","FR",52023122,null,0,null,null,null,null,null,"2026-08-12"],
+    ["ChAs","Chaos Ascendants","SA",51898634,null,-1346260,null,null,null,null,null,null]
+  ];
+
+  function deltaCell(v) {
+    if (v === null || v === undefined) return `<td class="delta">—</td>`;
+    const cls = v > 0 ? "up" : v < 0 ? "down" : "";
+    const sign = v > 0 ? "+" : "";
+    return `<td class="delta ${cls}">${sign}${v.toLocaleString("en-US")}</td>`;
+  }
+
+  const TYPE_LABEL = { tank: 'Tank', air: 'Air', missile: 'Missile' };
+  function typeBadge(type, isDefaultHero) {
+    if (!type) return '';
+    const title = isDefaultHero ? ' title="Strongest hero is Kimberly, the game\'s default progression hero — a weaker signal of intended squad type"' : '';
+    const cls = isDefaultHero ? `type-badge type-${type} type-default` : `type-badge type-${type}`;
+    return `<span class="${cls}"${title}>${TYPE_LABEL[type]}</span>`;
+  }
+  function nameCell(name, missingSince, type, isDefaultHero) {
+    const badge = typeBadge(type, isDefaultHero);
+    if (!missingSince) return `<td class="col-player">${name}${badge}</td>`;
+    return `<td class="col-player"><span class="name-missing">${name}</span>${badge}<span class="missing-tag" title="No longer reported by the source as of this date">left ${missingSince}</span></td>`;
+  }
+
+  const maxThp = withThp[0][3];
+  const rowsEl = document.getElementById("rows");
+  withThp.forEach((r, i) => {
+    const [name, country, kills, thp, d1, d7, d30, dK1, dK7, dK30, missingSince, type, isDefaultHero] = r;
+    const pct = Math.max((thp / maxThp) * 100, 3);
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="col-pos">${i + 1}</td>
+      ${nameCell(name, missingSince, type, isDefaultHero)}
+      <td class="col-country">${country}</td>
+      <td class="num">${thp.toLocaleString("en-US")}</td>
+      ${deltaCell(d1)}${deltaCell(d7)}${deltaCell(d30)}
+      <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></td>
+    `;
+    rowsEl.appendChild(tr);
+  });
+
+  document.getElementById("thpPanelSub").textContent =
+    `${withThp.length} commanders · sorted highest to lowest`;
+  document.getElementById("killsPanelSub").textContent =
+    `${killsRanked.length} commanders with kills recorded · sorted highest to lowest`;
+  document.getElementById("noThpPanelSub").textContent =
+    `${noThp.length} more commanders with no THP captured by the source`;
+
+  const maxKills = killsRanked[0][2];
+  const killsRowsEl = document.getElementById("killsRows");
+  killsRanked.forEach((r, i) => {
+    const [name, country, kills, d1, d7, d30, missingSince, type, isDefaultHero] = r;
+    const pct = Math.max((kills / maxKills) * 100, 3);
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="col-pos">${i + 1}</td>
+      ${nameCell(name, missingSince, type, isDefaultHero)}
+      <td class="col-country">${country}</td>
+      <td class="num">${kills.toLocaleString("en-US")}</td>
+      ${deltaCell(d1)}${deltaCell(d7)}${deltaCell(d30)}
+      <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></td>
+    `;
+    killsRowsEl.appendChild(tr);
+  });
+
+  const noThpEl = document.getElementById("noThpList");
+  noThpEl.innerHTML = noThp
+    .map(([name, country, kills]) => `<b>${name}</b> (${country}${kills !== null ? ", " + kills.toLocaleString("en-US") + " kills" : ""})`)
+    .join(" · ");
+
+  // Tracked by alliance_id c1e025d28dba45f5b9eb5865167b40d6 in alliance_2300_alliances_roster.csv —
+  // update this tag if that alliance_id's abbr ever changes (a confirmed rename, reported in the daily summary).
+  const OWN_ALLIANCE_TAG = "2300";
+
+  function tagCell(tag, missingSince) {
+    const isOwn = tag === OWN_ALLIANCE_TAG;
+    const span = `<span class="col-tag">${tag}</span>` + (isOwn ? `<span class="own-tag">Us</span>` : "");
+    if (!missingSince) return `<td>${span}</td>`;
+    return `<td>${span}<span class="missing-tag" title="No longer reported by the source as of this date">left ${missingSince}</span></td>`;
+  }
+
+  document.getElementById("alliancesPanelSub").textContent =
+    `${allianceRanked.length} alliances on server #2300 · sorted by power highest to lowest`;
+
+  const maxPower = allianceRanked[0][3];
+  const allianceRowsEl = document.getElementById("allianceRows");
+  allianceRanked.forEach((r, i) => {
+    const [tag, name, country, power, kills, dP1, dP7, dP30, dK1, dK7, dK30, missingSince] = r;
+    const pct = Math.max((power / maxPower) * 100, 3);
+    const tr = document.createElement("tr");
+    if (tag === OWN_ALLIANCE_TAG) tr.classList.add("own-alliance-row");
+    tr.innerHTML = `
+      <td class="col-pos">${i + 1}</td>
+      ${tagCell(tag, missingSince)}
+      <td class="col-player">${name}</td>
+      <td class="num">${power.toLocaleString("en-US")}</td>
+      ${deltaCell(dP1)}${deltaCell(dP7)}${deltaCell(dP30)}
+      <td class="num">${kills !== null ? kills.toLocaleString("en-US") : "—"}</td>
+      ${deltaCell(dK1)}${deltaCell(dK7)}${deltaCell(dK30)}
+      <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></td>
+    `;
+    allianceRowsEl.appendChild(tr);
+  });
+
+  // THP → FSP: published formula from lwservers.com (js/lws-math.js, estimateFsp()).
+  // Quadratic fit up to 280M THP, linear tail beyond it. THP-only input — never game power.
+  const FSP_QUAD_LINEAR = 0.4258;
+  const FSP_QUAD_SQUARE = 0.000453;
+  const FSP_KNEE_M = 280;
+  const FSP_TAIL_BASE_M = 83.71;
+  const FSP_TAIL_SLOPE = 0.1720;
+  function estimateFsp(totalPower) {
+    const tp = Number(totalPower) || 0;
+    if (tp <= 0) return 0;
+    const x = tp / 1e6;
+    if (x <= FSP_KNEE_M) return (FSP_QUAD_LINEAR * x - FSP_QUAD_SQUARE * x * x) * 1e6;
+    return (FSP_TAIL_BASE_M + (x - FSP_KNEE_M) * FSP_TAIL_SLOPE) * 1e6;
+  }
+
+  document.getElementById("fspPanelSub").textContent =
+    `${withThp.length} commanders with THP · estimated FSP, sorted highest to lowest`;
+
+  const fspRowsEl = document.getElementById("fspRows");
+  const maxFsp = estimateFsp(withThp[0][3]);
+  withThp.forEach((r, i) => {
+    const [name, country, kills, thp, , , , , , , missingSince, type, isDefaultHero] = r;
+    const fsp = estimateFsp(thp);
+    const pct = Math.max((fsp / maxFsp) * 100, 3);
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="col-pos">${i + 1}</td>
+      ${nameCell(name, missingSince, type, isDefaultHero)}
+      <td class="col-country">${country}</td>
+      <td class="num">${thp.toLocaleString("en-US")}</td>
+      <td class="num">${Math.round(fsp).toLocaleString("en-US")}</td>
+      <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></td>
+    `;
+    fspRowsEl.appendChild(tr);
+  });
+
+  const tabButtons = document.querySelectorAll(".tab-btn");
+  const tabPanels = document.querySelectorAll(".tab-panel");
+  tabButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      tabButtons.forEach(b => { b.classList.remove("active"); b.setAttribute("aria-selected", "false"); });
+      tabPanels.forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      btn.setAttribute("aria-selected", "true");
+      document.getElementById(btn.getAttribute("aria-controls")).classList.add("active");
+    });
+  });
+</script>
+</body>
+</html>
