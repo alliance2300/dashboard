@@ -1552,26 +1552,12 @@
       ];
     },
     dsb: () => {
-      const rows = currentDsbRows();
-      const date = dsbDateFilterEl.value;
-      const team = dsbTeamFilterEl.value;
-      const opponent = rows.length ? rows[0][1] : "—";
-      const result = rows.length ? rows[0][3] : null;
-      const resultLabel = result === "win" ? "Win" : result === "loss" ? "Loss" : "Pending";
-      const starters = rows.filter(r => r[5] !== "Substitutes").length;
-      const subs = rows.length - starters;
-      const unknown = rows.filter(r => r[8] === null).length;
-      const notPlayed = rows.filter(r => r[8] === false).length;
       const record = allTimeRecord();
       const battleWord = record.totalBattles === 1 ? "battle" : "battles";
       return [
-        { label: "Battle", value: rows.length ? `vs ${opponent}` : "—", sub: `Team ${team} · ${date}` },
-        { label: "Result", value: resultLabel, sub: result === null ? "awaiting outcome" : "" },
         { label: "Wins (all-time)", value: String(record.wins), sub: `${record.totalBattles} ${battleWord} logged` },
         { label: "Losses (all-time)", value: String(record.losses), sub: record.decided ? `record ${record.wins}–${record.losses}` : "no decided battles yet" },
         { label: "Win rate (all-time)", value: record.decided ? `${Math.round((record.wins / record.decided) * 100)}%` : "—", sub: record.decided ? `${record.decided} decided` : "no decided battles yet" },
-        { label: "Roster", value: String(rows.length), sub: `${starters} starters · ${subs} subs` },
-        { label: "Participation known", value: `${rows.length - unknown}/${rows.length}`, sub: notPlayed ? `${notPlayed} did not play` : "none reported yet" },
       ];
     },
     attendance: () => {
