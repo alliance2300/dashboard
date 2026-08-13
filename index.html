@@ -247,19 +247,50 @@
   .group-select { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 8px; }
   .group-select.hidden { display: none; }
   .group-card {
+    position: relative;
     display: block;
+    width: 100%;
     text-align: left;
     background: var(--panel);
-    border: 1px solid var(--line);
+    border: 1.5px solid var(--line);
     border-radius: 12px;
-    padding: 20px;
+    padding: 20px 44px 20px 20px;
     cursor: pointer;
     font: inherit;
     color: inherit;
-    transition: border-color 0.15s, transform 0.15s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
   }
-  .group-card:hover { transform: translateY(-2px); }
+  .group-card:hover, .group-card:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+  }
   .group-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .group-card-arrow {
+    position: absolute;
+    top: 20px;
+    right: 18px;
+    font-size: 18px;
+    color: var(--text-dim);
+    transition: transform 0.15s, color 0.15s;
+  }
+  .group-card:hover .group-card-arrow, .group-card:focus-visible .group-card-arrow {
+    transform: translateX(4px);
+  }
+  .group-card[data-group="alliance"]:hover .group-card-arrow { color: var(--accent); }
+  .group-card[data-group="server"]:hover .group-card-arrow { color: var(--accent2); }
+  .group-card[data-group="dsb"]:hover .group-card-arrow { color: var(--accent3); }
+  .group-card-cta {
+    display: block;
+    margin-top: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .group-card[data-group="alliance"] .group-card-cta { color: var(--accent); }
+  .group-card[data-group="server"] .group-card-cta { color: var(--accent2); }
+  .group-card[data-group="dsb"] .group-card-cta { color: var(--accent3); }
   .group-card-label {
     display: inline-block;
     font-size: 11px;
@@ -508,19 +539,25 @@
 
   <div class="group-select" id="groupSelect">
     <button class="group-card" type="button" data-group="alliance">
+      <span class="group-card-arrow" aria-hidden="true">→</span>
       <span class="group-card-label">Alliance 2300 Data</span>
       <h2>THP · Kills · FSP</h2>
       <p>Our own alliance's roster — Hero Power ranking, Kills ranking, and estimated First Squad Power.</p>
+      <span class="group-card-cta">View rankings →</span>
     </button>
     <button class="group-card" type="button" data-group="server">
+      <span class="group-card-arrow" aria-hidden="true">→</span>
       <span class="group-card-label">Server 2300 Data</span>
       <h2>Server Ranking · Alliance Rankings</h2>
       <p>The whole server #2300, not just us — every confirmed commander's THP/Kills, and every alliance ranked by power.</p>
+      <span class="group-card-cta">View rankings →</span>
     </button>
     <button class="group-card" type="button" data-group="dsb">
+      <span class="group-card-arrow" aria-hidden="true">→</span>
       <span class="group-card-label">Desert Storm</span>
       <h2>Battle Roster · Attendance</h2>
       <p>Team A/B lineups for each Desert Storm, results, and who actually shows up over time.</p>
+      <span class="group-card-cta">View rankings →</span>
     </button>
   </div>
 
@@ -640,16 +677,6 @@
         <h2>Full Server Ranking — Hero Power</h2>
         <span id="server200PanelSub"></span>
       </div>
-      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
-        <span class="notice-icon" aria-hidden="true">i</span>
-        <span>
-          Every commander with a confirmed Hero Power (THP) and/or Kills report across <b>the entire server #2300</b>, not just
-          our alliance — sourced the same way as our own roster (lwservers.com, "confirmed" reports only, so this is a
-          floor on the server's real population, not a full census). Sorted by THP; commanders with only Kills confirmed
-          (no THP) are listed after, sorted by Kills. Rows from our alliance are highlighted and tagged "Us". Δ columns show
-          growth vs 1/7/30 days ago and fill in as daily history accumulates.
-        </span>
-      </div>
       <div class="table-scroll">
         <table>
           <thead>
@@ -670,6 +697,16 @@
           </thead>
           <tbody id="server200Rows"></tbody>
         </table>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          Every commander with a confirmed Hero Power (THP) and/or Kills report across <b>the entire server #2300</b>, not just
+          our alliance — sourced the same way as our own roster (lwservers.com, "confirmed" reports only, so this is a
+          floor on the server's real population, not a full census). Sorted by THP; commanders with only Kills confirmed
+          (no THP) are listed after, sorted by Kills. Rows from our alliance are highlighted and tagged "Us". Δ columns show
+          growth vs 1/7/30 days ago and fill in as daily history accumulates.
+        </span>
       </div>
     </div>
 
@@ -706,14 +743,6 @@
         <h2>Desert Storm Battle</h2>
         <span id="dsbPanelSub"></span>
       </div>
-      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
-        <span class="notice-icon" aria-hidden="true">i</span>
-        <span>
-          Team rosters are set before each Desert Storm from THP ranking (see the strategy images shared in Discord). Result,
-          Score and Participated fill in after the battle — until then they show as <b>Pending</b>. A row with
-          <b>Participated = No</b> (a starter or sub who didn't actually play) is shown dimmed with a struck-through name.
-        </span>
-      </div>
       <div class="dsb-filters">
         <label>Date
           <select id="dsbDateFilter"></select>
@@ -739,6 +768,14 @@
           </thead>
           <tbody id="dsbRows"></tbody>
         </table>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          Team rosters are set before each Desert Storm from THP ranking (see the strategy images shared in Discord). Result,
+          Score and Participated fill in after the battle — until then they show as <b>Pending</b>. A row with
+          <b>Participated = No</b> (a starter or sub who didn't actually play) is shown dimmed with a struck-through name.
+        </span>
       </div>
     </div>
 
@@ -777,14 +814,7 @@
   </div>
 
   <footer>
-    Commander data (THP Ranking, Kills Ranking, FSP Ranking): <a href="https://www.lwservers.com/ranking" target="_blank" rel="noopener">lwservers.com</a>, filtered to alliance 2300 on server #2300 by account ID. As of 2026-08-10 this replaced lastrank.fun as the source — it confirms Hero Power for more of our roster (60 commanders vs. 48 before), so growth (Δ) columns restarted from this date.
-    Alliance Rankings (all alliances on the server): <a href="https://lastrank.fun/rankings/alliances?server=2300" target="_blank" rel="noopener">lastrank.fun</a>, sorted by Power.
-    Kills are only confirmed for some commanders — the Kills Ranking above lists only those with a recorded value.
-    Δ columns compare against the closest earlier capture in the daily history log; they read "—" until enough days have been logged.
-    A struck-through name with a "left YYYY-MM-DD" tag means the source stopped reporting that commander on that date — they're kept listed for 30 days (in case it's a temporary blip) and removed automatically after that if they never reappear. Renames are tracked by the game's own account ID, so a commander keeps their history even after changing their display name.
-    Estimated FSP uses the public THP→FSP formula published by lwservers.com — see the note in the FSP Ranking tab.
-    The colored Tank/Air/Missile badge next to a name shows their strongest hero's squad type (Air beats Tank beats Missile beats Air) — lwservers.com only confirms this for about half the roster, so a name with no badge just means that data point isn't confirmed, not that the commander lacks a squad. A dimmed badge means the strongest hero is Kimberly, the game's default starting hero — still a real Tank, but a weaker signal of intentional squad choice.
-    This dashboard is republished automatically every day at 23:05 Brasília time (BRT) — the game's daily reset — with the latest capture from both sources.
+    Data: <a href="https://www.lwservers.com/ranking" target="_blank" rel="noopener">lwservers.com</a> (THP, Kills, FSP, Server Ranking) and <a href="https://lastrank.fun/rankings/alliances?server=2300" target="_blank" rel="noopener">lastrank.fun</a> (Alliance Rankings). Republished automatically every day at 23:05 BRT.
   </footer>
 </div>
 
