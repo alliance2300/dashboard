@@ -433,28 +433,7 @@
     </div>
   </div>
 
-  <div class="tiles">
-    <div class="tile">
-      <div class="tile-label" id="tileLabel0">Commanders</div>
-      <div class="tile-value" id="tileValue0">—</div>
-      <div class="tile-sub" id="tileSub0"></div>
-    </div>
-    <div class="tile">
-      <div class="tile-label" id="tileLabel1">Leader</div>
-      <div class="tile-value" id="tileValue1">—</div>
-      <div class="tile-sub" id="tileSub1"></div>
-    </div>
-    <div class="tile">
-      <div class="tile-label" id="tileLabel2">Combined</div>
-      <div class="tile-value" id="tileValue2">—</div>
-      <div class="tile-sub" id="tileSub2"></div>
-    </div>
-    <div class="tile">
-      <div class="tile-label" id="tileLabel3">Median</div>
-      <div class="tile-value" id="tileValue3">—</div>
-      <div class="tile-sub" id="tileSub3"></div>
-    </div>
-  </div>
+  <div class="tiles" id="tilesContainer"></div>
 
   <div class="panel">
     <div class="tabs" role="tablist">
@@ -1347,6 +1326,20 @@
     return desertStorm.filter(r => r[0] === date && r[2] === team);
   }
 
+  // All-time W/L record — one result per distinct (date, team) battle, ignoring the current
+  // filters on purpose (unlike currentDsbRows) since this is meant to compile across everything logged.
+  function allTimeRecord() {
+    const battleResults = new Map();
+    desertStorm.forEach(r => {
+      const key = `${r[0]}|${r[2]}`;
+      if (!battleResults.has(key)) battleResults.set(key, r[3]);
+    });
+    const results = [...battleResults.values()];
+    const wins = results.filter(r => r === "win").length;
+    const losses = results.filter(r => r === "loss").length;
+    return { wins, losses, decided: wins + losses, totalBattles: results.length };
+  }
+
   function populateDsbTeamFilter() {
     const date = dsbDateFilterEl.value;
     const teams = [...new Set(desertStorm.filter(r => r[0] === date).map(r => r[2]))].sort();
@@ -1569,9 +1562,14 @@
       const subs = rows.length - starters;
       const unknown = rows.filter(r => r[8] === null).length;
       const notPlayed = rows.filter(r => r[8] === false).length;
+      const record = allTimeRecord();
+      const battleWord = record.totalBattles === 1 ? "battle" : "battles";
       return [
         { label: "Battle", value: rows.length ? `vs ${opponent}` : "—", sub: `Team ${team} · ${date}` },
         { label: "Result", value: resultLabel, sub: result === null ? "awaiting outcome" : "" },
+        { label: "Wins (all-time)", value: String(record.wins), sub: `${record.totalBattles} ${battleWord} logged` },
+        { label: "Losses (all-time)", value: String(record.losses), sub: record.decided ? `record ${record.wins}–${record.losses}` : "no decided battles yet" },
+        { label: "Win rate (all-time)", value: record.decided ? `${Math.round((record.wins / record.decided) * 100)}%` : "—", sub: record.decided ? `${record.decided} decided` : "no decided battles yet" },
         { label: "Roster", value: String(rows.length), sub: `${starters} starters · ${subs} subs` },
         { label: "Participation known", value: `${rows.length - unknown}/${rows.length}`, sub: notPlayed ? `${notPlayed} did not play` : "none reported yet" },
       ];
@@ -1595,10 +1593,17 @@
   function renderTiles(tabKey) {
     const cfg = TILE_CONFIGS[tabKey];
     if (!cfg) return;
-    cfg().forEach((t, i) => {
-      document.getElementById(`tileLabel${i}`).textContent = t.label;
-      document.getElementById(`tileValue${i}`).textContent = t.value;
-      document.getElementById(`tileSub${i}`).textContent = t.sub;
+    const container = document.getElementById("tilesContainer");
+    container.innerHTML = "";
+    cfg().forEach(t => {
+      const tile = document.createElement("div");
+      tile.className = "tile";
+      tile.innerHTML = `
+        <div class="tile-label">${t.label}</div>
+        <div class="tile-value">${t.value}</div>
+        <div class="tile-sub">${t.sub}</div>
+      `;
+      container.appendChild(tile);
     });
   }
 
