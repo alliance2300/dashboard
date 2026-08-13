@@ -298,6 +298,21 @@
     text-transform: uppercase;
     color: var(--accent2);
   }
+  .result-badge {
+    display: inline-block;
+    font: 700 11px/1 system-ui, sans-serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .result-win { background: color-mix(in srgb, var(--good) 18%, transparent); color: var(--good); }
+  .result-loss { background: color-mix(in srgb, var(--bad) 18%, transparent); color: var(--bad); }
+  .result-pending { background: var(--panel-2); color: var(--text-dim); }
+  .col-role {
+    font-size: 12.5px;
+    color: var(--text-dim);
+  }
   .num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
   .delta { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; font-size: 12.5px; color: var(--text-dim); }
   .delta.up { color: var(--good); }
@@ -430,6 +445,7 @@
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fsp" id="tab-fsp" data-tab="fsp">FSP Ranking</button>
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-server200" id="tab-server200" data-tab="server200">Server Ranking</button>
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-alliances" id="tab-alliances" data-tab="alliances">Alliance Rankings</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-dsb" id="tab-dsb" data-tab="dsb">Desert Storm</button>
     </div>
 
     <div class="tab-panel active" id="panel-thp" role="tabpanel" aria-labelledby="tab-thp">
@@ -579,6 +595,37 @@
             </tr>
           </thead>
           <tbody id="allianceRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-dsb" role="tabpanel" aria-labelledby="tab-dsb">
+      <div class="panel-head">
+        <h2>Desert Storm Battle</h2>
+        <span id="dsbPanelSub"></span>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          Team rosters are set before each Desert Storm from THP ranking (see the strategy images shared in Discord). Result
+          and Score fill in after the battle — until then they show as <b>Pending</b>.
+        </span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Opponent</th>
+              <th>Team</th>
+              <th>Result</th>
+              <th>Player</th>
+              <th>Role</th>
+              <th class="num">Power</th>
+              <th class="num">Score</th>
+            </tr>
+          </thead>
+          <tbody id="dsbRows"></tbody>
         </table>
       </div>
     </div>
@@ -1168,6 +1215,61 @@
     allianceRowsEl.appendChild(tr);
   });
 
+  // Desert Storm Battle log — manually maintained (not part of the daily scrape). One row per
+  // participant per battle. Each row: [date, opponent, team, result, player, role, power, score]
+  // result: "win" | "loss" | null (pending). score: number | null (filled in after the battle).
+  // power: the THP snapshot (in millions, as captured when the team was assigned) used to rank
+  // and place that player — kept as the original string (e.g. "20.7M") rather than the live THP.
+  const desertStorm = [
+    ["2026-08-14","MONZ","A",null,"JP BRAZIL","Roamers","20.7M",null],
+    ["2026-08-14","MONZ","A",null,"NISSI™","Roamers","19.2M",null],
+    ["2026-08-14","MONZ","A",null,"m19elevenn","2300 Oil","14.3M",null],
+    ["2026-08-14","MONZ","A",null,"2CTrashhh","2300 Oil","11.7M",null],
+    ["2026-08-14","MONZ","A",null,"Right Tùrn Clydè","2300 Oil","11.1M",null],
+    ["2026-08-14","MONZ","A",null,"Icēman","Enemy Oil","12.1M",null],
+    ["2026-08-14","MONZ","A",null,"Bombinø","Enemy Oil","11.6M",null],
+    ["2026-08-14","MONZ","A",null,"Flodzzzz","Enemy Oil","9.9M",null],
+    ["2026-08-14","MONZ","A",null,"Bourne","Science Hub","9.6M",null],
+    ["2026-08-14","MONZ","A",null,"KaRTõõN","Science Hub","9.4M",null],
+    ["2026-08-14","MONZ","A",null,"Sțríker","Info Center","9.5M",null],
+    ["2026-08-14","MONZ","A",null,"jjamesbond","Info Center","9.2M",null],
+    ["2026-08-14","MONZ","A",null,"KillaKells2","Hospital 1","9.0M",null],
+    ["2026-08-14","MONZ","A",null,"DarkeySPD","Hospital 1","6.2M",null],
+    ["2026-08-14","MONZ","A",null,"Sloth xoxo","Hospital 2","8.6M",null],
+    ["2026-08-14","MONZ","A",null,"Dark Little Darling","Hospital 2","7.4M",null],
+    ["2026-08-14","MONZ","A",null,"AThena","Hospital 3","8.5M",null],
+    ["2026-08-14","MONZ","A",null,"Thracian Mercenary","Hospital 3","7.4M",null],
+    ["2026-08-14","MONZ","A",null,"Witch UA","Hospital 4","7.9M",null],
+    ["2026-08-14","MONZ","A",null,"NOT Lord Shocka","Hospital 4","7.7M",null],
+  ];
+
+  function resultBadge(result) {
+    if (result === "win") return `<span class="result-badge result-win">Win</span>`;
+    if (result === "loss") return `<span class="result-badge result-loss">Loss</span>`;
+    return `<span class="result-badge result-pending">Pending</span>`;
+  }
+
+  const battleKeys = [...new Set(desertStorm.map(r => `${r[0]}|${r[2]}|${r[1]}`))];
+  document.getElementById("dsbPanelSub").textContent =
+    `${desertStorm.length} participants logged across ${battleKeys.length} battle${battleKeys.length === 1 ? "" : "s"}`;
+
+  const dsbRowsEl = document.getElementById("dsbRows");
+  desertStorm.forEach(r => {
+    const [date, opponent, team, result, player, role, power, score] = r;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${date}</td>
+      <td>${opponent}</td>
+      <td class="col-tag">${team}</td>
+      <td>${resultBadge(result)}</td>
+      <td class="col-player">${player}</td>
+      <td class="col-role">${role}</td>
+      <td class="num">${power}</td>
+      <td class="num">${score !== null ? score.toLocaleString("en-US") : "—"}</td>
+    `;
+    dsbRowsEl.appendChild(tr);
+  });
+
   // THP → FSP: published formula from lwservers.com (js/lws-math.js, estimateFsp()).
   // Quadratic fit up to 280M THP, linear tail beyond it. THP-only input — never game power.
   const FSP_QUAD_LINEAR = 0.4258;
@@ -1280,6 +1382,19 @@
         { label: "Leader (THP)", value: fmtAbbrev(leader[3]), sub: leaderSub },
         { label: "Combined THP", value: fmtAbbrev(sumOf(vals)), sub: `sum of ${withThpRows.length} with THP` },
         { label: "Median THP", value: fmtAbbrev(medianOf(vals)), sub: "server midpoint" },
+      ];
+    },
+    dsb: () => {
+      const dates = [...new Set(desertStorm.map(r => r[0]))].sort();
+      const latest = dates[dates.length - 1];
+      const latestRows = desertStorm.filter(r => r[0] === latest);
+      const teams = [...new Set(latestRows.map(r => r[2]))].sort();
+      const pending = desertStorm.filter(r => r[3] === null).length;
+      return [
+        { label: "Battles logged", value: String(battleKeys.length), sub: dates.length === 1 ? latest : `${dates[0]} → ${latest}` },
+        { label: "Latest battle", value: `vs ${latestRows[0][1]}`, sub: `Team ${teams.join(" & ")} · ${latest}` },
+        { label: "Participants", value: String(desertStorm.length), sub: "starters logged" },
+        { label: "Results pending", value: String(pending), sub: pending === desertStorm.length ? "awaiting scores" : `of ${desertStorm.length} rows` },
       ];
     },
   };
