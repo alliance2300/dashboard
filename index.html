@@ -464,6 +464,7 @@
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-server200" id="tab-server200" data-tab="server200">Server Ranking</button>
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-alliances" id="tab-alliances" data-tab="alliances">Alliance Rankings</button>
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-dsb" id="tab-dsb" data-tab="dsb">Desert Storm</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-attendance" id="tab-attendance" data-tab="attendance">Attendance</button>
     </div>
 
     <div class="tab-panel active" id="panel-thp" role="tabpanel" aria-labelledby="tab-thp">
@@ -664,6 +665,37 @@
             </tr>
           </thead>
           <tbody id="dsbRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-attendance" role="tabpanel" aria-labelledby="tab-attendance">
+      <div class="panel-head">
+        <h2>Attendance — All Logged Battles</h2>
+        <span id="attendancePanelSub"></span>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          Tallies every roster spot in the Desert Storm log across every date and team so far, regardless of the filters on
+          that tab. <b>No-shows</b> counts rows marked Participated = No — a player assigned to a spot who didn't actually
+          play. Rows still marked Pending aren't counted either way yet. Sorted by most times participated.
+        </span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th>Player</th>
+              <th class="num">Participated</th>
+              <th class="num">No-shows</th>
+              <th class="num">Reported</th>
+              <th class="num">Rate</th>
+              <th class="bar-cell"></th>
+            </tr>
+          </thead>
+          <tbody id="attendanceRows"></tbody>
         </table>
       </div>
     </div>
@@ -1374,6 +1406,44 @@
 
   renderDsbRows();
 
+  // Attendance summary — tallies desertStorm across every date/team (ignores the Desert Storm tab's
+  // own filters on purpose, since this is meant to answer "who actually shows up overall").
+  function buildAttendance() {
+    const byPlayer = new Map();
+    desertStorm.forEach(r => {
+      const [, , , , player, , , , participated] = r;
+      if (!byPlayer.has(player)) byPlayer.set(player, { yes: 0, no: 0, pending: 0 });
+      const rec = byPlayer.get(player);
+      if (participated === true) rec.yes++;
+      else if (participated === false) rec.no++;
+      else rec.pending++;
+    });
+    return [...byPlayer.entries()]
+      .map(([player, rec]) => ({ player, ...rec, reported: rec.yes + rec.no }))
+      .sort((a, b) => b.yes - a.yes || b.no - a.no || a.player.localeCompare(b.player));
+  }
+
+  document.getElementById("attendancePanelSub").textContent =
+    `${new Set(desertStorm.map(r => r[4])).size} players · ${[...new Set(desertStorm.map(r => `${r[0]}|${r[2]}`))].length} battle(s) logged`;
+
+  const attendanceRowsEl = document.getElementById("attendanceRows");
+  const attendanceData = buildAttendance();
+  attendanceData.forEach((a, i) => {
+    const rateText = a.reported ? `${Math.round((a.yes / a.reported) * 100)}%` : "—";
+    const ratePct = a.reported ? (a.yes / a.reported) * 100 : 0;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="col-pos">${i + 1}</td>
+      <td class="col-player">${a.player}</td>
+      <td class="num participated-yes">${a.yes}</td>
+      <td class="num participated-no">${a.no}</td>
+      <td class="num">${a.reported}</td>
+      <td class="num">${rateText}</td>
+      <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${Math.max(ratePct, a.reported ? 3 : 0)}%"></div></div></td>
+    `;
+    attendanceRowsEl.appendChild(tr);
+  });
+
   // THP → FSP: published formula from lwservers.com (js/lws-math.js, estimateFsp()).
   // Quadratic fit up to 280M THP, linear tail beyond it. THP-only input — never game power.
   const FSP_QUAD_LINEAR = 0.4258;
@@ -1504,6 +1574,20 @@
         { label: "Result", value: resultLabel, sub: result === null ? "awaiting outcome" : "" },
         { label: "Roster", value: String(rows.length), sub: `${starters} starters · ${subs} subs` },
         { label: "Participation known", value: `${rows.length - unknown}/${rows.length}`, sub: notPlayed ? `${notPlayed} did not play` : "none reported yet" },
+      ];
+    },
+    attendance: () => {
+      const reported = attendanceData.filter(a => a.reported > 0);
+      const mostReliable = reported.length ? [...reported].sort((a, b) => b.yes - a.yes)[0] : null;
+      const mostAbsences = reported.length ? [...reported].sort((a, b) => b.no - a.no)[0] : null;
+      const avgRate = reported.length
+        ? Math.round(reported.reduce((s, a) => s + a.yes / a.reported, 0) / reported.length * 100)
+        : null;
+      return [
+        { label: "Players tracked", value: String(attendanceData.length), sub: `${reported.length} with a reported result` },
+        { label: "Most reliable", value: mostReliable ? String(mostReliable.yes) : "—", sub: mostReliable ? mostReliable.player : "no data yet" },
+        { label: "Most no-shows", value: mostAbsences && mostAbsences.no > 0 ? String(mostAbsences.no) : "—", sub: mostAbsences && mostAbsences.no > 0 ? mostAbsences.player : "no data yet" },
+        { label: "Avg. attendance rate", value: avgRate !== null ? `${avgRate}%` : "—", sub: "across reported players" },
       ];
     },
   };
