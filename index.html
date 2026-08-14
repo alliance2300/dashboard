@@ -343,6 +343,17 @@
     position: sticky;
     top: 0;
   }
+  th.sortable {
+    cursor: pointer;
+    user-select: none;
+  }
+  th.sortable:hover { color: var(--text); }
+  .sort-arrow {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 9px;
+    opacity: 0.85;
+  }
   tbody td {
     padding: 8px 16px;
     border-bottom: 1px solid var(--line);
@@ -789,11 +800,11 @@
           <thead>
             <tr>
               <th class="col-pos">#</th>
-              <th>Player</th>
-              <th class="num">Participated</th>
-              <th class="num">No-shows</th>
-              <th class="num">Reported</th>
-              <th class="num">Rate</th>
+              <th class="sortable" data-sort="player" data-default-dir="asc">Player<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="yes" data-default-dir="desc">Participated<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="no" data-default-dir="desc">No-shows<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="reported" data-default-dir="desc">Reported<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="rate" data-default-dir="desc">Rate<span class="sort-arrow"></span></th>
               <th class="bar-cell"></th>
             </tr>
           </thead>
@@ -1584,21 +1595,61 @@
 
   const attendanceRowsEl = document.getElementById("attendanceRows");
   const attendanceData = buildAttendance();
-  attendanceData.forEach((a, i) => {
-    const rateText = a.reported ? `${Math.round((a.yes / a.reported) * 100)}%` : "—";
-    const ratePct = a.reported ? (a.yes / a.reported) * 100 : 0;
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td class="col-pos">${i + 1}</td>
-      <td class="col-player">${a.player}</td>
-      <td class="num participated-yes">${a.yes}</td>
-      <td class="num participated-no">${a.no}</td>
-      <td class="num">${a.reported}</td>
-      <td class="num">${rateText}</td>
-      <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${Math.max(ratePct, a.reported ? 3 : 0)}%"></div></div></td>
-    `;
-    attendanceRowsEl.appendChild(tr);
+  let attendanceSortKey = "no";
+  let attendanceSortDir = "desc";
+
+  function attendanceRate(a) {
+    return a.reported ? a.yes / a.reported : -1;
+  }
+
+  function renderAttendanceRows() {
+    const dir = attendanceSortDir === "asc" ? 1 : -1;
+    const key = attendanceSortKey;
+    const sorted = [...attendanceData].sort((a, b) => {
+      if (key === "player") return dir * a.player.localeCompare(b.player);
+      const av = key === "rate" ? attendanceRate(a) : a[key];
+      const bv = key === "rate" ? attendanceRate(b) : b[key];
+      if (av === bv) return a.player.localeCompare(b.player);
+      return dir * (av - bv);
+    });
+
+    attendanceRowsEl.innerHTML = "";
+    sorted.forEach((a, i) => {
+      const rateText = a.reported ? `${Math.round(attendanceRate(a) * 100)}%` : "—";
+      const ratePct = a.reported ? attendanceRate(a) * 100 : 0;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="col-pos">${i + 1}</td>
+        <td class="col-player">${a.player}</td>
+        <td class="num participated-yes">${a.yes}</td>
+        <td class="num participated-no">${a.no}</td>
+        <td class="num">${a.reported}</td>
+        <td class="num">${rateText}</td>
+        <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${Math.max(ratePct, a.reported ? 3 : 0)}%"></div></div></td>
+      `;
+      attendanceRowsEl.appendChild(tr);
+    });
+
+    document.querySelectorAll('#panel-attendance thead th[data-sort]').forEach(th => {
+      const arrow = th.querySelector(".sort-arrow");
+      arrow.textContent = th.dataset.sort === attendanceSortKey ? (attendanceSortDir === "asc" ? " ▲" : " ▼") : "";
+    });
+  }
+
+  document.querySelectorAll('#panel-attendance thead th[data-sort]').forEach(th => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.sort;
+      if (attendanceSortKey === key) {
+        attendanceSortDir = attendanceSortDir === "asc" ? "desc" : "asc";
+      } else {
+        attendanceSortKey = key;
+        attendanceSortDir = th.dataset.defaultDir || "desc";
+      }
+      renderAttendanceRows();
+    });
   });
+
+  renderAttendanceRows();
 
   // THP → FSP: published formula from lwservers.com (js/lws-math.js, estimateFsp()).
   // Quadratic fit up to 280M THP, linear tail beyond it. THP-only input — never game power.
