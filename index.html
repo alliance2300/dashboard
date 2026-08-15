@@ -18,6 +18,8 @@
     --accent2-soft: #d9e9ef;
     --accent3: #b8611f;
     --accent3-soft: #f5ddc0;
+    --accent4: #a3283f;
+    --accent4-soft: #f5d9de;
     --bar-track: #e6ddc4;
     --good: #3f7d52;
     --bad: #b3492f;
@@ -42,6 +44,8 @@
       --accent2-soft: #16303c;
       --accent3: #e0954f;
       --accent3-soft: #3d2814;
+      --accent4: #e2708a;
+      --accent4-soft: #3d1822;
       --bar-track: #24303d;
       --good: #6fbf8b;
       --bad: #e0806a;
@@ -66,6 +70,8 @@
     --accent2-soft: #16303c;
     --accent3: #e0954f;
     --accent3-soft: #3d2814;
+    --accent4: #e2708a;
+    --accent4-soft: #3d1822;
     --bar-track: #24303d;
     --good: #6fbf8b;
     --bad: #e0806a;
@@ -89,6 +95,8 @@
     --accent2-soft: #d9e9ef;
     --accent3: #b8611f;
     --accent3-soft: #f5ddc0;
+    --accent4: #a3283f;
+    --accent4-soft: #f5d9de;
     --bar-track: #e6ddc4;
     --good: #3f7d52;
     --type-tank: #5c7a4a;
@@ -226,6 +234,8 @@
   .tab-btn-alt.active { color: var(--accent2); border-bottom-color: var(--accent2); }
   .tab-btn-dsb { color: var(--accent3); }
   .tab-btn-dsb.active { color: var(--accent3); border-bottom-color: var(--accent3); }
+  .tab-btn-war { color: var(--accent4); }
+  .tab-btn-war.active { color: var(--accent4); border-bottom-color: var(--accent4); }
   #panel-alliances .panel-head { border-bottom-color: var(--accent2); }
   #panel-alliances .panel-head h2 { color: var(--accent2); }
   #panel-alliances .bar-fill { background: var(--accent2); }
@@ -240,6 +250,9 @@
   #panel-attendance .panel-head h2 { color: var(--accent3); }
   #panel-attendance thead th { color: var(--accent3); }
   #panel-attendance .bar-fill { background: var(--accent3); }
+  #panel-busterday .panel-head { border-bottom-color: var(--accent4); }
+  #panel-busterday .panel-head h2 { color: var(--accent4); }
+  #panel-busterday thead th { color: var(--accent4); }
   .tab-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
@@ -280,6 +293,7 @@
   .group-card[data-group="alliance"]:hover .group-card-arrow { color: var(--accent); }
   .group-card[data-group="server"]:hover .group-card-arrow { color: var(--accent2); }
   .group-card[data-group="dsb"]:hover .group-card-arrow { color: var(--accent3); }
+  .group-card[data-group="waaaaar"]:hover .group-card-arrow { color: var(--accent4); }
   .group-card-cta {
     display: block;
     margin-top: 12px;
@@ -291,6 +305,7 @@
   .group-card[data-group="alliance"] .group-card-cta { color: var(--accent); }
   .group-card[data-group="server"] .group-card-cta { color: var(--accent2); }
   .group-card[data-group="dsb"] .group-card-cta { color: var(--accent3); }
+  .group-card[data-group="waaaaar"] .group-card-cta { color: var(--accent4); }
   .group-card-label {
     display: inline-block;
     font-size: 11px;
@@ -310,6 +325,9 @@
   .group-card[data-group="dsb"] { border-color: var(--accent3-soft); }
   .group-card[data-group="dsb"]:hover { border-color: var(--accent3); }
   .group-card[data-group="dsb"] .group-card-label { background: var(--accent3-soft); color: var(--accent3); }
+  .group-card[data-group="waaaaar"] { border-color: var(--accent4-soft); }
+  .group-card[data-group="waaaaar"]:hover { border-color: var(--accent4); }
+  .group-card[data-group="waaaaar"] .group-card-label { background: var(--accent4-soft); color: var(--accent4); }
   .group-card h2 { margin: 0 0 6px; font-size: 18px; }
   .group-card p { margin: 0; font-size: 13px; color: var(--text-dim); line-height: 1.5; }
 
@@ -570,6 +588,13 @@
       <p>Team A/B lineups for each Desert Storm, results, and who actually shows up over time.</p>
       <span class="group-card-cta">View rankings →</span>
     </button>
+    <button class="group-card" type="button" data-group="waaaaar">
+      <span class="group-card-arrow" aria-hidden="true">→</span>
+      <span class="group-card-label">WAAAAAR</span>
+      <h2>Buster Day</h2>
+      <p>Weekly Buster Day Top 15 / Bottom 15 point rankings — who shows up strong, and who's at risk.</p>
+      <span class="group-card-cta">View rankings →</span>
+    </button>
   </div>
 
   <div class="data-view hidden" id="dataView">
@@ -586,6 +611,7 @@
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-alliances" id="tab-alliances" data-tab="alliances" data-group="server">Alliance Rankings</button>
       <button class="tab-btn tab-btn-dsb" role="tab" aria-selected="false" aria-controls="panel-dsb" id="tab-dsb" data-tab="dsb" data-group="dsb">Desert Storm</button>
       <button class="tab-btn tab-btn-dsb" role="tab" aria-selected="false" aria-controls="panel-attendance" id="tab-attendance" data-tab="attendance" data-group="dsb">Attendance</button>
+      <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-busterday" id="tab-busterday" data-tab="busterday" data-group="waaaaar">Buster Day</button>
     </div>
 
     <div class="tab-panel active" id="panel-thp" role="tabpanel" aria-labelledby="tab-thp">
@@ -817,6 +843,56 @@
           Tallies every roster spot in the Desert Storm log across every date and team so far, regardless of the filters on
           that tab. <b>No-shows</b> counts rows marked Participated = No — a player assigned to a spot who didn't actually
           play. Rows still marked Pending aren't counted either way yet. Sorted by most times participated.
+        </span>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-busterday" role="tabpanel" aria-labelledby="tab-busterday">
+      <div class="panel-head">
+        <h2>Buster Day</h2>
+        <span id="busterdayPanelSub"></span>
+      </div>
+      <div class="dsb-filters">
+        <label>Date
+          <select id="busterDateFilter"></select>
+        </label>
+      </div>
+      <div class="panel-head" style="border-top: 1px solid var(--line); margin-top: 14px;">
+        <h2>Top 15</h2>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th>Player</th>
+              <th class="num">Points</th>
+            </tr>
+          </thead>
+          <tbody id="busterTopRows"></tbody>
+        </table>
+      </div>
+      <div class="panel-head" style="border-top: 1px solid var(--line); margin-top: 14px;">
+        <h2>Bottom 15</h2>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th>Player</th>
+              <th class="num">Points</th>
+            </tr>
+          </thead>
+          <tbody id="busterBottomRows"></tbody>
+        </table>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          Buster Day Top 15 and Bottom 15 point rankings, sent in manually at the end of each Saturday — not part of the
+          daily scrape. <b>Most appearances</b> tiles count every week logged so far, tie-broken by total points across
+          those appearances. The point totals reflect the selected week only.
         </span>
       </div>
     </div>
@@ -1651,6 +1727,71 @@
 
   renderAttendanceRows();
 
+  // Buster Day — Top 15 / Bottom 15 point rankings, manually maintained (sent in by the user each
+  // Saturday, not part of the daily scrape). One row per player per week per tier.
+  // Each row: [date, tier, rank, player, points] — tier: "top" | "bottom", rank: 1-15.
+  const busterDay = [
+  ];
+
+  function busterDates() {
+    return [...new Set(busterDay.map(r => r[0]))].sort();
+  }
+  const busterDateFilterEl = document.getElementById("busterDateFilter");
+  const busterDatesList = busterDates();
+  busterDatesList.forEach(d => {
+    const opt = document.createElement("option");
+    opt.value = d;
+    opt.textContent = d;
+    busterDateFilterEl.appendChild(opt);
+  });
+  if (busterDatesList.length) busterDateFilterEl.value = busterDatesList[busterDatesList.length - 1];
+
+  function currentBusterRows(tier) {
+    const date = busterDateFilterEl.value;
+    return busterDay.filter(r => r[0] === date && r[1] === tier).sort((a, b) => a[2] - b[2]);
+  }
+
+  function renderBusterRows(tier, tbodyId) {
+    const rows = currentBusterRows(tier);
+    const el = document.getElementById(tbodyId);
+    el.innerHTML = "";
+    rows.forEach(r => {
+      const [, , rank, player, points] = r;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="col-pos">${rank}</td>
+        <td class="col-player">${player}</td>
+        <td class="num">${points.toLocaleString("en-US")}</td>
+      `;
+      el.appendChild(tr);
+    });
+  }
+
+  // All-time per-player tally across every logged week — appearances first, total points as tiebreak.
+  function busterAppearances(tier) {
+    const byPlayer = new Map();
+    busterDay.filter(r => r[1] === tier).forEach(r => {
+      const player = r[3], points = r[4];
+      if (!byPlayer.has(player)) byPlayer.set(player, { appearances: 0, points: 0 });
+      const rec = byPlayer.get(player);
+      rec.appearances++;
+      rec.points += points;
+    });
+    return [...byPlayer.entries()]
+      .map(([player, rec]) => ({ player, ...rec }))
+      .sort((a, b) => b.appearances - a.appearances || b.points - a.points);
+  }
+
+  function renderBusterDay() {
+    renderBusterRows("top", "busterTopRows");
+    renderBusterRows("bottom", "busterBottomRows");
+    document.getElementById("busterdayPanelSub").textContent = busterDatesList.length
+      ? `${busterDateFilterEl.value} · ${busterDatesList.length} week${busterDatesList.length === 1 ? "" : "s"} logged`
+      : "no weeks logged yet";
+  }
+  busterDateFilterEl.addEventListener("change", () => { renderBusterDay(); renderTiles("busterday"); });
+  renderBusterDay();
+
   // THP → FSP: published formula from lwservers.com (js/lws-math.js, estimateFsp()).
   // Quadratic fit up to 280M THP, linear tail beyond it. THP-only input — never game power.
   const FSP_QUAD_LINEAR = 0.4258;
@@ -1788,6 +1929,22 @@
         { label: "Avg. attendance rate", value: avgRate !== null ? `${avgRate}%` : "—", sub: "across reported players" },
       ];
     },
+    busterday: () => {
+      const topAppearances = busterAppearances("top");
+      const bottomAppearances = busterAppearances("bottom");
+      const leaderTop = topAppearances[0] || null;
+      const leaderBottom = bottomAppearances[0] || null;
+      const currentTop = currentBusterRows("top");
+      const currentBottom = currentBusterRows("bottom");
+      const totalTopPoints = currentTop.reduce((s, r) => s + r[4], 0);
+      const totalBottomPoints = currentBottom.reduce((s, r) => s + r[4], 0);
+      return [
+        { label: "Most Top 15 appearances", value: leaderTop ? String(leaderTop.appearances) : "—", sub: leaderTop ? leaderTop.player : "no data yet" },
+        { label: "Top 15 points (this week)", value: currentTop.length ? totalTopPoints.toLocaleString("en-US") : "—", sub: currentTop.length ? busterDateFilterEl.value : "no data yet" },
+        { label: "Most Bottom 15 appearances", value: leaderBottom ? String(leaderBottom.appearances) : "—", sub: leaderBottom ? leaderBottom.player : "no data yet" },
+        { label: "Bottom 15 points (this week)", value: currentBottom.length ? totalBottomPoints.toLocaleString("en-US") : "—", sub: currentBottom.length ? busterDateFilterEl.value : "no data yet" },
+      ];
+    },
   };
 
   function renderTiles(tabKey) {
@@ -1825,7 +1982,7 @@
   // Group navigation: the dashboard opens on a group-picker screen (Alliance 2300 Data /
   // Server 2300 Data / Desert Storm); picking a group filters the tab bar down to just that
   // group's tabs and activates the first one. "← All groups" returns to the picker.
-  const GROUPS = { alliance: ["thp", "kills", "fsp"], server: ["server200", "alliances"], dsb: ["dsb", "attendance"] };
+  const GROUPS = { alliance: ["thp", "kills", "fsp"], server: ["server200", "alliances"], dsb: ["dsb", "attendance"], waaaaar: ["busterday"] };
   const groupSelectEl = document.getElementById("groupSelect");
   const dataViewEl = document.getElementById("dataView");
 
