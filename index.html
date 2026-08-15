@@ -243,6 +243,10 @@
   #panel-server200 .panel-head { border-bottom-color: var(--accent2); }
   #panel-server200 .panel-head h2 { color: var(--accent2); }
   #panel-server200 thead th { color: var(--accent2); }
+  #panel-serverkills .panel-head { border-bottom-color: var(--accent2); }
+  #panel-serverkills .panel-head h2 { color: var(--accent2); }
+  #panel-serverkills thead th { color: var(--accent2); }
+  #panel-serverkills .bar-fill { background: var(--accent2); }
   #panel-dsb .panel-head { border-bottom-color: var(--accent3); }
   #panel-dsb .panel-head h2 { color: var(--accent3); }
   #panel-dsb thead th { color: var(--accent3); }
@@ -608,6 +612,7 @@
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-kills" id="tab-kills" data-tab="kills" data-group="alliance">Kills Ranking</button>
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fsp" id="tab-fsp" data-tab="fsp" data-group="alliance">FSP Ranking</button>
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-server200" id="tab-server200" data-tab="server200" data-group="server">Server Ranking</button>
+      <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-serverkills" id="tab-serverkills" data-tab="serverkills" data-group="server">Kills Ranking</button>
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-alliances" id="tab-alliances" data-tab="alliances" data-group="server">Alliance Rankings</button>
       <button class="tab-btn tab-btn-dsb" role="tab" aria-selected="false" aria-controls="panel-dsb" id="tab-dsb" data-tab="dsb" data-group="dsb">Desert Storm</button>
       <button class="tab-btn tab-btn-dsb" role="tab" aria-selected="false" aria-controls="panel-attendance" id="tab-attendance" data-tab="attendance" data-group="dsb">Attendance</button>
@@ -743,6 +748,40 @@
           floor on the server's real population, not a full census). Sorted by THP; commanders with only Kills confirmed
           (no THP) are listed after, sorted by Kills. Rows from our alliance are highlighted and tagged "Us". Δ columns show
           growth vs 1/7/30 days ago and fill in as daily history accumulates.
+        </span>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-serverkills" role="tabpanel" aria-labelledby="tab-serverkills">
+      <div class="panel-head">
+        <h2>Full Server Ranking — Kills</h2>
+        <span id="serverKillsPanelSub"></span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th>Commander</th>
+              <th>Alliance</th>
+              <th>Country</th>
+              <th class="num">Kills</th>
+              <th class="delta">Δ 1d</th>
+              <th class="delta">Δ 7d</th>
+              <th class="delta">Δ 30d</th>
+              <th class="bar-cell"></th>
+            </tr>
+          </thead>
+          <tbody id="serverKillsRows"></tbody>
+        </table>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          Every commander with a confirmed Kills report across <b>the entire server #2300</b>, not just our alliance —
+          same source and same "confirmed reports only" caveat as the other Server 2300 Data tabs. Sorted by Kills highest
+          to lowest. Rows from our alliance are highlighted and tagged "Us". Δ columns show growth vs 1/7/30 days ago and
+          fill in as daily history accumulates.
         </span>
       </div>
     </div>
@@ -1305,6 +1344,122 @@
     ["صــمــــت","GOv","YE",null,"",false,null,null,null,93884,null,null,null]
   ];
 
+  // Same population as server200, filtered to confirmed Kills and sorted by kills desc — the
+  // server-wide equivalent of "killsRanked", mirroring its column format (+ an alliance tag).
+  // Each row: [name, alliance, country, kills, dKills1d, dKills7d, dKills30d, type, isDefaultHero]
+  const serverKills = [
+    ["SenZ0r","TKVR","JM",1505050,53841,null,null,"",false],
+    ["Dánkross","MEL0","CL",1019241,97896,null,null,"",false],
+    ["B E C","OGGA","ENG",677304,0,null,null,"air",false],
+    ["Siiilvaa7","GOBY","PT",644624,0,null,null,"tank",false],
+    ["ID Lemongrass ᵀᴹ","2300","VN",582728,2693,null,null,"tank",true],
+    ["UncleSmurfPants","HAVN","GB",569000,22257,null,null,"",false],
+    ["GAM Xll","Thou","ID",547765,0,null,null,"",false],
+    ["主Chicken","TKVR","JP",544865,0,null,null,"",false],
+    ["Deadlock1","BG4L","US",529382,0,null,null,"",false],
+    ["15014700","BG4L","US",515465,0,null,null,"",false],
+    ["ട Ḻ y ツ","TKVR","PH",493524,0,null,null,"air",false],
+    ["Asher Zero","BG4L","JP",463233,0,null,null,"",false],
+    ["ShuShii","OGGA","BG",452776,29648,null,null,"missile",false],
+    ["Soraax","DESt","EU",429284,0,null,null,"",false],
+    ["PULUU","SonS","UN",410482,0,null,null,"",false],
+    ["Blue ᵀᴹ","2300","US",408581,0,null,null,"air",false],
+    ["Xu Man Tou","FBl","ID",385111,0,null,null,"",false],
+    ["Kongostán","GOBY","ES",367380,0,null,null,"tank",false],
+    ["Al Fatih 1919","KRIS","ID",365387,0,null,null,"",false],
+    ["NURELLAA","Thou","TR",358376,0,null,null,"",false],
+    ["きんさん2300","Ytg","JP",349884,155,null,null,"",false],
+    ["CaLiMoN","GOBY","IT",336794,0,null,null,"",false],
+    ["Kompi2300","WPGx","ID",334748,0,null,null,"",false],
+    ["Dűcky","TKVR","US",331993,0,null,null,"tank",true],
+    ["WidWod","IWC1","US",330769,0,null,null,"",false],
+    ["CeMoX","TKVR","TR",328264,0,null,null,"",false],
+    ["Nelos36","GOBY","ES",326955,1780,null,null,"",false],
+    ["ˡᵃᵈʸ lemon ジ","AMRB","UN",325338,0,null,null,"",false],
+    ["JP BRAZIL","2300","BR",316443,0,null,null,"air",false],
+    ["FacePartDeux","Smog","US",316086,0,null,null,"tank",false],
+    ["serjfloyd","GOBY","CL",312334,0,null,null,"",false],
+    ["ᘏᗢʚThe Redɞ","MEL0","KR",308237,7905,null,null,"air",false],
+    ["Ƥ么Ｎᗪ么么","DESt","GB",295611,0,null,null,"air",false],
+    ["2CTrashhh","2300","US",292799,0,null,null,"air",false],
+    ["카이 Sky","MEL0","KR",290311,0,null,null,"tank",true],
+    ["XLUX","2300","TR",282661,588,null,null,"",false],
+    ["효담 Hyodam","MEL0","KR",281967,1098,null,null,"air",false],
+    ["Ontozry","NyXX","PL",276418,0,null,null,"",false],
+    ["TMLASTRAİL","TKVR","TR",271372,0,null,null,"",false],
+    ["Joel   12","Wks1","NI",267031,36449,null,null,"",false],
+    ["FR97Senior","IdM","ID",264058,4639,null,null,"",false],
+    ["GôN","DESt","LU",263066,2509,null,null,"",false],
+    ["Silent Sneako","Smog","AU",257174,0,null,null,"tank",false],
+    ["CLöŭD","FBl","SO",252193,8780,null,null,"",false],
+    ["zDavez","DESt","DE",250934,0,null,null,"",false],
+    ["삐야기  Chicken","MEL0","KR",250444,1992,null,null,"tank",false],
+    ["Antannnnidek","IWC1","ID",249825,1079,null,null,"",false],
+    ["Blakes Badboys","KFB","US",244628,0,null,null,"",false],
+    ["アオゼンNoìr","NyXX","AU",241455,0,null,null,"",false],
+    ["Villex","DESt","SO",238700,0,null,null,"",false],
+    ["Chill đeeeeeeeeeeee","SDC1","VN",236724,0,null,null,"",false],
+    ["Fēŋrir","GOBY","BR",235455,0,null,null,"",false],
+    ["moodoth","KRIS","ID",233576,155,null,null,"",false],
+    ["ㆍ Last ㆍ","DESt","UN",233200,0,null,null,"",false],
+    ["LLoydddd","OGGA","GB",230224,0,null,null,"air",false],
+    ["ʇɥɓıspuıH","Thou","US",229016,2020,null,null,"air",false],
+    ["CerenH","GOBY","TR",226827,0,null,null,"",false],
+    ["ChubbiieChicken","2300","US",225782,96,null,null,"tank",true],
+    ["BeakerReaper","Smog","US",222197,0,null,null,"",false],
+    ["Velle2131","DESt","RS",220700,0,null,null,"",false],
+    ["Squam1jo","D1GS","US",219592,0,null,null,"tank",false],
+    ["Champ1918","NyXX","TH",218582,0,null,null,"tank",false],
+    ["Ʀᴇᴍ","OGGA","GB",214031,0,null,null,"tank",false],
+    ["Gusinnn","2300","ID",213096,7312,null,null,"",false],
+    ["YXMIFFX V2","2300","US",212754,6002,null,null,"",false],
+    ["안녕〆RiiiNシ","MEL0","KR",211380,0,null,null,"",false],
+    ["xx CROOK FACTORY xx","Thou","IT",210940,0,null,null,"air",false],
+    ["LEGIÃO GÊNESIS","Pow","BR",210038,7815,null,null,"",false],
+    ["BRIAN PMD","IWC1","ID",207606,0,null,null,"",false],
+    ["Nerea CC","GOBY","ES",205713,607,null,null,"",false],
+    ["23JTRreaper","Smog","US",205452,0,null,null,"",false],
+    ["Nobre rj","2300","UN",205288,0,null,null,"",false],
+    ["LucisB","2300","VN",203809,983,null,null,"tank",true],
+    ["Ɓσυʀηᴇ","2300","US",202261,0,null,null,"tank",true],
+    ["1 Báo 1","SDC1","VN",201312,0,null,null,"",false],
+    ["RubiSs","2300","UN",201112,7562,null,null,"missile",false],
+    ["케로로 Sgt Keroro","MEL0","UN",200639,1801,null,null,"",false],
+    ["Sorek Satu 2","ADEN","BZ",200507,0,null,null,"",false],
+    ["qayid qitaliun","Om2","ID",200198,38814,null,null,"",false],
+    ["VandaLisme","-","AL",195963,0,null,null,"",false],
+    ["통영 아재","REOR","KR",195629,4059,null,null,"",false],
+    ["NïkÖ","2300","SI",193668,0,null,null,"tank",false],
+    ["Vgssa","VRG1","SA",192623,0,null,null,"tank",false],
+    ["Fuzzyᴹᶦᵗᵗᶻ","TKVR","US",192466,0,null,null,"air",false],
+    ["Konrado א","Aura","UN",189817,9380,null,null,"",false],
+    ["H a D e S","OGGA","GR",187637,0,null,null,"tank",false],
+    ["scooter71","OGGA","ENG",183912,0,null,null,"tank",false],
+    ["Thracian Mercenary","2300","US",183848,0,null,null,"",false],
+    ["Spit0","OGGA","NL",183562,0,null,null,"air",false],
+    ["달 ల Moon","REOR","KR",180600,4984,null,null,"tank",true],
+    ["Huan meiの連知な","-","VN",179391,0,null,null,"",false],
+    ["botmannoelmanalu","h3h4","ID",178151,2358,null,null,"",false],
+    ["Leonidas Sparta","REOR","UN",176703,0,null,null,"",false],
+    ["Not Dengar","Smog","US",176109,0,null,null,"",false],
+    ["Flodzzzz","2300","FR",174796,2000,null,null,"tank",true],
+    ["MoSHe","MEL0","TR",171934,0,null,null,"",false],
+    ["TheGhadah","OGGA","UN",171514,0,null,null,"",false],
+    ["Right Tùrn Clydè","2300","US",170251,0,null,null,"air",false],
+    ["Supr Soakr","D1GS","US",169919,0,null,null,"",false],
+    ["DESTVAX","DESt","ID",169458,null,null,null,"",false],
+    ["스물스물v","REOR","KR",168919,0,null,null,"",false],
+    ["Raksasa Kecil","IWC1","ID",168282,null,null,null,"",false],
+    ["Irihhum","GOBY","ES",168011,0,null,null,"",false],
+    ["Papa FlucK","OGGA","US",167375,0,null,null,"",false],
+    ["C4LUM","OGGA","SCO",166737,0,null,null,"tank",false],
+    ["UnHinged Tyr","Thou","US",164507,0,null,null,"",false],
+    ["NoRagrets00","TKVR","US",162821,0,null,null,"tank",true],
+    ["kikimasterE","FRAn","FR",162678,0,null,null,"",false],
+    ["صــمــــت","GOv","YE",93884,null,null,null,"",false],
+    ["edinocheeta","NlPh","NL",28235,0,null,null,"",false]
+  ];
+
   // All alliances on server #2300 (not just ours), sorted by power desc.
   // Each row: [tag, name, country, power, kills, dPower1d, dPower7d, dPower30d, dKills1d, dKills7d, dKills30d, missingSince]
   const allianceRanked = [
@@ -1459,6 +1614,28 @@
       ${deltaCell(dK1)}${deltaCell(dK7)}${deltaCell(dK30)}
     `;
     server200RowsEl.appendChild(tr);
+  });
+
+  document.getElementById("serverKillsPanelSub").textContent =
+    `${serverKills.length} confirmed commanders · sorted by Kills highest to lowest`;
+
+  const maxServerKills = serverKills[0][3];
+  const serverKillsRowsEl = document.getElementById("serverKillsRows");
+  serverKills.forEach((r, i) => {
+    const [name, alliance, country, kills, dK1, dK7, dK30, type, isDefaultHero] = r;
+    const pct = Math.max((kills / maxServerKills) * 100, 3);
+    const tr = document.createElement("tr");
+    if (alliance === OWN_ALLIANCE_TAG) tr.classList.add("own-alliance-row");
+    tr.innerHTML = `
+      <td class="col-pos">${i + 1}</td>
+      ${nameCell(name, null, type, isDefaultHero)}
+      ${tagCell(alliance, null)}
+      <td class="col-country">${country}</td>
+      <td class="num">${kills.toLocaleString("en-US")}</td>
+      ${deltaCell(dK1)}${deltaCell(dK7)}${deltaCell(dK30)}
+      <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></td>
+    `;
+    serverKillsRowsEl.appendChild(tr);
   });
 
   document.getElementById("alliancesPanelSub").textContent =
@@ -1906,6 +2083,18 @@
         { label: "Median THP", value: fmtAbbrev(medianOf(vals)), sub: "server midpoint" },
       ];
     },
+    serverkills: () => {
+      const vals = serverKills.map(r => r[3]);
+      const leader = serverKills[0];
+      const ours = serverKills.filter(r => r[1] === OWN_ALLIANCE_TAG).length;
+      const leaderSub = leader[1] === OWN_ALLIANCE_TAG ? `${leader[0]} (Us)` : `${leader[0]} [${leader[1]}]`;
+      return [
+        { label: "Confirmed", value: String(serverKills.length), sub: `${ours} from our alliance` },
+        { label: "Leader (Kills)", value: fmtAbbrev(leader[3]), sub: leaderSub },
+        { label: "Combined Kills", value: fmtAbbrev(sumOf(vals)), sub: `sum of all ${serverKills.length}` },
+        { label: "Median Kills", value: fmtAbbrev(medianOf(vals)), sub: "server midpoint" },
+      ];
+    },
     dsb: () => {
       const record = allTimeRecord();
       const battleWord = record.totalBattles === 1 ? "battle" : "battles";
@@ -1982,7 +2171,7 @@
   // Group navigation: the dashboard opens on a group-picker screen (Alliance 2300 Data /
   // Server 2300 Data / Desert Storm); picking a group filters the tab bar down to just that
   // group's tabs and activates the first one. "← All groups" returns to the picker.
-  const GROUPS = { alliance: ["thp", "kills", "fsp"], server: ["server200", "alliances"], dsb: ["dsb", "attendance"], waaaaar: ["busterday"] };
+  const GROUPS = { alliance: ["thp", "kills", "fsp"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance"], waaaaar: ["busterday"] };
   const groupSelectEl = document.getElementById("groupSelect");
   const dataViewEl = document.getElementById("dataView");
 
