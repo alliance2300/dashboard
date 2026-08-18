@@ -257,6 +257,9 @@
   #panel-busterday .panel-head { border-bottom-color: var(--accent4); }
   #panel-busterday .panel-head h2 { color: var(--accent4); }
   #panel-busterday thead th { color: var(--accent4); }
+  #panel-busterhistory .panel-head { border-bottom-color: var(--accent4); }
+  #panel-busterhistory .panel-head h2 { color: var(--accent4); }
+  #panel-busterhistory thead th { color: var(--accent4); }
   .buster-columns {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -630,6 +633,7 @@
       <button class="tab-btn tab-btn-dsb" role="tab" aria-selected="false" aria-controls="panel-dsb" id="tab-dsb" data-tab="dsb" data-group="dsb">Desert Storm</button>
       <button class="tab-btn tab-btn-dsb" role="tab" aria-selected="false" aria-controls="panel-attendance" id="tab-attendance" data-tab="attendance" data-group="dsb">Attendance</button>
       <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-busterday" id="tab-busterday" data-tab="busterday" data-group="waaaaar">Buster Day</button>
+      <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-busterhistory" id="tab-busterhistory" data-tab="busterhistory" data-group="waaaaar">History</button>
     </div>
 
     <div class="tab-panel active" id="panel-thp" role="tabpanel" aria-labelledby="tab-thp">
@@ -951,6 +955,32 @@
           Buster Day Top 15 and Bottom 15 point rankings, sent in manually at the end of each Saturday — not part of the
           daily scrape. <b>Most appearances</b> tiles count every week logged so far, tie-broken by total points across
           those appearances. The point totals reflect the selected week only.
+        </span>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-busterhistory" role="tabpanel" aria-labelledby="tab-busterhistory">
+      <div class="panel-head">
+        <h2>Buster Day History</h2>
+        <span id="busterHistoryPanelSub"></span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th class="sortable" data-sort="player" data-default-dir="asc">Player<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="top" data-default-dir="desc">Top 15<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="bottom" data-default-dir="desc">Bottom 15<span class="sort-arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="busterHistoryRows"></tbody>
+        </table>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          Counts every week logged so far for the Buster Day Top 15 and Bottom 15 lists — click a column header to sort.
         </span>
       </div>
     </div>
@@ -2067,6 +2097,66 @@
   busterDateFilterEl.addEventListener("change", () => { renderBusterDay(); renderTiles("busterday"); });
   renderBusterDay();
 
+  // Buster Day History — per-player Top 15 / Bottom 15 appearance counts across every week logged.
+  function buildBusterHistory() {
+    const byPlayer = new Map();
+    busterDay.forEach(r => {
+      const [, tier, , player] = r;
+      if (!byPlayer.has(player)) byPlayer.set(player, { top: 0, bottom: 0 });
+      byPlayer.get(player)[tier]++;
+    });
+    return [...byPlayer.entries()].map(([player, rec]) => ({ player, ...rec }));
+  }
+
+  const busterHistoryData = buildBusterHistory();
+  const busterHistoryRowsEl = document.getElementById("busterHistoryRows");
+  let busterHistorySortKey = "top";
+  let busterHistorySortDir = "desc";
+
+  function renderBusterHistoryRows() {
+    const dir = busterHistorySortDir === "asc" ? 1 : -1;
+    const key = busterHistorySortKey;
+    const sorted = [...busterHistoryData].sort((a, b) => {
+      if (key === "player") return dir * a.player.localeCompare(b.player);
+      if (a[key] === b[key]) return a.player.localeCompare(b.player);
+      return dir * (a[key] - b[key]);
+    });
+
+    busterHistoryRowsEl.innerHTML = "";
+    sorted.forEach((r, i) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="col-pos">${i + 1}</td>
+        <td class="col-player">${r.player}</td>
+        <td class="num">${r.top}</td>
+        <td class="num">${r.bottom}</td>
+      `;
+      busterHistoryRowsEl.appendChild(tr);
+    });
+
+    document.querySelectorAll('#panel-busterhistory thead th[data-sort]').forEach(th => {
+      const arrow = th.querySelector(".sort-arrow");
+      arrow.textContent = th.dataset.sort === busterHistorySortKey ? (busterHistorySortDir === "asc" ? " ▲" : " ▼") : "";
+    });
+  }
+
+  document.querySelectorAll('#panel-busterhistory thead th[data-sort]').forEach(th => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.sort;
+      if (busterHistorySortKey === key) {
+        busterHistorySortDir = busterHistorySortDir === "asc" ? "desc" : "asc";
+      } else {
+        busterHistorySortKey = key;
+        busterHistorySortDir = th.dataset.defaultDir || "desc";
+      }
+      renderBusterHistoryRows();
+    });
+  });
+
+  document.getElementById("busterHistoryPanelSub").textContent =
+    `${busterHistoryData.length} player(s) tracked · ${busterDatesList.length} week(s) logged`;
+  renderBusterHistoryRows();
+
   // THP → FSP: published formula from lwservers.com (js/lws-math.js, estimateFsp()).
   // Quadratic fit up to 280M THP, linear tail beyond it. THP-only input — never game power.
   const FSP_QUAD_LINEAR = 0.4258;
@@ -2232,6 +2322,15 @@
         { label: "Bottom 15 points (this week)", value: currentBottom.length ? totalBottomPoints.toLocaleString("en-US") : "—", sub: currentBottom.length ? busterDateFilterEl.value : "no data yet" },
       ];
     },
+    busterhistory: () => {
+      const mostTop = busterHistoryData.length ? [...busterHistoryData].sort((a, b) => b.top - a.top)[0] : null;
+      const mostBottom = busterHistoryData.length ? [...busterHistoryData].sort((a, b) => b.bottom - a.bottom)[0] : null;
+      return [
+        { label: "Players tracked", value: String(busterHistoryData.length), sub: `${busterDatesList.length} week(s) logged` },
+        { label: "Most Top 15 appearances", value: mostTop ? String(mostTop.top) : "—", sub: mostTop ? mostTop.player : "no data yet" },
+        { label: "Most Bottom 15 appearances", value: mostBottom ? String(mostBottom.bottom) : "—", sub: mostBottom ? mostBottom.player : "no data yet" },
+      ];
+    },
   };
 
   function renderTiles(tabKey) {
@@ -2269,7 +2368,7 @@
   // Group navigation: the dashboard opens on a group-picker screen (Alliance 2300 Data /
   // Server 2300 Data / Desert Storm); picking a group filters the tab bar down to just that
   // group's tabs and activates the first one. "← All groups" returns to the picker.
-  const GROUPS = { alliance: ["thp", "kills", "fsp"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance"], waaaaar: ["busterday"] };
+  const GROUPS = { alliance: ["thp", "kills", "fsp"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance"], waaaaar: ["busterday", "busterhistory"] };
   const groupSelectEl = document.getElementById("groupSelect");
   const dataViewEl = document.getElementById("dataView");
 
