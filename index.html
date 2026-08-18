@@ -1953,8 +1953,41 @@
 
   // Buster Day — Top 15 / Bottom 15 point rankings, manually maintained (sent in by the user each
   // Saturday, not part of the daily scrape). One row per player per week per tier.
-  // Each row: [date, tier, rank, player, points] — tier: "top" | "bottom", rank: 1-15.
+  // Each row: [date, tier, rank, player, points] — tier: "top" | "bottom". "rank" is the real
+  // in-game alliance Ranking number (top: 1-15; bottom: whatever range the user sends, e.g. 75-90 —
+  // not renumbered to 1-15 locally, so it stays a faithful readout of the in-game screen).
   const busterDay = [
+    ["2026-08-15","top",1,"ID Lemongrass ᵀᴹ",35146857],
+    ["2026-08-15","top",2,"LucisB",19391559],
+    ["2026-08-15","top",3,"JPrison Mike ᴮᴿ",15390218],
+    ["2026-08-15","top",4,"undercovermario",9658648],
+    ["2026-08-15","top",5,"NISSI  ᵀᴹ",9561318],
+    ["2026-08-15","top",6,"LEVINA",8870602],
+    ["2026-08-15","top",7,"Icēman",8826686],
+    ["2026-08-15","top",8,"Free To Missile",8076982],
+    ["2026-08-15","top",9,"NïkÖ",7383068],
+    ["2026-08-15","top",10,"Shai Lá",6171737],
+    ["2026-08-15","top",11,"RubiSs",6089436],
+    ["2026-08-15","top",12,"Right Tùrn Clydè",5976467],
+    ["2026-08-15","top",13,"2CTrashhh",5486561],
+    ["2026-08-15","top",14,"m19elevenn",5226280],
+    ["2026-08-15","top",15,"STRIKER",4404350],
+    ["2026-08-15","bottom",75,"Prince Killer",724230],
+    ["2026-08-15","bottom",76,"Consent Was Given",715000],
+    ["2026-08-15","bottom",77,"The Jelly ツ",637500],
+    ["2026-08-15","bottom",78,"TotallyNotMcLuuuvin",630000],
+    ["2026-08-15","bottom",79,"TATIi",528075],
+    ["2026-08-15","bottom",80,"NOT Lord Shocka",515987],
+    ["2026-08-15","bottom",81,"LadyBug2300",390000],
+    ["2026-08-15","bottom",82,"Bombinø",300000],
+    ["2026-08-15","bottom",83,"222 J",293256],
+    ["2026-08-15","bottom",84,"Candy MINI",41082],
+    ["2026-08-15","bottom",85,"NoseyTano",0],
+    ["2026-08-15","bottom",86,"Prison Mike ᵀᴹ",0],
+    ["2026-08-15","bottom",87,"MikeyTheSage",0],
+    ["2026-08-15","bottom",88,"STORM WAR",0],
+    ["2026-08-15","bottom",89,"LuffyDistractusIII",0],
+    ["2026-08-15","bottom",90,"Varolena",0],
   ];
 
   function busterDates() {
