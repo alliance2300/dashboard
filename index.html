@@ -590,8 +590,8 @@
     <button class="group-card" type="button" data-group="alliance">
       <span class="group-card-arrow" aria-hidden="true">→</span>
       <span class="group-card-label">Alliance 2300 Data</span>
-      <h2>THP · Kills · FSP</h2>
-      <p>Our own alliance's roster — Hero Power ranking, Kills ranking, and estimated First Squad Power.</p>
+      <h2>THP · Kills · FSP · Tech Donation</h2>
+      <p>Our own alliance's roster — Hero Power ranking, Kills ranking, estimated First Squad Power, and weekly Tech Donation rankings.</p>
       <span class="group-card-cta">View rankings →</span>
     </button>
     <button class="group-card" type="button" data-group="server">
@@ -627,6 +627,8 @@
       <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-thp" id="tab-thp" data-tab="thp" data-group="alliance">THP Ranking</button>
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-kills" id="tab-kills" data-tab="kills" data-group="alliance">Kills Ranking</button>
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fsp" id="tab-fsp" data-tab="fsp" data-group="alliance">FSP Ranking</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-techdonation" id="tab-techdonation" data-tab="techdonation" data-group="alliance">Tech Donation</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-techdonationhistory" id="tab-techdonationhistory" data-tab="techdonationhistory" data-group="alliance">Donation History</button>
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-server200" id="tab-server200" data-tab="server200" data-group="server">Server Ranking</button>
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-serverkills" id="tab-serverkills" data-tab="serverkills" data-group="server">Kills Ranking</button>
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-alliances" id="tab-alliances" data-tab="alliances" data-group="server">Alliance Rankings</button>
@@ -981,6 +983,90 @@
         <span class="notice-icon" aria-hidden="true">i</span>
         <span>
           Counts every week logged so far for the Buster Day Top 15 and Bottom 15 lists — click a column header to sort.
+        </span>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-techdonation" role="tabpanel" aria-labelledby="tab-techdonation">
+      <div class="panel-head">
+        <h2>Tech Donation</h2>
+        <span id="techdonationPanelSub"></span>
+      </div>
+      <div class="dsb-filters">
+        <label>Date
+          <select id="techDonationDateFilter"></select>
+        </label>
+      </div>
+      <div class="buster-columns">
+        <div>
+          <div class="panel-head">
+            <h2 id="techTopLabel">Top</h2>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-pos">#</th>
+                  <th>Player</th>
+                  <th class="num">Points</th>
+                </tr>
+              </thead>
+              <tbody id="techTopRows"></tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="panel-head">
+            <h2 id="techBottomLabel">Bottom</h2>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-pos">#</th>
+                  <th>Player</th>
+                  <th class="num">Points</th>
+                </tr>
+              </thead>
+              <tbody id="techBottomRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          Tech Donation Top / Bottom point rankings (Strength Ranking → Donation → Weekly, in-game), sent in manually each
+          week — not part of the daily scrape. Started at Top 5 only; the list size may grow (e.g. Top 10) in later weeks
+          as more of the screen is sent in, and Bottom entries fill in once available. <b>Most appearances</b> tiles count
+          every week logged so far, tie-broken by total points across those appearances. The point totals reflect the
+          selected week only.
+        </span>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-techdonationhistory" role="tabpanel" aria-labelledby="tab-techdonationhistory">
+      <div class="panel-head">
+        <h2>Tech Donation History</h2>
+        <span id="techdonationHistoryPanelSub"></span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th class="sortable" data-sort="player" data-default-dir="asc">Player<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="top" data-default-dir="desc">Top<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="bottom" data-default-dir="desc">Bottom<span class="sort-arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="techDonationHistoryRows"></tbody>
+        </table>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          Counts every week logged so far for the Tech Donation Top and Bottom lists — click a column header to sort.
         </span>
       </div>
     </div>
@@ -2230,6 +2316,146 @@
     `${busterHistoryData.length} player(s) tracked · ${busterDatesList.length} week(s) logged`;
   renderBusterHistoryRows();
 
+  // Tech Donation — Strength Ranking → Donation → Weekly, sent in manually (not part of the daily
+  // scrape). Same shape as busterDay: one row per player per week per tier. Started at Top 5 only
+  // (no Bottom data yet); may grow to Top 10 / Bottom 10 in later weeks as more of the screen is
+  // sent in — the list size is read from the data itself, never hardcoded, so it just adapts.
+  const techDonation = [
+    ["2026-08-09","top",1,"JP BRAZIL",112150],
+    ["2026-08-09","top",2,"LEVINA",92150],
+    ["2026-08-09","top",3,"Bilbō Bagginŝ",75300],
+    ["2026-08-09","top",4,"NïkÖ",67200],
+    ["2026-08-09","top",5,"Brąnd",66050],
+    ["2026-08-16","top",1,"LEVINA",104050],
+    ["2026-08-16","top",2,"Brąnd",63750],
+    ["2026-08-16","top",3,"JPrison Mike ᴮᴿ",62450],
+    ["2026-08-16","top",4,"Shai Lá",61950],
+    ["2026-08-16","top",5,"Sloth xoxo",61600],
+  ];
+
+  function techDonationDates() {
+    return [...new Set(techDonation.map(r => r[0]))].sort();
+  }
+  const techDonationDateFilterEl = document.getElementById("techDonationDateFilter");
+  const techDonationDatesList = techDonationDates();
+  techDonationDatesList.forEach(d => {
+    const opt = document.createElement("option");
+    opt.value = d;
+    opt.textContent = d;
+    techDonationDateFilterEl.appendChild(opt);
+  });
+  if (techDonationDatesList.length) techDonationDateFilterEl.value = techDonationDatesList[techDonationDatesList.length - 1];
+
+  function currentTechRows(tier) {
+    const date = techDonationDateFilterEl.value;
+    return techDonation.filter(r => r[0] === date && r[1] === tier).sort((a, b) => a[2] - b[2]);
+  }
+
+  function renderTechRows(tier, tbodyId) {
+    const rows = currentTechRows(tier);
+    const el = document.getElementById(tbodyId);
+    el.innerHTML = "";
+    rows.forEach(r => {
+      const [, , rank, player, points] = r;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="col-pos">${rank}</td>
+        <td class="col-player">${player}</td>
+        <td class="num">${points.toLocaleString("en-US")}</td>
+      `;
+      el.appendChild(tr);
+    });
+  }
+
+  // All-time per-player tally across every logged week — appearances first, total points as tiebreak.
+  function techAppearances(tier) {
+    const byPlayer = new Map();
+    techDonation.filter(r => r[1] === tier).forEach(r => {
+      const player = r[3], points = r[4];
+      if (!byPlayer.has(player)) byPlayer.set(player, { appearances: 0, points: 0 });
+      const rec = byPlayer.get(player);
+      rec.appearances++;
+      rec.points += points;
+    });
+    return [...byPlayer.entries()]
+      .map(([player, rec]) => ({ player, ...rec }))
+      .sort((a, b) => b.appearances - a.appearances || b.points - a.points);
+  }
+
+  function renderTechDonation() {
+    renderTechRows("top", "techTopRows");
+    renderTechRows("bottom", "techBottomRows");
+    const topCount = currentTechRows("top").length;
+    const bottomCount = currentTechRows("bottom").length;
+    document.getElementById("techTopLabel").textContent = topCount ? `Top ${topCount}` : "Top";
+    document.getElementById("techBottomLabel").textContent = bottomCount ? `Bottom ${bottomCount}` : "Bottom (no data yet)";
+    document.getElementById("techdonationPanelSub").textContent = techDonationDatesList.length
+      ? `${techDonationDateFilterEl.value} · ${techDonationDatesList.length} week${techDonationDatesList.length === 1 ? "" : "s"} logged`
+      : "no weeks logged yet";
+  }
+  techDonationDateFilterEl.addEventListener("change", () => { renderTechDonation(); renderTiles("techdonation"); });
+  renderTechDonation();
+
+  // Tech Donation History — per-player Top / Bottom appearance counts across every week logged.
+  function buildTechDonationHistory() {
+    const byPlayer = new Map();
+    techDonation.forEach(r => {
+      const [, tier, , player] = r;
+      if (!byPlayer.has(player)) byPlayer.set(player, { top: 0, bottom: 0 });
+      byPlayer.get(player)[tier]++;
+    });
+    return [...byPlayer.entries()].map(([player, rec]) => ({ player, ...rec }));
+  }
+
+  const techDonationHistoryData = buildTechDonationHistory();
+  const techDonationHistoryRowsEl = document.getElementById("techDonationHistoryRows");
+  let techDonationHistorySortKey = "top";
+  let techDonationHistorySortDir = "desc";
+
+  function renderTechDonationHistoryRows() {
+    const dir = techDonationHistorySortDir === "asc" ? 1 : -1;
+    const key = techDonationHistorySortKey;
+    const sorted = [...techDonationHistoryData].sort((a, b) => {
+      if (key === "player") return dir * a.player.localeCompare(b.player);
+      if (a[key] === b[key]) return a.player.localeCompare(b.player);
+      return dir * (a[key] - b[key]);
+    });
+
+    techDonationHistoryRowsEl.innerHTML = "";
+    sorted.forEach((r, i) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="col-pos">${i + 1}</td>
+        <td class="col-player">${r.player}</td>
+        <td class="num">${r.top}</td>
+        <td class="num">${r.bottom}</td>
+      `;
+      techDonationHistoryRowsEl.appendChild(tr);
+    });
+
+    document.querySelectorAll('#panel-techdonationhistory thead th[data-sort]').forEach(th => {
+      const arrow = th.querySelector(".sort-arrow");
+      arrow.textContent = th.dataset.sort === techDonationHistorySortKey ? (techDonationHistorySortDir === "asc" ? " ▲" : " ▼") : "";
+    });
+  }
+
+  document.querySelectorAll('#panel-techdonationhistory thead th[data-sort]').forEach(th => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.sort;
+      if (techDonationHistorySortKey === key) {
+        techDonationHistorySortDir = techDonationHistorySortDir === "asc" ? "desc" : "asc";
+      } else {
+        techDonationHistorySortKey = key;
+        techDonationHistorySortDir = th.dataset.defaultDir || "desc";
+      }
+      renderTechDonationHistoryRows();
+    });
+  });
+
+  document.getElementById("techdonationHistoryPanelSub").textContent =
+    `${techDonationHistoryData.length} player(s) tracked · ${techDonationDatesList.length} week(s) logged`;
+  renderTechDonationHistoryRows();
+
   // THP → FSP: published formula from lwservers.com (js/lws-math.js, estimateFsp()).
   // Quadratic fit up to 280M THP, linear tail beyond it. THP-only input — never game power.
   const FSP_QUAD_LINEAR = 0.4258;
@@ -2411,6 +2637,31 @@
         { label: "Most Bottom 15 appearances", value: mostBottom ? String(mostBottom.bottom) : "—", sub: mostBottom ? mostBottom.player : "no data yet" },
       ];
     },
+    techdonation: () => {
+      const topAppearances = techAppearances("top");
+      const bottomAppearances = techAppearances("bottom");
+      const leaderTop = topAppearances[0] || null;
+      const leaderBottom = bottomAppearances[0] || null;
+      const currentTop = currentTechRows("top");
+      const currentBottom = currentTechRows("bottom");
+      const totalTopPoints = currentTop.reduce((s, r) => s + r[4], 0);
+      const totalBottomPoints = currentBottom.reduce((s, r) => s + r[4], 0);
+      return [
+        { label: "Most Top appearances", value: leaderTop ? String(leaderTop.appearances) : "—", sub: leaderTop ? leaderTop.player : "no data yet" },
+        { label: "Top points (this week)", value: currentTop.length ? totalTopPoints.toLocaleString("en-US") : "—", sub: currentTop.length ? techDonationDateFilterEl.value : "no data yet" },
+        { label: "Most Bottom appearances", value: leaderBottom ? String(leaderBottom.appearances) : "—", sub: leaderBottom ? leaderBottom.player : "no data yet" },
+        { label: "Bottom points (this week)", value: currentBottom.length ? totalBottomPoints.toLocaleString("en-US") : "—", sub: currentBottom.length ? techDonationDateFilterEl.value : "no data yet" },
+      ];
+    },
+    techdonationhistory: () => {
+      const mostTop = techDonationHistoryData.length ? [...techDonationHistoryData].sort((a, b) => b.top - a.top)[0] : null;
+      const mostBottom = techDonationHistoryData.length ? [...techDonationHistoryData].sort((a, b) => b.bottom - a.bottom)[0] : null;
+      return [
+        { label: "Players tracked", value: String(techDonationHistoryData.length), sub: `${techDonationDatesList.length} week(s) logged` },
+        { label: "Most Top appearances", value: mostTop ? String(mostTop.top) : "—", sub: mostTop ? mostTop.player : "no data yet" },
+        { label: "Most Bottom appearances", value: mostBottom ? String(mostBottom.bottom) : "—", sub: mostBottom ? mostBottom.player : "no data yet" },
+      ];
+    },
   };
 
   function renderTiles(tabKey) {
@@ -2448,7 +2699,7 @@
   // Group navigation: the dashboard opens on a group-picker screen (Alliance 2300 Data /
   // Server 2300 Data / Desert Storm); picking a group filters the tab bar down to just that
   // group's tabs and activates the first one. "← All groups" returns to the picker.
-  const GROUPS = { alliance: ["thp", "kills", "fsp"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance"], waaaaar: ["busterday", "busterhistory"] };
+  const GROUPS = { alliance: ["thp", "kills", "fsp", "techdonation", "techdonationhistory"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance"], waaaaar: ["busterday", "busterhistory"] };
   const groupSelectEl = document.getElementById("groupSelect");
   const dataViewEl = document.getElementById("dataView");
 
