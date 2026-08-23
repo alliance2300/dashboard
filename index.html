@@ -974,6 +974,7 @@
               <th class="sortable" data-sort="player" data-default-dir="asc">Player<span class="sort-arrow"></span></th>
               <th class="num sortable" data-sort="top" data-default-dir="desc">Top 15<span class="sort-arrow"></span></th>
               <th class="num sortable" data-sort="bottom" data-default-dir="desc">Bottom 15<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="points" data-default-dir="desc">Total Points<span class="sort-arrow"></span></th>
             </tr>
           </thead>
           <tbody id="busterHistoryRows"></tbody>
@@ -2364,9 +2365,11 @@
   function buildBusterHistory() {
     const byPlayer = new Map();
     busterDay.forEach(r => {
-      const [, tier, , player] = r;
-      if (!byPlayer.has(player)) byPlayer.set(player, { top: 0, bottom: 0 });
-      byPlayer.get(player)[tier]++;
+      const [, tier, , player, points] = r;
+      if (!byPlayer.has(player)) byPlayer.set(player, { top: 0, bottom: 0, points: 0 });
+      const rec = byPlayer.get(player);
+      rec[tier]++;
+      rec.points += points;
     });
     return [...byPlayer.entries()].map(([player, rec]) => ({ player, ...rec }));
   }
@@ -2393,6 +2396,7 @@
         <td class="col-player">${r.player}</td>
         <td class="num">${r.top}</td>
         <td class="num">${r.bottom}</td>
+        <td class="num">${r.points.toLocaleString("en-US")}</td>
       `;
       busterHistoryRowsEl.appendChild(tr);
     });
