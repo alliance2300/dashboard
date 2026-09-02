@@ -429,7 +429,6 @@
     padding: 1px 5px;
     text-decoration: none;
   }
-  .col-country { color: var(--text-dim); font-size: 12px; }
   .col-tag {
     font: 700 12px/1 system-ui, sans-serif;
     letter-spacing: 0.03em;
@@ -649,7 +648,6 @@
             <tr>
               <th class="col-pos">#</th>
               <th class="sortable" data-sort="name" data-default-dir="asc">Commander<span class="sort-arrow"></span></th>
-              <th class="sortable" data-sort="country" data-default-dir="asc">Country<span class="sort-arrow"></span></th>
               <th class="num sortable" data-sort="thp" data-default-dir="desc">THP<span class="sort-arrow"></span></th>
               <th class="delta sortable" data-sort="d1" data-default-dir="desc">Δ 1d<span class="sort-arrow"></span></th>
               <th class="delta sortable" data-sort="d7" data-default-dir="desc">Δ 7d<span class="sort-arrow"></span></th>
@@ -687,7 +685,6 @@
             <tr>
               <th class="col-pos">#</th>
               <th class="sortable" data-sort="name" data-default-dir="asc">Commander<span class="sort-arrow"></span></th>
-              <th class="sortable" data-sort="country" data-default-dir="asc">Country<span class="sort-arrow"></span></th>
               <th class="num sortable" data-sort="kills" data-default-dir="desc">Kills<span class="sort-arrow"></span></th>
               <th class="delta sortable" data-sort="d1" data-default-dir="desc">Δ 1d<span class="sort-arrow"></span></th>
               <th class="delta sortable" data-sort="d7" data-default-dir="desc">Δ 7d<span class="sort-arrow"></span></th>
@@ -722,7 +719,6 @@
             <tr>
               <th class="col-pos">#</th>
               <th class="sortable" data-sort="name" data-default-dir="asc">Commander<span class="sort-arrow"></span></th>
-              <th class="sortable" data-sort="country" data-default-dir="asc">Country<span class="sort-arrow"></span></th>
               <th class="num sortable" data-sort="thp" data-default-dir="desc">THP<span class="sort-arrow"></span></th>
               <th class="num sortable" data-sort="fsp" data-default-dir="desc">Est. FSP<span class="sort-arrow"></span></th>
               <th class="bar-cell"></th>
@@ -745,7 +741,6 @@
               <th class="col-pos">#</th>
               <th class="sortable" data-sort="name" data-default-dir="asc">Commander<span class="sort-arrow"></span></th>
               <th class="sortable" data-sort="alliance" data-default-dir="asc">Alliance<span class="sort-arrow"></span></th>
-              <th class="sortable" data-sort="country" data-default-dir="asc">Country<span class="sort-arrow"></span></th>
               <th class="num sortable" data-sort="thp" data-default-dir="desc">THP<span class="sort-arrow"></span></th>
               <th class="num sortable" data-sort="d1" data-default-dir="desc">Δ 1d<span class="sort-arrow"></span></th>
               <th class="num sortable" data-sort="d7" data-default-dir="desc">Δ 7d<span class="sort-arrow"></span></th>
@@ -783,7 +778,6 @@
               <th class="col-pos">#</th>
               <th class="sortable" data-sort="name" data-default-dir="asc">Commander<span class="sort-arrow"></span></th>
               <th class="sortable" data-sort="alliance" data-default-dir="asc">Alliance<span class="sort-arrow"></span></th>
-              <th class="sortable" data-sort="country" data-default-dir="asc">Country<span class="sort-arrow"></span></th>
               <th class="num sortable" data-sort="kills" data-default-dir="desc">Kills<span class="sort-arrow"></span></th>
               <th class="delta sortable" data-sort="d1" data-default-dir="desc">Δ 1d<span class="sort-arrow"></span></th>
               <th class="delta sortable" data-sort="d7" data-default-dir="desc">Δ 7d<span class="sort-arrow"></span></th>
@@ -1901,7 +1895,6 @@
       tr.innerHTML = `
         <td class="col-pos">${i + 1}</td>
         ${nameCell(name, missingSince, type, isDefaultHero)}
-        <td class="col-country">${country}</td>
         <td class="num">${thp.toLocaleString("en-US")}</td>
         ${deltaCell(d1)}${deltaCell(d7)}${deltaCell(d30)}
         <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></td>
@@ -1910,7 +1903,7 @@
     });
   }
   setupSortableTable("panel-thp",
-    { name: { idx: 0, str: true }, country: { idx: 1, str: true }, thp: { idx: 3 }, d1: { idx: 4 }, d7: { idx: 5 }, d30: { idx: 6 } },
+    { name: { idx: 0, str: true }, thp: { idx: 3 }, d1: { idx: 4 }, d7: { idx: 5 }, d30: { idx: 6 } },
     () => withThp, renderThpRows, "thp", "desc");
 
   document.getElementById("thpPanelSub").textContent =
@@ -1931,7 +1924,6 @@
       tr.innerHTML = `
         <td class="col-pos">${i + 1}</td>
         ${nameCell(name, missingSince, type, isDefaultHero)}
-        <td class="col-country">${country}</td>
         <td class="num">${kills.toLocaleString("en-US")}</td>
         ${deltaCell(d1)}${deltaCell(d7)}${deltaCell(d30)}
         <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></td>
@@ -1940,12 +1932,12 @@
     });
   }
   setupSortableTable("panel-kills",
-    { name: { idx: 0, str: true }, country: { idx: 1, str: true }, kills: { idx: 2 }, d1: { idx: 3 }, d7: { idx: 4 }, d30: { idx: 5 } },
+    { name: { idx: 0, str: true }, kills: { idx: 2 }, d1: { idx: 3 }, d7: { idx: 4 }, d30: { idx: 5 } },
     () => killsRanked, renderKillsRows, "kills", "desc");
 
   const noThpEl = document.getElementById("noThpList");
   noThpEl.innerHTML = noThp
-    .map(([name, country, kills]) => `<b>${name}</b> (${country}${kills !== null ? ", " + kills.toLocaleString("en-US") + " kills" : ""})`)
+    .map(([name, , kills]) => `<b>${name}</b>${kills !== null ? " (" + kills.toLocaleString("en-US") + " kills)" : ""}`)
     .join(" · ");
 
   // Tracked by alliance_id c1e025d28dba45f5b9eb5865167b40d6 in alliance_2300_alliances_roster.csv —
@@ -1973,7 +1965,6 @@
         <td class="col-pos">${i + 1}</td>
         ${nameCell(name, null, type, isDefaultHero)}
         ${tagCell(alliance, null)}
-        <td class="col-country">${country}</td>
         <td class="num">${thp !== null ? thp.toLocaleString("en-US") : "—"}</td>
         ${deltaCell(d1)}${deltaCell(d7)}${deltaCell(d30)}
         <td class="num">${kills !== null ? kills.toLocaleString("en-US") : "—"}</td>
@@ -1983,7 +1974,7 @@
     });
   }
   setupSortableTable("panel-server200",
-    { name: { idx: 0, str: true }, alliance: { idx: 1, str: true }, country: { idx: 2, str: true }, thp: { idx: 3 }, d1: { idx: 6 }, d7: { idx: 7 }, d30: { idx: 8 }, kills: { idx: 9 }, dk1: { idx: 10 }, dk7: { idx: 11 }, dk30: { idx: 12 } },
+    { name: { idx: 0, str: true }, alliance: { idx: 1, str: true }, thp: { idx: 3 }, d1: { idx: 6 }, d7: { idx: 7 }, d30: { idx: 8 }, kills: { idx: 9 }, dk1: { idx: 10 }, dk7: { idx: 11 }, dk30: { idx: 12 } },
     () => server200, renderServer200Rows, "thp", "desc");
 
   document.getElementById("serverKillsPanelSub").textContent =
@@ -2002,7 +1993,6 @@
         <td class="col-pos">${i + 1}</td>
         ${nameCell(name, null, type, isDefaultHero)}
         ${tagCell(alliance, null)}
-        <td class="col-country">${country}</td>
         <td class="num">${kills.toLocaleString("en-US")}</td>
         ${deltaCell(dK1)}${deltaCell(dK7)}${deltaCell(dK30)}
         <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></td>
@@ -2011,7 +2001,7 @@
     });
   }
   setupSortableTable("panel-serverkills",
-    { name: { idx: 0, str: true }, alliance: { idx: 1, str: true }, country: { idx: 2, str: true }, kills: { idx: 3 }, d1: { idx: 4 }, d7: { idx: 5 }, d30: { idx: 6 } },
+    { name: { idx: 0, str: true }, alliance: { idx: 1, str: true }, kills: { idx: 3 }, d1: { idx: 4 }, d7: { idx: 5 }, d30: { idx: 6 } },
     () => serverKills, renderServerKillsRows, "kills", "desc");
 
   document.getElementById("alliancesPanelSub").textContent =
@@ -2840,7 +2830,6 @@
       tr.innerHTML = `
         <td class="col-pos">${i + 1}</td>
         ${nameCell(name, missingSince, type, isDefaultHero)}
-        <td class="col-country">${country}</td>
         <td class="num">${thp.toLocaleString("en-US")}</td>
         <td class="num">${Math.round(fsp).toLocaleString("en-US")}</td>
         <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div></td>
@@ -2849,7 +2838,7 @@
     });
   }
   setupSortableTable("panel-fsp",
-    { name: { idx: 0, str: true }, country: { idx: 1, str: true }, thp: { idx: 2 }, fsp: { idx: 3 } },
+    { name: { idx: 0, str: true }, thp: { idx: 2 }, fsp: { idx: 3 } },
     () => fspData, renderFspRows, "fsp", "desc");
 
   // ── Top stat tiles: recomputed per tab from the same arrays that feed the tables below,
