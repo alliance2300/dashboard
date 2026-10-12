@@ -260,6 +260,9 @@
   #panel-busterhistory .panel-head { border-bottom-color: var(--accent4); }
   #panel-busterhistory .panel-head h2 { color: var(--accent4); }
   #panel-busterhistory thead th { color: var(--accent4); }
+  #panel-warzone .panel-head { border-bottom-color: var(--accent4); }
+  #panel-warzone .panel-head h2 { color: var(--accent4); }
+  #panel-warzone thead th { color: var(--accent4); }
   .buster-columns {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -639,6 +642,7 @@
       <button class="tab-btn tab-btn-dsb" role="tab" aria-selected="false" aria-controls="panel-attendance" id="tab-attendance" data-tab="attendance" data-group="dsb">Attendance</button>
       <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-busterday" id="tab-busterday" data-tab="busterday" data-group="waaaaar">Buster Day</button>
       <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-busterhistory" id="tab-busterhistory" data-tab="busterhistory" data-group="waaaaar">History</button>
+      <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-warzone" id="tab-warzone" data-tab="warzone" data-group="waaaaar">Warzone Duel</button>
     </div>
 
     <div class="tab-panel active" id="panel-thp" role="tabpanel" aria-labelledby="tab-thp">
@@ -987,6 +991,37 @@
         <span class="notice-icon" aria-hidden="true">i</span>
         <span>
           Counts every week logged so far for the Buster Day Top 15 and Bottom 15 lists — click a column header to sort.
+        </span>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-warzone" role="tabpanel" aria-labelledby="tab-warzone">
+      <div class="panel-head">
+        <h2>Warzone Duel — Did Not Participate</h2>
+        <span id="warzonePanelSub"></span>
+      </div>
+      <div class="dsb-filters">
+        <label>Date
+          <select id="warzoneDateFilter"></select>
+        </label>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th>Player</th>
+              <th class="num">Total no-shows</th>
+            </tr>
+          </thead>
+          <tbody id="warzoneRows"></tbody>
+        </table>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          Members who did not take part in the Warzone Duel on the selected date, sent in manually — not part of the
+          daily scrape. <b>Total no-shows</b> counts every date logged so far.
         </span>
       </div>
     </div>
@@ -3276,6 +3311,81 @@
     `${busterHistoryData.length} player(s) tracked · ${busterDatesList.length} week(s) logged`;
   renderBusterHistoryRows();
 
+  // Warzone Duel — members who did NOT take part, sent in manually per duel date (not part of the
+  // daily scrape). One row per absent player per date: [date, player].
+  const warzoneAbsent = [
+    ["2026-10-10","NIGHTREAP3R"],
+    ["2026-10-10","DertliSinek"],
+    ["2026-10-10","Blue™"],
+    ["2026-10-10","ʚbubuɞ"],
+    ["2026-10-10","PemburuCrown"],
+    ["2026-10-10","Golden P"],
+    ["2026-10-10","Jollŷ"],
+    ["2026-10-10","Gökan29"],
+    ["2026-10-10","KaRTôōN"],
+    ["2026-10-10","Múrder Mittens"],
+    ["2026-10-10","zDavez"],
+    ["2026-10-10","Nextdoor Neighbor"],
+    ["2026-10-10","KzaNissi"],
+    ["2026-10-10","Luca厉飞雨"],
+    ["2026-10-10","SwampFunk"],
+    ["2026-10-10","GrypBR"],
+    ["2026-10-10","The Lonely Chair"],
+    ["2026-10-10","222 J"],
+    ["2026-10-10","VSîm"],
+    ["2026-10-10","ʏxᴍɪꜰꜰx"],
+    ["2026-10-10","Lil Jadey"],
+    ["2026-10-10","xXMaybeCarnageXx"],
+    ["2026-10-10","Nissis Feet Pics"],
+    ["2026-10-10","SΔMURΔI"],
+  ];
+
+  function warzoneDates() {
+    return [...new Set(warzoneAbsent.map(r => r[0]))].sort();
+  }
+  const warzoneDateFilterEl = document.getElementById("warzoneDateFilter");
+  const warzoneDatesList = warzoneDates();
+  warzoneDatesList.forEach(d => {
+    const opt = document.createElement("option");
+    opt.value = d;
+    opt.textContent = d;
+    warzoneDateFilterEl.appendChild(opt);
+  });
+  if (warzoneDatesList.length) warzoneDateFilterEl.value = warzoneDatesList[warzoneDatesList.length - 1];
+
+  function warzoneTotals() {
+    const totals = new Map();
+    warzoneAbsent.forEach(([, player]) => totals.set(player, (totals.get(player) || 0) + 1));
+    return totals;
+  }
+  function currentWarzoneRows() {
+    const date = warzoneDateFilterEl.value;
+    const totals = warzoneTotals();
+    return warzoneAbsent
+      .filter(r => r[0] === date)
+      .map(r => ({ player: r[1], total: totals.get(r[1]) }))
+      .sort((a, b) => b.total - a.total || a.player.localeCompare(b.player));
+  }
+  function renderWarzone() {
+    const rows = currentWarzoneRows();
+    const el = document.getElementById("warzoneRows");
+    el.innerHTML = "";
+    rows.forEach((r, i) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="col-pos">${i + 1}</td>
+        <td class="col-player">${r.player}</td>
+        <td class="num">${r.total}</td>
+      `;
+      el.appendChild(tr);
+    });
+    document.getElementById("warzonePanelSub").textContent = warzoneDatesList.length
+      ? `${warzoneDateFilterEl.value} · ${rows.length} did not participate · ${warzoneDatesList.length} date${warzoneDatesList.length === 1 ? "" : "s"} logged`
+      : "no dates logged yet";
+  }
+  warzoneDateFilterEl.addEventListener("change", () => { renderWarzone(); renderTiles("warzone"); });
+  renderWarzone();
+
   // Tech Donation — Strength Ranking → Donation → Weekly, sent in manually (not part of the daily
   // scrape). Same shape as busterDay: one row per player per week per tier. Started at Top 5 only
   // (no Bottom data yet); may grow to Top 10 / Bottom 10 in later weeks as more of the screen is
@@ -3739,6 +3849,16 @@
         { label: "Most Bottom 15 appearances", value: mostBottom ? String(mostBottom.bottom) : "—", sub: mostBottom ? mostBottom.player : "no data yet" },
       ];
     },
+    warzone: () => {
+      const totals = [...warzoneTotals().entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+      const leader = totals[0] || null;
+      const current = currentWarzoneRows();
+      return [
+        { label: "Did not participate", value: current.length ? String(current.length) : "—", sub: current.length ? warzoneDateFilterEl.value : "no data yet" },
+        { label: "Dates logged", value: String(warzoneDatesList.length), sub: "Warzone Duel" },
+        { label: "Most no-shows", value: leader ? String(leader[1]) : "—", sub: leader ? leader[0] : "no data yet" },
+      ];
+    },
     techdonation: () => {
       const topAppearances = techAppearances("top");
       const bottomAppearances = techAppearances("bottom");
@@ -3801,7 +3921,7 @@
   // Group navigation: the dashboard opens on a group-picker screen (Alliance 2300 Data /
   // Server 2300 Data / Desert Storm); picking a group filters the tab bar down to just that
   // group's tabs and activates the first one. "← All groups" returns to the picker.
-  const GROUPS = { alliance: ["thp", "kills", "fsp", "techdonation", "techdonationhistory"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance"], waaaaar: ["busterday", "busterhistory"] };
+  const GROUPS = { alliance: ["thp", "kills", "fsp", "techdonation", "techdonationhistory"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance"], waaaaar: ["busterday", "busterhistory", "warzone"] };
   const groupSelectEl = document.getElementById("groupSelect");
   const dataViewEl = document.getElementById("dataView");
 
