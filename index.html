@@ -260,6 +260,9 @@
   #panel-busterhistory .panel-head { border-bottom-color: var(--accent4); }
   #panel-busterhistory .panel-head h2 { color: var(--accent4); }
   #panel-busterhistory thead th { color: var(--accent4); }
+  #panel-formermembers .panel-head { border-bottom-color: var(--accent4); }
+  #panel-formermembers .panel-head h2 { color: var(--accent4); }
+  #panel-formermembers thead th { color: var(--accent4); }
   #panel-warzone .panel-head { border-bottom-color: var(--accent4); }
   #panel-warzone .panel-head h2 { color: var(--accent4); }
   #panel-warzone thead th { color: var(--accent4); }
@@ -643,6 +646,7 @@
       <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-busterday" id="tab-busterday" data-tab="busterday" data-group="waaaaar">Buster Day</button>
       <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-busterhistory" id="tab-busterhistory" data-tab="busterhistory" data-group="waaaaar">History</button>
       <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-warzone" id="tab-warzone" data-tab="warzone" data-group="waaaaar">Warzone Duel</button>
+      <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-formermembers" id="tab-formermembers" data-tab="formermembers" data-group="waaaaar">No Longer a Member</button>
     </div>
 
     <div class="tab-panel active" id="panel-thp" role="tabpanel" aria-labelledby="tab-thp">
@@ -991,6 +995,35 @@
         <span class="notice-icon" aria-hidden="true">i</span>
         <span>
           Counts every week logged so far for the Buster Day Top 15 and Bottom 15 lists — click a column header to sort.
+        </span>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-formermembers" role="tabpanel" aria-labelledby="tab-formermembers">
+      <div class="panel-head">
+        <h2>No Longer a Member</h2>
+        <span id="formerMembersPanelSub"></span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th class="sortable" data-sort="player" data-default-dir="asc">Player<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="top" data-default-dir="desc">Top 15<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="bottom" data-default-dir="desc">Bottom 15<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="points" data-default-dir="desc">Total Points<span class="sort-arrow"></span></th>
+              <th class="sortable" data-sort="last" data-default-dir="desc">Last Buster Day<span class="sort-arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="formerMembersRows"></tbody>
+        </table>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          Players who appeared in the Buster Day lists but have since left the alliance (confirmed manually). They are
+          hidden from the Buster Day History tab, which only counts active members. Click a column header to sort.
         </span>
       </div>
     </div>
@@ -3071,7 +3104,7 @@
     ["2026-08-15","top",2,"LucisB",19391559],
     ["2026-08-15","top",3,"JPrison Mike ᴮᴿ",15390218],
     ["2026-08-15","top",4,"undercovermario",9658648],
-    ["2026-08-15","top",5,"NISSI  ᵀᴹ",9561318],
+    ["2026-08-15","top",5,"NISSI ᵀᴹ 니시",9561318],
     ["2026-08-15","top",6,"⚝Levina⚝",8870602],
     ["2026-08-15","top",7,"Icēman",8826686],
     ["2026-08-15","top",8,"Free To Nissi Le",8076982],
@@ -3090,7 +3123,7 @@
     ["2026-08-15","bottom",81,"LadyBug2300",390000],
     ["2026-08-15","bottom",82,"Bombinø",300000],
     ["2026-08-15","bottom",83,"222 J",293256],
-    ["2026-08-15","bottom",84,"Candy ᴹᴵᴺᴵ",41082],
+    ["2026-08-15","bottom",84,"ODESZAᵀᴹ",41082],
     ["2026-08-15","bottom",85,"NoseyTano",0],
     ["2026-08-15","bottom",86,"Prison Mike ᵀᴹ",0],
     ["2026-08-15","bottom",87,"MikeyTheSage",0],
@@ -3102,7 +3135,7 @@
     ["2026-08-22","top",3,"RubiSs",23200624],
     ["2026-08-22","top",4,"JPrison Mike ᴮᴿ",22316217],
     ["2026-08-22","top",5,"Free To Nissi Le",21078452],
-    ["2026-08-22","top",6,"NISSI  ᵀᴹ",20487025],
+    ["2026-08-22","top",6,"NISSI ᵀᴹ 니시",20487025],
     ["2026-08-22","top",7,"Just Shai",18203233],
     ["2026-08-22","top",8,"M19ëleven",17857471],
     ["2026-08-22","top",9,"ʚ Kasa mork ɞ",14349566],
@@ -3117,7 +3150,7 @@
     ["2026-08-22","bottom",82,"Golden P",1497500],
     ["2026-08-22","bottom",83,"XxBlackWidowXx",1350000],
     ["2026-08-22","bottom",84,"TATIi",1307755],
-    ["2026-08-22","bottom",85,"Candy ᴹᴵᴺᴵ",1148175],
+    ["2026-08-22","bottom",85,"ODESZAᵀᴹ",1148175],
     ["2026-08-22","bottom",86,"Embrツ",1100000],
     ["2026-08-22","bottom",87,"RCaria 카리아",900000],
     ["2026-08-22","bottom",88,"LadyBug2300",748450],
@@ -3132,9 +3165,9 @@
     ["2026-08-29","top",3,"LucisB",17147640],
     ["2026-08-29","top",4,"Free To Nissi Le",15395131],
     ["2026-08-29","top",5,"RubiSs",14782286],
-    ["2026-08-29","top",6,"SofaKingCool2",13432265],
+    ["2026-08-29","top",6,"ꕷꗞꘘᕔҜĬᙁG",13432265],
     ["2026-08-29","top",7,"ACK ACK",12624870],
-    ["2026-08-29","top",8,"NISSI  ᵀᴹ",11521024],
+    ["2026-08-29","top",8,"NISSI ᵀᴹ 니시",11521024],
     ["2026-08-29","top",9,"Embrツ",9689851],
     ["2026-08-29","top",10,"Just Shai",9347516],
     ["2026-08-29","top",11,"ʚ Kasa mork ɞ",9198014],
@@ -3152,25 +3185,25 @@
     ["2026-08-29","bottom",87,"Lil Jadey",975000],
     ["2026-08-29","bottom",88,"xXMaybeCarnageXx",563517],
     ["2026-08-29","bottom",89,"ABlï",760],
-    ["2026-08-29","bottom",90,"Candy ᴹᴵᴺᴵ",0],
+    ["2026-08-29","bottom",90,"ODESZAᵀᴹ",0],
     ["2026-08-29","bottom",91,"Prince Killer",0],
     ["2026-08-29","bottom",92,"LuffyDistractusIII",0],
     ["2026-08-29","bottom",94,"K badly wants Nissi",0],
     ["2026-08-29","bottom",95,"NissiFam",0],
-    ["2026-09-05","top",1,"NISSI  ᵀᴹ",58858868],
+    ["2026-09-05","top",1,"NISSI ᵀᴹ 니시",58858868],
     ["2026-09-05","top",2,"RubiSs",37366657],
     ["2026-09-05","top",3,"Verissimus",23207224],
     ["2026-09-05","top",4,"JPrison Mike ᴮᴿ",20926076],
     ["2026-09-05","top",5,"LucisB",17630048],
     ["2026-09-05","top",6,"Flodzzzz",15549721],
     ["2026-09-05","top",7,"M19ëleven",14910864],
-    ["2026-09-05","top",8,"Shai the Bullie",14820859],
+    ["2026-09-05","top",8,"Shai The Pirate ジ",14820859],
     ["2026-09-05","top",9,"2CTrash",12988221],
     ["2026-09-05","top",10,"NïkÖ",11892717],
     ["2026-09-05","top",11,"Brąnd",11773683],
-    ["2026-09-05","top",12,"KindaYourFault",10939330],
+    ["2026-09-05","top",12,"KindaYourFault네탓",10939330],
     ["2026-09-05","top",13,"Luca厉飞雨",10628117],
-    ["2026-09-05","top",14,"SofaKingCool2",10527956],
+    ["2026-09-05","top",14,"ꕷꗞꘘᕔҜĬᙁG",10527956],
     ["2026-09-05","top",15,"Free To Nissi Le",9670926],
     ["2026-09-05","bottom",82,"Wihejo",1893928],
     ["2026-09-05","bottom",83,"陰キャ覚醒",1800276],
@@ -3181,7 +3214,7 @@
     ["2026-09-05","bottom",88,"WrĂtH",1456068],
     ["2026-09-05","bottom",89,"Varolena",954130],
     ["2026-09-05","bottom",90,"Lil Jadey",900000],
-    ["2026-09-05","bottom",91,"Candy ᴹᴵᴺᴵ",819661],
+    ["2026-09-05","bottom",91,"ODESZAᵀᴹ",819661],
     ["2026-09-05","bottom",92,"The Jelly 2",750000],
     ["2026-09-05","bottom",93,"Ļeonidas",750000],
     ["2026-09-05","bottom",94,"Sunnyvibes",600000],
@@ -3189,12 +3222,12 @@
     ["2026-09-05","bottom",96,"Prince Killer",0],
     ["2026-09-12","top",1,"RubiSs",30748406],
     ["2026-09-12","top",2,"xBesii",30588149],
-    ["2026-09-12","top",3,"NISSI  ᵀᴹ",26406316],
+    ["2026-09-12","top",3,"NISSI ᵀᴹ 니시",26406316],
     ["2026-09-12","top",4,"2CTrash",20613749],
     ["2026-09-12","top",5,"⚝Levina⚝",18121392],
     ["2026-09-12","top",6,"Bizz NY",17766271],
     ["2026-09-12","top",7,"JPrison Mike ᴮᴿ",17553173],
-    ["2026-09-12","top",8,"Shai the Bullie",15387834],
+    ["2026-09-12","top",8,"Shai The Pirate ジ",15387834],
     ["2026-09-12","top",9,"—JoStaR—",14399220],
     ["2026-09-12","top",10,"HEYY LUCK COME TO ME",13180235],
     ["2026-09-12","top",11,"MONICA GIVE ME UR100",12284836],
@@ -3243,7 +3276,7 @@
     ["2026-09-19","bottom",88,"Lil Jadey",1700000],
     ["2026-09-19","bottom",89,"The Jelly 2",1556022],
     ["2026-09-19","bottom",90,"Golden P",1400000],
-    ["2026-09-19","bottom",91,"Candy ᴹᴵᴺᴵ",659818],
+    ["2026-09-19","bottom",91,"ODESZAᵀᴹ",659818],
     ["2026-09-19","bottom",92,"Prince Killer",503696],
     ["2026-09-19","bottom",93,"LuffyDistractusIII",164135],
     ["2026-09-19","bottom",94,"GrypBR",147520],
@@ -3252,13 +3285,13 @@
     ["2026-09-26","top",3,"HEYY LUCK COME TO ME",21930853],
     ["2026-09-26","top",4,"2CTrash",18252422],
     ["2026-09-26","top",5,"LucisB",18118647],
-    ["2026-09-26","top",6,"Shai the Bullie",14975080],
+    ["2026-09-26","top",6,"Shai The Pirate ジ",14975080],
     ["2026-09-26","top",7,"XLUX",14199570],
     ["2026-09-26","top",8,"Cap Myrtie",13673129],
     ["2026-09-26","top",9,"ʚ Kasa mork ɞ",13332569],
     ["2026-09-26","top",10,"Dr Scoooby v2",13014135],
     ["2026-09-26","top",11,"Verissimus",13004485],
-    ["2026-09-26","top",12,"Odeszaᵀᴸᴳ",11580398],
+    ["2026-09-26","top",12,"GreatScott3",11580398],
     ["2026-09-26","top",13,"Right Tưrn Clỳde",11546039],
     ["2026-09-26","top",14,"xBesii",11015566],
     ["2026-09-26","top",15,"M19ëleven",10288255],
@@ -3291,7 +3324,7 @@
     ["2026-10-03","top",12,"Bilook 23",15950151],
     ["2026-10-03","top",13,"Kommando piepmatz",15538740],
     ["2026-10-03","top",14,"Verissimus",14143632],
-    ["2026-10-03","top",15,"Shai the Bullie",13712984],
+    ["2026-10-03","top",15,"Shai The Pirate ジ",13712984],
     ["2026-10-03","bottom",83,"SΔMURΔI",2175450],
     ["2026-10-03","bottom",84,"GrypBR",2133329],
     ["2026-10-03","bottom",85,"KzaNissi",2045541],
@@ -3301,7 +3334,7 @@
     ["2026-10-03","bottom",89,"Lil Jadey",1715000],
     ["2026-10-03","bottom",90,"Bîlbö Bãggińs",1500000],
     ["2026-10-03","bottom",91,"The Jelly 2",1278207],
-    ["2026-10-03","bottom",92,"Odeszaᵀᴸᴳ",1256777],
+    ["2026-10-03","bottom",92,"GreatScott3",1256777],
     ["2026-10-03","bottom",93,"A T h e n a",1242555],
     ["2026-10-03","bottom",94,"Bauer Sage",970566],
     ["2026-10-03","bottom",95,"Nissis Feet Pics",600000],
@@ -3458,11 +3491,24 @@
   busterDateFilterEl.addEventListener("change", () => { renderBusterDay(); renderTiles("busterday"); });
   renderBusterDay();
 
-  // Buster Day History — per-player Top 15 / Bottom 15 appearance counts across every week logged.
+  // Players who already left the alliance, kept by hand (confirmed by the user). They are hidden
+  // from the Buster Day History tab and listed in the "No Longer a Member" tab instead. Their rows
+  // in busterDay stay untouched, so the weekly Top/Bottom lists still show them.
+  const formerMembers = new Set([
+    "zDavez", "Lil Jadey", "Nissis Feet Pics", "Rudyeeee", "Prince Killer", "LuffyDistractusIII",
+    "Faribole", "Nobre rj", "Rainbow Darling", "Varolena", "Sunnyvibes", "Nississippi Mangos", "Wihejo",
+    "NissiFam", "K badly wants Nissi", "Voice4Nissi", "s♡łƒe ツ", "ABlï", "RCaria 카리아", "NoseyTano",
+    "LadyBug2300", "TATIi", "TotallyNotMcLuuuvin", "STORM WAR", "MikeyTheSage", "Bombinø",
+    "XLUX", "Bizz NY", "XxBlackWidowXx",
+  ]);
+
+  // Buster Day History — per-player Top 15 / Bottom 15 appearance counts across every week logged
+  // (active members only — players in formerMembers are listed in the "No Longer a Member" tab).
   function buildBusterHistory() {
     const byPlayer = new Map();
     busterDay.forEach(r => {
       const [, tier, , player, points] = r;
+      if (formerMembers.has(player)) return;
       if (!byPlayer.has(player)) byPlayer.set(player, { top: 0, bottom: 0, points: 0 });
       const rec = byPlayer.get(player);
       rec[tier]++;
@@ -3520,6 +3566,64 @@
   document.getElementById("busterHistoryPanelSub").textContent =
     `${busterHistoryData.length} player(s) tracked · ${busterDatesList.length} week(s) logged`;
   renderBusterHistoryRows();
+
+  // No Longer a Member — everyone in formerMembers, with their Buster Day tallies and last appearance.
+  function buildFormerMembers() {
+    const byPlayer = new Map();
+    busterDay.forEach(r => {
+      const [date, tier, , player, points] = r;
+      if (!formerMembers.has(player)) return;
+      if (!byPlayer.has(player)) byPlayer.set(player, { top: 0, bottom: 0, points: 0, last: date });
+      const rec = byPlayer.get(player);
+      rec[tier]++;
+      rec.points += points;
+      if (date > rec.last) rec.last = date;
+    });
+    return [...byPlayer.entries()].map(([player, rec]) => ({ player, ...rec }));
+  }
+  const formerMembersData = buildFormerMembers();
+  const formerMembersRowsEl = document.getElementById("formerMembersRows");
+  let formerSortKey = "last";
+  let formerSortDir = "desc";
+
+  function renderFormerMembersRows() {
+    const dir = formerSortDir === "asc" ? 1 : -1;
+    const key = formerSortKey;
+    const sorted = [...formerMembersData].sort((a, b) => {
+      if (key === "player") return dir * a.player.localeCompare(b.player);
+      if (key === "last") return a.last === b.last ? a.player.localeCompare(b.player) : dir * a.last.localeCompare(b.last);
+      if (a[key] === b[key]) return a.player.localeCompare(b.player);
+      return dir * (a[key] - b[key]);
+    });
+    formerMembersRowsEl.innerHTML = "";
+    sorted.forEach((r, i) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="col-pos">${i + 1}</td>
+        <td class="col-player">${r.player}</td>
+        <td class="num">${r.top}</td>
+        <td class="num">${r.bottom}</td>
+        <td class="num">${r.points.toLocaleString("en-US")}</td>
+        <td>${r.last}</td>
+      `;
+      formerMembersRowsEl.appendChild(tr);
+    });
+    document.querySelectorAll('#panel-formermembers thead th[data-sort]').forEach(th => {
+      const arrow = th.querySelector(".sort-arrow");
+      arrow.textContent = th.dataset.sort === formerSortKey ? (formerSortDir === "asc" ? " ▲" : " ▼") : "";
+    });
+  }
+  document.querySelectorAll('#panel-formermembers thead th[data-sort]').forEach(th => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.sort;
+      if (formerSortKey === key) formerSortDir = formerSortDir === "asc" ? "desc" : "asc";
+      else { formerSortKey = key; formerSortDir = th.dataset.defaultDir || "desc"; }
+      renderFormerMembersRows();
+    });
+  });
+  document.getElementById("formerMembersPanelSub").textContent =
+    `${formerMembersData.length} player(s) who left the alliance`;
+  renderFormerMembersRows();
 
   // Warzone Duel — members who did NOT take part, sent in manually per duel date (not part of the
   // daily scrape). One row per absent player per date: [date, player].
@@ -3633,7 +3737,7 @@
     ["2026-08-23","top",8,"Consent Was Given",59950],
     ["2026-08-23","top",9,"RubiSs",56050],
     ["2026-08-23","top",10,"zDavez",55600],
-    ["2026-08-23","bottom",84,"Candy ᴹᴵᴺᴵ",27600],
+    ["2026-08-23","bottom",84,"ODESZAᵀᴹ",27600],
     ["2026-08-23","bottom",85,"Lil Jadey",27400],
     ["2026-08-23","bottom",86,"NOT Lord Shocka",27250],
     ["2026-08-23","bottom",87,"ABlï",24500],
@@ -3662,7 +3766,7 @@
     ["2026-08-30","bottom",90,"A T h e n a",17450],
     ["2026-08-30","bottom",92,"LuffyDistractusIII",8200],
     ["2026-08-30","bottom",93,"Prince Killer",5950],
-    ["2026-08-30","bottom",94,"Candy ᴹᴵᴺᴵ",5450],
+    ["2026-08-30","bottom",94,"ODESZAᵀᴹ",5450],
     ["2026-09-03","top",1,"⚝Levina⚝",91400],
     ["2026-09-03","top",2,"2CTrash",70500],
     ["2026-09-03","top",3,"Sloth xoxo",68350],
@@ -3680,7 +3784,7 @@
     ["2026-09-03","bottom",91,"Faribole",16650],
     ["2026-09-03","bottom",92,"Prince Killer",15750],
     ["2026-09-03","bottom",93,"Sunnyvibes",14200],
-    ["2026-09-03","bottom",94,"Candy ᴹᴵᴺᴵ",12400],
+    ["2026-09-03","bottom",94,"ODESZAᵀᴹ",12400],
     ["2026-09-03","bottom",95,"SΔMURΔI",11950],
     ["2026-09-03","bottom",96,"LuffyDistractusIII",6000],
     ["2026-09-13","top",1,"⚝Levina⚝",111400],
@@ -3693,7 +3797,7 @@
     ["2026-09-13","top",8,"陰キャ覚醒",55950],
     ["2026-09-13","top",9,"Rudyeeee",55850],
     ["2026-09-13","top",10,"JPrison Mike ᴮᴿ",55350],
-    ["2026-09-13","bottom",81,"Candy ᴹᴵᴺᴵ",23650],
+    ["2026-09-13","bottom",81,"ODESZAᵀᴹ",23650],
     ["2026-09-13","bottom",82,"Lil Jadey",23000],
     ["2026-09-13","bottom",83,"Gökan29",21250],
     ["2026-09-13","bottom",84,"A T h e n a",20000],
@@ -3719,7 +3823,7 @@
     ["2026-09-20","bottom",88,"Lil Jadey",20500],
     ["2026-09-20","bottom",89,"The Jelly 2",17500],
     ["2026-09-20","bottom",90,"Choppa Shocka",15800],
-    ["2026-09-20","bottom",91,"Candy ᴹᴵᴺᴵ",12350],
+    ["2026-09-20","bottom",91,"ODESZAᵀᴹ",12350],
     ["2026-09-20","bottom",92,"LuffyDistractusIII",11950],
     ["2026-09-20","bottom",93,"Sukunaa8",8900],
     ["2026-09-20","bottom",94,"GrypBR",6400],
@@ -3730,7 +3834,7 @@
     ["2026-10-04","top",5,"2CTrash",69100],
     ["2026-10-04","top",6,"Bilook 23",67400],
     ["2026-10-04","top",7,"Sloth xoxo",66400],
-    ["2026-10-04","top",8,"Shai the Bullie",64950],
+    ["2026-10-04","top",8,"Shai The Pirate ジ",64950],
     ["2026-10-04","top",9,"BKpearl",63700],
     ["2026-10-04","top",10,"陰キャ覚醒",63600],
     ["2026-10-04","bottom",82,"Choppa Shocka",34550],
@@ -4091,6 +4195,15 @@
         { label: "Most Bottom 15 appearances", value: mostBottom ? String(mostBottom.bottom) : "—", sub: mostBottom ? mostBottom.player : "no data yet" },
       ];
     },
+    formermembers: () => {
+      const mostTop = formerMembersData.length ? [...formerMembersData].sort((a, b) => b.top - a.top)[0] : null;
+      const mostBottom = formerMembersData.length ? [...formerMembersData].sort((a, b) => b.bottom - a.bottom)[0] : null;
+      return [
+        { label: "Former members", value: String(formerMembersData.length), sub: "tracked in Buster Day" },
+        { label: "Most Top 15 appearances", value: mostTop && mostTop.top > 0 ? String(mostTop.top) : "—", sub: mostTop && mostTop.top > 0 ? mostTop.player : "no data yet" },
+        { label: "Most Bottom 15 appearances", value: mostBottom && mostBottom.bottom > 0 ? String(mostBottom.bottom) : "—", sub: mostBottom && mostBottom.bottom > 0 ? mostBottom.player : "no data yet" },
+      ];
+    },
     warzone: () => {
       const totals = [...warzoneTotals().entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
       const leader = totals[0] || null;
@@ -4163,7 +4276,7 @@
   // Group navigation: the dashboard opens on a group-picker screen (Alliance 2300 Data /
   // Server 2300 Data / Desert Storm); picking a group filters the tab bar down to just that
   // group's tabs and activates the first one. "← All groups" returns to the picker.
-  const GROUPS = { alliance: ["thp", "kills", "fsp", "techdonation", "techdonationhistory"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance"], waaaaar: ["busterday", "busterhistory", "warzone"] };
+  const GROUPS = { alliance: ["thp", "kills", "fsp", "techdonation", "techdonationhistory"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance"], waaaaar: ["busterday", "busterhistory", "warzone", "formermembers"] };
   const groupSelectEl = document.getElementById("groupSelect");
   const dataViewEl = document.getElementById("dataView");
 
