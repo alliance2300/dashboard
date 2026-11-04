@@ -675,6 +675,10 @@
         <span class="no-thp-notice-label" id="noThpPanelSub"></span>
         <div class="no-thp-list" id="noThpList"></div>
       </div>
+      <div class="no-thp-notice" id="leftThpBox" hidden>
+        <span class="no-thp-notice-label" id="leftThpLabel"></span>
+        <div class="no-thp-list" id="leftThpList"></div>
+      </div>
       <div class="notice">
         <span class="notice-icon" aria-hidden="true">i</span>
         <span>
@@ -708,6 +712,10 @@
           </thead>
           <tbody id="killsRows"></tbody>
         </table>
+      </div>
+      <div class="no-thp-notice" id="leftKillsBox" hidden>
+        <span class="no-thp-notice-label" id="leftKillsLabel"></span>
+        <div class="no-thp-list" id="leftKillsList"></div>
       </div>
     </div>
 
@@ -1176,93 +1184,93 @@
     ["카이 Sky","KR",1808059,59063966,129721,2522595,20178305,0,71294,554716,null,"tank",true,0],
     ["ICEMΛN","US",null,57973199,43475,4007843,21198712,null,null,null,null,"air",false,0],
     ["Sîlenced","US",1777723,57659795,0,2031730,30970841,0,1389,959104,"2026-11-03","",false,null],
-    ["NIGHTREAP3R","UN",null,57549646,31879,3738374,13053074,null,null,null,null,"air",false,-1],
-    ["Shai The Pirate ジ","PT",2637050,56813312,168670,3492731,16455271,0,176368,1230187,null,"missile",false,-1],
-    ["xBesii","AL",3639800,55620629,165325,4305972,13926020,0,146824,1242364,null,"air",false,-1],
-    ["GreatScott3","CA",null,55270217,62287,3824847,17738341,null,null,null,null,"missile",false,-1],
-    ["LucisB","UN",5279974,54893500,243321,3449988,21096211,0,551335,2628028,null,"air",false,-1],
-    ["Free To Missile","SG",453231,54148671,304733,5107434,15635853,0,0,0,null,"missile",false,-1],
+    ["NIGHTREAP3R","UN",null,57549646,31879,3738374,13053074,null,null,null,null,"air",false,0],
+    ["Shai The Pirate ジ","PT",2637050,56813312,168670,3492731,16455271,0,176368,1230187,null,"missile",false,0],
+    ["xBesii","AL",3639800,55620629,165325,4305972,13926020,0,146824,1242364,null,"air",false,0],
+    ["GreatScott3","CA",null,55270217,62287,3824847,17738341,null,null,null,null,"missile",false,0],
+    ["LucisB","UN",5279974,54893500,243321,3449988,21096211,0,551335,2628028,null,"air",false,0],
+    ["Free To Missile","SG",453231,54148671,304733,5107434,15635853,0,0,0,null,"missile",false,0],
     ["BKs supporter Ad","UN",1366721,53067765,0,0,4279306,0,0,269963,"2026-10-14","",false,null],
     ["RubiSs","UN",3025303,52984979,0,2703352,14084009,0,2159,628106,"2026-11-03","",false,null],
-    ["Phxterror","US",null,52523991,290271,2879132,21234341,null,null,null,null,"tank",false,-2],
-    ["KindaYourFault네탓","US",null,52365701,38533,2762207,14928918,null,null,null,null,"missile",false,-4],
+    ["Phxterror","US",null,52523991,290271,2879132,21234341,null,null,null,null,"tank",false,1],
+    ["KindaYourFault네탓","US",null,52365701,38533,2762207,14928918,null,null,null,null,"missile",false,-1],
     ["BKpearl","TW",386599,52340141,0,0,0,0,0,0,"2026-10-07","",false,null],
-    ["Exsho","DE",null,51177695,172649,7541312,19161273,null,null,null,null,"tank",false,-4],
-    ["silent 2300","UN",2567131,50957019,35545,3953664,18450326,0,7441,816910,null,"missile",false,-4],
-    ["Right Tưrn Clỳde","US",3909490,50164990,89422,2752871,20160041,12161,1018433,3706281,null,"air",false,-4],
-    ["달 ల Moon","KR",3724041,48465914,69965,4561941,null,3462,416568,null,null,"air",false,-4],
-    ["ODESZAᵀᴹ","US",null,47982966,83179,4830243,21156387,null,null,null,null,"tank",false,-4],
-    ["LIL ZEUS","CH",2406434,47842852,159693,2818027,15767486,0,204076,723811,null,"air",false,-4],
-    ["Thracian Mercenary","GR",5624724,47602886,10648,4830734,21807151,2892,602411,3343680,null,"",false,-4],
+    ["Exsho","DE",null,51177695,172649,7541312,19161273,null,null,null,null,"tank",false,0],
+    ["silent 2300","UN",2567131,50957019,35545,3953664,18450326,0,7441,816910,null,"missile",false,0],
+    ["Right Tưrn Clỳde","US",3909490,50164990,89422,2752871,20160041,12161,1018433,3706281,null,"air",false,0],
+    ["달 ల Moon","KR",3724041,48465914,69965,4561941,null,3462,416568,null,null,"air",false,0],
+    ["ODESZAᵀᴹ","US",null,47982966,83179,4830243,21156387,null,null,null,null,"tank",false,0],
+    ["LIL ZEUS","CH",2406434,47842852,159693,2818027,15767486,0,204076,723811,null,"air",false,0],
+    ["Thracian Mercenary","GR",5624724,47602886,10648,4830734,21807151,2892,602411,3343680,null,"",false,0],
     ["Siruz01","DE",2328850,47408276,0,2176394,null,0,274,null,"2026-11-03","",false,null],
-    ["HEYY LUCK COME TO ME","ES",4524057,46404960,172704,2574577,18549455,0,530338,1946939,null,"tank",true,-5],
-    ["피츄 Pichuu","KR",4810955,46286883,110851,4124163,15109439,118,654537,2971805,null,"air",false,-5],
-    ["Luca厉飞雨","UN",2219715,45980847,79456,5680644,14819714,0,405907,1019530,null,"air",false,-5],
-    ["jjamesbond","PT",null,45234998,287368,3634171,15539164,null,null,null,null,"air",false,-3],
-    ["xBodyGuarD75","TR",null,45181052,231101,8084659,16186183,null,null,null,null,"",false,-5],
-    ["ʚ Kasa mork ɞ","JP",2153504,45172482,18315,10925830,20045099,2592,222735,1713944,null,"air",false,-7],
-    ["Ki lord","UN",null,44300146,14562,2631886,null,null,null,null,null,"",false,-5],
-    ["DertliSinek","TR",null,44273769,145404,6532063,15832122,null,null,null,null,"",false,-5],
-    ["Google FCz","VN",null,44089638,37268,3589107,17997269,null,null,null,null,"missile",false,-5],
-    ["Choppa Shocka","US",null,43629016,37192,2439128,14639650,null,null,null,null,"air",false,-5],
-    ["KaRTôōN","US",null,43484004,1648,2931154,13303430,null,null,null,null,"tank",false,-5],
-    ["천사 izrǟiLᵀᴹ","AL",4862360,43357852,163505,7576979,null,500,385148,null,null,"air",false,-4],
-    ["Glitch King","US",null,43339548,76090,4199830,18003527,null,null,null,null,"missile",false,-6],
-    ["M D 티치  Teach","KR",null,43227428,49322,3051151,null,null,null,null,null,"air",false,-5],
-    ["Golden P","US",null,43106036,0,1793816,8219685,null,null,null,null,"tank",false,-5],
-    ["GrypBR","BR",null,42580546,51863,3292456,21927000,null,null,null,null,"",false,-5],
-    ["Ava Ops Nz","TH",2011242,41440957,95360,4030931,null,0,250801,null,null,"air",false,-5],
-    ["PettyBoop","CA",null,40850179,22182,5173450,11202633,null,null,null,null,"",false,-5],
-    ["A T h e n a","US",null,40431547,55837,2989476,12418470,null,null,null,null,"",false,-5],
-    ["YXMIFFX","US",2210664,39716173,27569,2175494,13718810,0,131421,746595,null,"",false,-5],
+    ["HEYY LUCK COME TO ME","ES",4524057,46404960,172704,2574577,18549455,0,530338,1946939,null,"tank",true,0],
+    ["피츄 Pichuu","KR",4810955,46286883,110851,4124163,15109439,118,654537,2971805,null,"air",false,0],
+    ["Luca厉飞雨","UN",2219715,45980847,79456,5680644,14819714,0,405907,1019530,null,"air",false,0],
+    ["jjamesbond","PT",null,45234998,287368,3634171,15539164,null,null,null,null,"air",false,2],
+    ["xBodyGuarD75","TR",null,45181052,231101,8084659,16186183,null,null,null,null,"",false,0],
+    ["ʚ Kasa mork ɞ","JP",2153504,45172482,18315,10925830,20045099,2592,222735,1713944,null,"air",false,-2],
+    ["Ki lord","UN",null,44300146,14562,2631886,null,null,null,null,null,"",false,0],
+    ["DertliSinek","TR",null,44273769,145404,6532063,15832122,null,null,null,null,"",false,0],
+    ["Google FCz","VN",null,44089638,37268,3589107,17997269,null,null,null,null,"missile",false,0],
+    ["Choppa Shocka","US",null,43629016,37192,2439128,14639650,null,null,null,null,"air",false,0],
+    ["KaRTôōN","US",null,43484004,1648,2931154,13303430,null,null,null,null,"tank",false,0],
+    ["천사 izrǟiLᵀᴹ","AL",4862360,43357852,163505,7576979,null,500,385148,null,null,"air",false,1],
+    ["Glitch King","US",null,43339548,76090,4199830,18003527,null,null,null,null,"missile",false,-1],
+    ["M D 티치  Teach","KR",null,43227428,49322,3051151,null,null,null,null,null,"air",false,0],
+    ["Golden P","US",null,43106036,0,1793816,8219685,null,null,null,null,"tank",false,0],
+    ["GrypBR","BR",null,42580546,51863,3292456,21927000,null,null,null,null,"",false,0],
+    ["Ava Ops Nz","TH",2011242,41440957,95360,4030931,null,0,250801,null,null,"air",false,0],
+    ["PettyBoop","CA",null,40850179,22182,5173450,11202633,null,null,null,null,"",false,0],
+    ["A T h e n a","US",null,40431547,55837,2989476,12418470,null,null,null,null,"",false,0],
+    ["YXMIFFX","US",2210664,39716173,27569,2175494,13718810,0,131421,746595,null,"",false,0],
     ["NaNatsu","VN",2396027,39515598,null,null,null,null,null,null,null,"tank",true,null],
     ["Mínahasa","ENG",null,39165436,0,0,11956653,null,null,null,"2026-10-27","",false,null],
-    ["아르미 Heart","KR",null,39078254,263879,2969676,null,null,null,null,null,"tank",true,-6],
-    ["StickyyPants","GB",null,39039163,82181,3948234,13375232,null,null,null,null,"",false,-8],
-    ["진철Park Jin Cheol","KR",null,38665390,46038,null,null,null,null,null,null,"tank",true,-7],
-    ["PT 휴","US",null,38281088,149438,null,null,null,null,null,null,"",false,-7],
+    ["아르미 Heart","KR",null,39078254,263879,2969676,null,null,null,null,null,"tank",true,0],
+    ["StickyyPants","GB",null,39039163,82181,3948234,13375232,null,null,null,null,"",false,-2],
+    ["진철Park Jin Cheol","KR",null,38665390,46038,null,null,null,null,null,null,"tank",true,-1],
+    ["PT 휴","US",null,38281088,149438,null,null,null,null,null,null,"",false,-1],
     ["ʚbubuɞ","AR",null,37498004,0,0,5641862,null,null,null,"2026-10-22","",false,null],
-    ["KillaKells2","CA",null,37316213,437735,2517374,10350467,null,null,null,null,"",false,-6],
-    ["Mr Sun 1998","VN",null,37107996,34141,7191233,null,null,null,null,null,"",false,-9],
-    ["Sîlencer","US",null,36948377,8690,null,null,null,null,null,null,"",false,-9],
-    ["Embrツ","US",null,36887649,121971,3481746,null,null,null,null,null,"",false,-6],
-    ["DANKROSS","CL",8328069,36836236,19552,2476259,13388675,19642,349971,3181249,null,"",false,-9],
-    ["Vyskar","KR",2001648,36758796,46861,2683238,24364888,0,298522,1409698,null,"",false,-7],
-    ["Kommando piepmatz","UN",null,36726545,15939,2102515,9311309,null,null,null,null,"",false,-7],
-    ["SxSM0KER","UN",3681110,36627770,-173301,1657643,16202902,2364,721907,2170587,null,"",false,-11],
-    ["Gökan29","TR",null,36587680,939722,2602594,25472181,null,null,null,null,"",false,-5],
-    ["Jollŷ","US",null,36512123,0,3171351,8993253,null,null,null,null,"tank",false,-9],
+    ["KillaKells2","CA",null,37316213,437735,2517374,10350467,null,null,null,null,"",false,1],
+    ["Mr Sun 1998","VN",null,37107996,34141,7191233,null,null,null,null,null,"",false,-2],
+    ["Sîlencer","US",null,36948377,8690,null,null,null,null,null,null,"",false,-2],
+    ["Embrツ","US",null,36887649,121971,3481746,null,null,null,null,null,"",false,1],
+    ["DANKROSS","CL",8328069,36836236,19552,2476259,13388675,19642,349971,3181249,null,"",false,-2],
+    ["Vyskar","KR",2001648,36758796,46861,2683238,24364888,0,298522,1409698,null,"",false,0],
+    ["Kommando piepmatz","UN",null,36726545,15939,2102515,9311309,null,null,null,null,"",false,0],
+    ["SxSM0KER","UN",3681110,36627770,-173301,1657643,16202902,2364,721907,2170587,null,"",false,-4],
+    ["Gökan29","TR",null,36587680,939722,2602594,25472181,null,null,null,null,"",false,2],
+    ["Jollŷ","US",null,36512123,0,3171351,8993253,null,null,null,null,"tank",false,-2],
     ["XLUX","TR",1760698,36249157,0,0,0,0,0,0,"2026-10-07","",false,null],
     ["MuSTaFax","TR",null,36018966,0,0,8930338,null,null,null,null,"air",false,null],
-    ["HeavyDmech","CA",null,35936719,0,1806713,8205441,null,null,null,null,"",false,-11],
-    ["Blue ᵀᴹ","US",1365752,35767108,0,2194466,6777782,0,0,4870,null,"air",false,-11],
-    ["SwampFunk","US",null,35076346,478136,613349,7901572,null,null,null,null,"tank",false,-10],
+    ["HeavyDmech","CA",null,35936719,0,1806713,8205441,null,null,null,null,"",false,-3],
+    ["Blue ᵀᴹ","US",1365752,35767108,0,2194466,6777782,0,0,4870,null,"air",false,-3],
+    ["SwampFunk","US",null,35076346,478136,613349,7901572,null,null,null,null,"tank",false,-2],
     ["동동ෆDoongDoong","KR",null,34852649,null,null,null,null,null,null,null,"",false,null],
-    ["Sloth xoxo","US",null,34352431,0,636558,8073286,null,null,null,null,"",false,-11],
+    ["Sloth xoxo","US",null,34352431,0,636558,8073286,null,null,null,null,"",false,-3],
     ["zDavez","DE",255532,33739763,0,0,2877580,0,0,0,"2026-10-22","",false,null],
-    ["ーJoStaRー","UN",null,33405078,0,0,20230722,null,null,null,null,"air",false,-12],
-    ["ᴬᶜᵏ","AL",681149,31542284,14265,14265,5058076,0,0,0,null,"missile",false,-12],
+    ["ーJoStaRー","UN",null,33405078,0,0,20230722,null,null,null,null,"air",false,-3],
+    ["ᴬᶜᵏ","AL",681149,31542284,14265,14265,5058076,0,0,0,null,"missile",false,-3],
     ["Nerea CC","ES",1745277,31182374,0,0,null,0,0,null,"2026-10-22","",false,null],
-    ["PemburuCrown","AU",null,30206162,0,0,19659313,null,null,null,null,"",false,-13],
-    ["DarkeyPenguin3rs","US",3165393,29636140,0,0,null,0,313401,1501944,null,"",false,-13],
-    ["AToz ᵀᴹ","UN",2028844,27780015,0,0,2644086,7064,202136,1382480,null,"air",false,-13],
-    ["Haji Śugiono ജ","ID",6012871,26168883,428239,428239,1423505,6263,1667823,3993063,null,"",false,-13],
-    ["PinKittyKat","CO",524261,25548875,0,0,516054,0,0,0,"2026-11-04","",false,-13],
+    ["PemburuCrown","AU",null,30206162,0,0,19659313,null,null,null,null,"",false,-3],
+    ["DarkeyPenguin3rs","US",3165393,29636140,0,0,null,0,313401,1501944,null,"",false,-3],
+    ["AToz ᵀᴹ","UN",2028844,27780015,0,0,2644086,7064,202136,1382480,null,"air",false,-3],
+    ["Haji Śugiono ജ","ID",6012871,26168883,428239,428239,1423505,6263,1667823,3993063,null,"",false,-3],
+    ["PinKittyKat","CO",524261,25548875,0,0,516054,0,0,0,"2026-11-04","",false,null],
     ["Carnage ᵀᴹ","CO",null,25450304,null,null,null,null,null,null,null,"",false,null],
-    ["ENGRODA716","US",null,25360713,0,0,271584,null,null,null,null,"",false,-14],
-    ["itsamemarioandpeach","NL",null,24604181,0,0,0,null,null,null,"2026-11-04","",false,-14],
-    ["222 J","US",null,21974066,0,0,0,null,null,null,null,"tank",false,-14],
-    ["Mango The Dog","US",null,21015791,0,0,0,null,null,null,"2026-11-04","",false,-14],
-    ["Střiķer","US",null,18606220,0,0,0,null,null,null,"2026-11-04","",false,-14],
-    ["Sukunaa8","UN",null,17055532,0,0,0,null,null,null,"2026-11-04","",false,-14],
-    ["B23N","AU",null,14689516,0,0,0,null,null,null,"2026-11-04","",false,-14],
-    ["ChubbiieChicken","US",225782,11609622,0,0,0,0,0,0,"2026-11-04","",false,-14],
-    ["Irish Clan","IE",null,11518910,0,0,0,null,null,null,"2026-11-04","",false,-14],
-    ["Steph Curry McFlurry","US",null,10409220,0,0,0,null,null,null,"2026-11-04","",false,-14],
-    ["VSîm","US",null,9755222,0,0,0,null,null,null,"2026-11-04","",false,-14],
-    ["Leónídas","US",null,8971139,0,0,0,null,null,null,"2026-11-04","",false,-14],
-    ["scnzic","IN",null,8651737,0,0,0,null,null,null,null,"",false,-14],
-    ["Pippa Rae","AU",null,6725967,0,0,0,null,null,null,null,"",false,-14],
+    ["ENGRODA716","US",null,25360713,0,0,271584,null,null,null,null,"",false,-4],
+    ["itsamemarioandpeach","NL",null,24604181,0,0,0,null,null,null,"2026-11-04","",false,null],
+    ["222 J","US",null,21974066,0,0,0,null,null,null,null,"tank",false,-4],
+    ["Mango The Dog","US",null,21015791,0,0,0,null,null,null,"2026-11-04","",false,null],
+    ["Střiķer","US",null,18606220,0,0,0,null,null,null,"2026-11-04","",false,null],
+    ["Sukunaa8","UN",null,17055532,0,0,0,null,null,null,"2026-11-04","",false,null],
+    ["B23N","AU",null,14689516,0,0,0,null,null,null,"2026-11-04","",false,null],
+    ["ChubbiieChicken","US",225782,11609622,0,0,0,0,0,0,"2026-11-04","",false,null],
+    ["Irish Clan","IE",null,11518910,0,0,0,null,null,null,"2026-11-04","",false,null],
+    ["Steph Curry McFlurry","US",null,10409220,0,0,0,null,null,null,"2026-11-04","",false,null],
+    ["VSîm","US",null,9755222,0,0,0,null,null,null,"2026-11-04","",false,null],
+    ["Leónídas","US",null,8971139,0,0,0,null,null,null,"2026-11-04","",false,null],
+    ["scnzic","IN",null,8651737,0,0,0,null,null,null,null,"",false,-4],
+    ["Pippa Rae","AU",null,6725967,0,0,0,null,null,null,null,"",false,-4],
     ["Kimtech","US",null,5462173,null,null,null,null,null,null,null,"",false,null],
     ["KzaNissi","MA",null,5243598,null,null,null,null,null,null,null,"",false,null],
     ["Múrder Mittens","US",null,5076014,null,null,null,null,null,null,null,"",false,null],
@@ -1290,54 +1298,70 @@
     ["xBesii","AL",3639800,0,146824,1242364,null,"air",false,0],
     ["DarkeyPenguin3rs","US",3165393,0,313401,1501944,null,"",false,0],
     ["RubiSs","UN",3025303,0,2159,628106,"2026-11-03","",false,null],
-    ["Shai The Pirate ジ","PT",2637050,0,176368,1230187,null,"missile",false,-1],
-    ["silent 2300","UN",2567131,0,7441,816910,null,"missile",false,-1],
-    ["LIL ZEUS","CH",2406434,0,204076,723811,null,"air",false,-1],
+    ["Shai The Pirate ジ","PT",2637050,0,176368,1230187,null,"missile",false,0],
+    ["silent 2300","UN",2567131,0,7441,816910,null,"missile",false,0],
+    ["LIL ZEUS","CH",2406434,0,204076,723811,null,"air",false,0],
     ["NaNatsu","VN",2396027,null,null,null,null,"tank",true,null],
     ["Siruz01","DE",2328850,0,274,null,"2026-11-03","",false,null],
-    ["ஜLevinaஜ","US",2266711,0,246798,609579,null,"air",false,-3],
-    ["DEVELOPER ᵀᴹ","IL",2256149,20,20,557740,null,"air",false,-3],
-    ["Luca厉飞雨","UN",2219715,0,405907,1019530,null,"air",false,-3],
-    ["YXMIFFX","US",2210664,0,131421,746595,null,"",false,-3],
-    ["ʚ Kasa mork ɞ","JP",2153504,2592,222735,1713944,null,"air",false,-3],
-    ["Bilook 23","FR",2125397,0,194794,843964,null,"tank",false,-3],
-    ["AToz ᵀᴹ","UN",2028844,7064,202136,1382480,null,"air",false,-3],
-    ["Ava Ops Nz","TH",2011242,0,250801,null,null,"air",false,-3],
-    ["Cap Myrtie","US",2003184,2999,null,null,null,"missile",false,-2],
-    ["Vyskar","KR",2001648,0,298522,1409698,null,"",false,-4],
-    ["카이 Sky","KR",1808059,0,71294,554716,null,"tank",true,-3],
+    ["ஜLevinaஜ","US",2266711,0,246798,609579,null,"air",false,-1],
+    ["DEVELOPER ᵀᴹ","IL",2256149,20,20,557740,null,"air",false,-1],
+    ["Luca厉飞雨","UN",2219715,0,405907,1019530,null,"air",false,-1],
+    ["YXMIFFX","US",2210664,0,131421,746595,null,"",false,-1],
+    ["ʚ Kasa mork ɞ","JP",2153504,2592,222735,1713944,null,"air",false,-1],
+    ["Bilook 23","FR",2125397,0,194794,843964,null,"tank",false,-1],
+    ["AToz ᵀᴹ","UN",2028844,7064,202136,1382480,null,"air",false,-1],
+    ["Ava Ops Nz","TH",2011242,0,250801,null,null,"air",false,-1],
+    ["Cap Myrtie","US",2003184,2999,null,null,null,"missile",false,0],
+    ["Vyskar","KR",2001648,0,298522,1409698,null,"",false,-2],
+    ["카이 Sky","KR",1808059,0,71294,554716,null,"tank",true,-1],
     ["Sîlenced","US",1777723,0,1389,959104,"2026-11-03","",false,null],
     ["XLUX","TR",1760698,0,0,0,"2026-10-07","",false,null],
     ["Nerea CC","ES",1745277,0,0,null,"2026-10-22","",false,null],
     ["BKs supporter Ad","UN",1366721,0,0,269963,"2026-10-14","",false,null],
-    ["Blue ᵀᴹ","US",1365752,0,0,4870,null,"air",false,-7],
-    ["ᴬᶜᵏ","AL",681149,0,0,0,null,"missile",false,-7],
-    ["PinKittyKat","CO",524261,0,0,0,"2026-11-04","",false,-7],
-    ["Free To Missile","SG",453231,0,0,0,null,"missile",false,-7],
+    ["Blue ᵀᴹ","US",1365752,0,0,4870,null,"air",false,-1],
+    ["ᴬᶜᵏ","AL",681149,0,0,0,null,"missile",false,-1],
+    ["PinKittyKat","CO",524261,0,0,0,"2026-11-04","",false,null],
+    ["Free To Missile","SG",453231,0,0,0,null,"missile",false,-1],
     ["BKpearl","TW",386599,0,0,0,"2026-10-07","",false,null],
     ["zDavez","DE",255532,0,0,0,"2026-10-22","",false,null],
-    ["Gusinnn","ID",234032,0,0,0,null,"tank",true,-9],
-    ["ChubbiieChicken","US",225782,0,0,0,"2026-11-04","",false,-9]
+    ["Gusinnn","ID",234032,0,0,0,null,"tank",true,-1],
+    ["ChubbiieChicken","US",225782,0,0,0,"2026-11-04","",false,null]
   ];
   const noThp = [
-    ["陰キャ覚醒","NO",null],
-    ["Bîlbö Bãggińs","NZ",null],
-    ["Kenny케니이","KR",null],
-    ["Gusinnn","ID",234032],
-    ["ѕᘻιℓҽ ッ","UN",null],
-    ["Nextdoor Neighbor","US",null],
-    ["The Jelly 2","CY",null],
-    ["The Lonely Chair","CA",null],
-    ["Queen II","BR",null],
-    ["tetao","SO",null],
-    ["Bräd","AU",null],
-    ["육군 원수 Yuan","NL",3812021],
-    ["UItegra","KR",null],
-    ["PixelPixi","US",null],
-    ["Uncle ARass","GB",null],
-    ["WrĂtH","UKL",null],
-    ["Jenkszz","UN",null]
+    ["陰キャ覚醒","NO",null,null],
+    ["Bîlbö Bãggińs","NZ",null,"2026-11-04"],
+    ["Kenny케니이","KR",null,"2026-11-04"],
+    ["Gusinnn","ID",234032,null],
+    ["ѕᘻιℓҽ ッ","UN",null,null],
+    ["Nextdoor Neighbor","US",null,null],
+    ["The Jelly 2","CY",null,"2026-11-04"],
+    ["The Lonely Chair","CA",null,null],
+    ["Queen II","BR",null,null],
+    ["tetao","SO",null,"2026-11-04"],
+    ["Bräd","AU",null,null],
+    ["육군 원수 Yuan","NL",3812021,null],
+    ["UItegra","KR",null,null],
+    ["PixelPixi","US",null,null],
+    ["Uncle ARass","GB",null,null],
+    ["WrĂtH","UKL",null,null],
+    ["Jenkszz","UN",null,null]
   ];
+
+  // The three arrays above are rebuilt daily and still carry players who left the alliance (they have a
+  // missingSince date). Current members stay in withThp/killsRanked/noThp — so every ranking, tile and the
+  // FSP table only counts people who are in the alliance now — while those who left are moved into
+  // leftThp/leftKills/leftNoThp and listed in their own section at the bottom of each tab.
+  function splitLeft(arr, idx) {
+    const left = arr.filter(r => r[idx]);
+    for (let i = arr.length - 1; i >= 0; i--) if (arr[i][idx]) arr.splice(i, 1);
+    return left;
+  }
+  const leftThp = splitLeft(withThp, 10);
+  const leftKills = splitLeft(killsRanked, 6);
+  const leftNoThp = splitLeft(noThp, 3);
+  // Left temporarily and expected back (per the user): shown as "away" instead of "left", and kept out of
+  // the "No Longer a Member" tab. Remove a name from this list once they're confirmed gone for good.
+  const returningMembers = new Set(["RubiSs", "Sîlenced"]);
 
   // Every commander on server #2300 with a confirmed THP and/or Kills report (not just our alliance), sorted by THP desc
   // (THP holders first), then by Kills desc for the kills-only remainder. History-backed deltas vs 1/7/30 days ago.
@@ -2192,6 +2216,25 @@
   noThpEl.innerHTML = noThp
     .map(([name, , kills]) => `<b>${name}</b>${kills !== null ? " (" + kills.toLocaleString("en-US") + " kills)" : ""}`)
     .join(" · ");
+
+  // Players who left the alliance: listed apart from the rankings (current members only), with the last
+  // known value and the date they stopped being reported as a member.
+  function renderLeftBox(boxId, labelId, listId, entries, what) {
+    const box = document.getElementById(boxId);
+    if (!entries.length) { box.hidden = true; return; }
+    box.hidden = false;
+    document.getElementById(labelId).textContent = `${entries.length} no longer in the alliance${what ? " · last known " + what : ""}`;
+    document.getElementById(listId).innerHTML = entries
+      .sort((a, b) => (b.value ?? -1) - (a.value ?? -1))
+      .map(e => `<b>${e.name}</b>${e.value != null ? " (" + e.value.toLocaleString("en-US") + ")" : ""} <span class="missing-tag">${returningMembers.has(e.name) ? "away" : "left"} ${e.since}</span>`)
+      .join(" · ");
+  }
+  renderLeftBox("leftThpBox", "leftThpLabel", "leftThpList", [
+    ...leftThp.map(r => ({ name: r[0], value: r[3], since: r[10] })),
+    ...leftNoThp.map(r => ({ name: r[0], value: null, since: r[3] })),
+  ], "THP");
+  renderLeftBox("leftKillsBox", "leftKillsLabel", "leftKillsList",
+    leftKills.map(r => ({ name: r[0], value: r[2], since: r[6] })), "kills");
 
   // Tracked by alliance_id c1e025d28dba45f5b9eb5865167b40d6 in alliance_2300_alliances_roster.csv —
   // update this tag if that alliance_id's abbr ever changes (a confirmed rename, reported in the daily summary).
@@ -3620,6 +3663,13 @@
     "The Jelly 2", "Ļeonidas", "VSîm", "DroneSlutzNHarmony", "SΔMURΔI",
     "Bîlbö Bãggińs", "Prison Mike ᵀᴹ", "Bauer Sage", "xXMaybeCarnageXx", "Siruz01",
   ]);
+  // Anyone the daily data reports as no longer in the alliance (see leftThp/leftKills/leftNoThp) joins the
+  // set automatically, except the ones flagged as temporarily away; leftSince = the date they stopped
+  // being reported, used as "last seen" for those with no Buster Day row.
+  const leftSince = new Map();
+  [...leftThp.map(r => [r[0], r[10]]), ...leftKills.map(r => [r[0], r[6]]), ...leftNoThp.map(r => [r[0], r[3]])]
+    .forEach(([n, d]) => { if (!leftSince.has(n)) leftSince.set(n, d); });
+  leftSince.forEach((d, n) => { if (!returningMembers.has(n)) formerMembers.add(n); });
 
   // Buster Day History — per-player Top 15 / Bottom 15 appearance counts across every week logged
   // (active members only — players in formerMembers are listed in the "No Longer a Member" tab).
@@ -3698,6 +3748,10 @@
       rec.points += points;
       if (date > rec.last) rec.last = date;
     });
+    // Players who left but never made a Buster Day list still belong here (zero tallies, no appearance)
+    formerMembers.forEach(player => {
+      if (!byPlayer.has(player) && leftSince.has(player)) byPlayer.set(player, { top: 0, bottom: 0, points: 0, last: null });
+    });
     return [...byPlayer.entries()].map(([player, rec]) => ({ player, ...rec }));
   }
   const formerMembersData = buildFormerMembers();
@@ -3710,7 +3764,7 @@
     const key = formerSortKey;
     const sorted = [...formerMembersData].sort((a, b) => {
       if (key === "player") return dir * a.player.localeCompare(b.player);
-      if (key === "last") return a.last === b.last ? a.player.localeCompare(b.player) : dir * a.last.localeCompare(b.last);
+      if (key === "last") return (a.last || "") === (b.last || "") ? a.player.localeCompare(b.player) : dir * (a.last || "").localeCompare(b.last || "");
       if (a[key] === b[key]) return a.player.localeCompare(b.player);
       return dir * (a[key] - b[key]);
     });
@@ -3723,7 +3777,7 @@
         <td class="num">${r.top}</td>
         <td class="num">${r.bottom}</td>
         <td class="num">${r.points.toLocaleString("en-US")}</td>
-        <td>${r.last}</td>
+        <td>${r.last || `<span title="Never in a Buster Day list; left the alliance ${leftSince.get(r.player) || ""}">—</span>`}</td>
       `;
       formerMembersRowsEl.appendChild(tr);
     });
