@@ -20,6 +20,8 @@
     --accent3-soft: #f5ddc0;
     --accent4: #a3283f;
     --accent4-soft: #f5d9de;
+    --score-bg: #8a5a00;
+    --score-fg: #ffffff;
     --bar-track: #e6ddc4;
     --good: #3f7d52;
     --bad: #b3492f;
@@ -46,6 +48,8 @@
       --accent3-soft: #3d2814;
       --accent4: #e2708a;
       --accent4-soft: #3d1822;
+      --score-bg: #f0c14b;
+      --score-fg: #1b1403;
       --bar-track: #24303d;
       --good: #6fbf8b;
       --bad: #e0806a;
@@ -72,6 +76,8 @@
     --accent3-soft: #3d2814;
     --accent4: #e2708a;
     --accent4-soft: #3d1822;
+    --score-bg: #f0c14b;
+    --score-fg: #1b1403;
     --bar-track: #24303d;
     --good: #6fbf8b;
     --bad: #e0806a;
@@ -97,6 +103,8 @@
     --accent3-soft: #f5ddc0;
     --accent4: #a3283f;
     --accent4-soft: #f5d9de;
+    --score-bg: #8a5a00;
+    --score-fg: #ffffff;
     --bar-track: #e6ddc4;
     --good: #3f7d52;
     --type-tank: #5c7a4a;
@@ -236,6 +244,16 @@
   .tab-btn-dsb.active { color: var(--accent3); border-bottom-color: var(--accent3); }
   .tab-btn-war { color: var(--accent4); }
   .tab-btn-war.active { color: var(--accent4); border-bottom-color: var(--accent4); }
+  .tab-btn-score { background: var(--score-bg); color: var(--score-fg); border-radius: 8px 8px 0 0; padding: 13px 14px; margin-right: 8px; letter-spacing: 0.08em; }
+  .tab-btn-score:hover { color: var(--score-fg); filter: brightness(1.1); }
+  .tab-btn-score.active { color: var(--score-fg); border-bottom-color: var(--score-bg); box-shadow: 0 0 0 2px var(--score-bg); }
+  #panel-score .panel-head { border-bottom-color: var(--score-bg); }
+  #panel-score .panel-head h2 { color: var(--score-bg); }
+  #panel-score thead th { color: var(--score-bg); }
+  #panel-score td.score-pos { color: var(--good); font-weight: 700; }
+  #panel-score td.score-neg { color: var(--bad); font-weight: 700; }
+  #panel-score td.score-total { font-weight: 800; font-size: 1.05em; }
+  #panel-score tbody tr.score-podium td.col-pos { color: var(--score-bg); font-weight: 800; }
   #panel-alliances .panel-head { border-bottom-color: var(--accent2); }
   #panel-alliances .panel-head h2 { color: var(--accent2); }
   #panel-alliances .bar-fill { background: var(--accent2); }
@@ -637,6 +655,7 @@
 
   <div class="panel">
     <div class="tabs" role="tablist">
+      <button class="tab-btn tab-btn-score" role="tab" aria-selected="false" aria-controls="panel-score" id="tab-score" data-tab="score" data-group="alliance">★ Score</button>
       <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-thp" id="tab-thp" data-tab="thp" data-group="alliance">THP Ranking</button>
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-kills" id="tab-kills" data-tab="kills" data-group="alliance">Kills Ranking</button>
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fsp" id="tab-fsp" data-tab="fsp" data-group="alliance">FSP Ranking</button>
@@ -653,6 +672,34 @@
       <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-busterhistory" id="tab-busterhistory" data-tab="busterhistory" data-group="waaaaar">History</button>
       <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-warzone" id="tab-warzone" data-tab="warzone" data-group="waaaaar">Warzone Duel</button>
       <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-formermembers" id="tab-formermembers" data-tab="formermembers" data-group="waaaaar">No Longer a Member</button>
+    </div>
+
+    <div class="tab-panel" id="panel-score" role="tabpanel" aria-labelledby="tab-score">
+      <div class="panel-head">
+        <h2>★ Score — Contribution Points</h2>
+        <span id="scorePanelSub"></span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th class="sortable" data-sort="player" data-default-dir="asc">Player<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="total" data-default-dir="desc">Total<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="recent" data-default-dir="desc">Last 4 weeks<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="buster" data-default-dir="desc">Buster Day<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="tech" data-default-dir="desc">Tech Donation<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="desert" data-default-dir="desc">Desert Storm<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="warzone" data-default-dir="desc">Warzone Duel<span class="sort-arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="scoreRows"></tbody>
+        </table>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span id="scoreNotice"></span>
+      </div>
     </div>
 
     <div class="tab-panel active" id="panel-thp" role="tabpanel" aria-labelledby="tab-thp">
@@ -4685,6 +4732,116 @@
 
   const totalRoster = withThp.length + noThp.length;
 
+  // Score — contribution points for current members, built from the manually logged lists (Buster Day, Tech
+  // Donation, Desert Storm attendance, Warzone Duel no-shows). Only the extremes of each list are logged, so a
+  // player outside every list scores 0. All weights live here; change them in one place.
+  const SCORE_WEIGHTS = {
+    buster: { top: 10, bottom: -7, bottomZero: -10 },
+    tech: { top: 10, bottom: -7 },
+    desert: { played: 6, noShow: -10 },
+    warzone: { noShow: -20 },
+  };
+  const SCORE_RECENT_DAYS = 28;
+
+  function buildScores() {
+    const members = new Set(withThp.map(r => r[0]).concat(noThp.map(r => r[0])));
+    const byPlayer = new Map();
+    members.forEach(n => byPlayer.set(n, { player: n, total: 0, recent: 0, buster: 0, tech: 0, desert: 0, warzone: 0, n: {} }));
+    const events = [];
+    const W = SCORE_WEIGHTS;
+    busterDay.forEach(([date, tier, , player, points]) => {
+      const bottomPts = points === 0 ? W.buster.bottomZero : W.buster.bottom;
+      events.push({ date, player, cat: "buster", label: tier === "top" ? "Top 15" : (points === 0 ? "Bottom 15 (0 pts)" : "Bottom 15"), pts: tier === "top" ? W.buster.top : bottomPts });
+    });
+    techDonation.forEach(([date, tier, , player]) => {
+      events.push({ date, player, cat: "tech", label: tier === "top" ? "Top" : "Bottom", pts: tier === "top" ? W.tech.top : W.tech.bottom });
+    });
+    desertStorm.forEach(r => {
+      const date = r[0], player = r[4], participated = r[8];
+      if (participated === true) events.push({ date, player, cat: "desert", label: "played", pts: W.desert.played });
+      else if (participated === false) events.push({ date, player, cat: "desert", label: "no-show", pts: W.desert.noShow });
+    });
+    warzoneAbsent.forEach(([date, player]) => {
+      events.push({ date, player, cat: "warzone", label: "no-show", pts: W.warzone.noShow });
+    });
+    const latest = events.reduce((m, e) => (e.date > m ? e.date : m), "");
+    const cutoff = latest
+      ? new Date(new Date(latest + "T00:00:00Z").getTime() - (SCORE_RECENT_DAYS - 1) * 86400000).toISOString().slice(0, 10)
+      : "";
+    events.forEach(e => {
+      const rec = byPlayer.get(e.player);
+      if (!rec) return;
+      rec[e.cat] += e.pts;
+      rec.total += e.pts;
+      if (e.date >= cutoff) rec.recent += e.pts;
+      const k = e.cat + ": " + e.label;
+      rec.n[k] = (rec.n[k] || 0) + 1;
+    });
+    return { rows: [...byPlayer.values()], latest, cutoff };
+  }
+  const scoreResult = buildScores();
+  const scoreData = scoreResult.rows;
+  let scoreSortKey = "total";
+  let scoreSortDir = "desc";
+  const scoreRowsEl = document.getElementById("scoreRows");
+  const fmtScore = v => (v > 0 ? "+" + v : String(v));
+  const scoreCell = v => `<td class="num ${v > 0 ? "score-pos" : v < 0 ? "score-neg" : ""}">${v === 0 ? "—" : fmtScore(v)}</td>`;
+
+  function scoreTitle(r, cat) {
+    const parts = Object.entries(r.n).filter(([k]) => k.startsWith(cat + ":")).map(([k, c]) => `${c}× ${k.slice(cat.length + 2)}`);
+    return parts.join(" · ");
+  }
+  function renderScoreRows() {
+    const dir = scoreSortDir === "asc" ? 1 : -1;
+    const key = scoreSortKey;
+    const sorted = [...scoreData].sort((a, b) => {
+      if (key === "player") return dir * a.player.localeCompare(b.player);
+      if (a[key] === b[key]) return a.player.localeCompare(b.player);
+      return dir * (a[key] - b[key]);
+    });
+    scoreRowsEl.innerHTML = "";
+    sorted.forEach((r, i) => {
+      const tr = document.createElement("tr");
+      if (i < 3 && scoreSortKey === "total" && scoreSortDir === "desc") tr.className = "score-podium";
+      const cell = (v, cat) => scoreCell(v).replace("<td ", `<td title="${scoreTitle(r, cat)}" `);
+      tr.innerHTML = `
+        <td class="col-pos">${i + 1}</td>
+        <td class="col-player">${r.player}</td>
+        <td class="num score-total ${r.total > 0 ? "score-pos" : r.total < 0 ? "score-neg" : ""}">${r.total === 0 ? "0" : fmtScore(r.total)}</td>
+        ${scoreCell(r.recent)}
+        ${cell(r.buster, "buster")}
+        ${cell(r.tech, "tech")}
+        ${cell(r.desert, "desert")}
+        ${cell(r.warzone, "warzone")}
+      `;
+      scoreRowsEl.appendChild(tr);
+    });
+    document.querySelectorAll('#panel-score thead th[data-sort]').forEach(th => {
+      const arrow = th.querySelector(".sort-arrow");
+      arrow.textContent = th.dataset.sort === scoreSortKey ? (scoreSortDir === "asc" ? " ▲" : " ▼") : "";
+    });
+  }
+  document.querySelectorAll('#panel-score thead th[data-sort]').forEach(th => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.sort;
+      if (scoreSortKey === key) scoreSortDir = scoreSortDir === "asc" ? "desc" : "asc";
+      else { scoreSortKey = key; scoreSortDir = th.dataset.defaultDir || "desc"; }
+      renderScoreRows();
+    });
+  });
+  document.getElementById("scorePanelSub").textContent =
+    `${scoreData.length} current members · last 4 weeks = ${scoreResult.cutoff} to ${scoreResult.latest}`;
+  (function () {
+    const W = SCORE_WEIGHTS;
+    document.getElementById("scoreNotice").innerHTML =
+      `Contribution points for current members, built from the lists logged by hand. <b>Buster Day:</b> ${fmtScore(W.buster.top)} per Top 15 week, ` +
+      `${fmtScore(W.buster.bottom)} per Bottom 15 week (${fmtScore(W.buster.bottomZero)} when the player scored 0). <b>Tech Donation:</b> ${fmtScore(W.tech.top)} per Top week, ` +
+      `${fmtScore(W.tech.bottom)} per Bottom week. <b>Desert Storm:</b> ${fmtScore(W.desert.played)} per battle played, ${fmtScore(W.desert.noShow)} per no-show. ` +
+      `<b>Warzone Duel:</b> ${fmtScore(W.warzone.noShow)} per no-show, the heaviest penalty. Only the extremes of each list are logged, so a player outside ` +
+      `every list scores 0 (neutral). Players on leave ("away") and former members are not scored. Hover a cell to see the counts; click a header to sort.`;
+  })();
+  renderScoreRows();
+
   const TILE_CONFIGS = {
     thp: () => {
       const vals = withThp.map(r => r[3]);
@@ -4835,6 +4992,17 @@
         { label: "Bottom points (this week)", value: currentBottom.length ? totalBottomPoints.toLocaleString("en-US") : "—", sub: currentBottom.length ? techDonationDateFilterEl.value : "no data yet" },
       ];
     },
+    score: () => {
+      const byTotal = [...scoreData].sort((a, b) => b.total - a.total || a.player.localeCompare(b.player));
+      const byRecent = [...scoreData].sort((a, b) => b.recent - a.recent || a.player.localeCompare(b.player));
+      const lowest = byTotal[byTotal.length - 1] || null;
+      return [
+        { label: "Score leader", value: byTotal[0] ? fmtScore(byTotal[0].total) : "—", sub: byTotal[0] ? byTotal[0].player : "no data yet" },
+        { label: "Best last 4 weeks", value: byRecent[0] ? fmtScore(byRecent[0].recent) : "—", sub: byRecent[0] ? byRecent[0].player : "no data yet" },
+        { label: "Lowest score", value: lowest ? fmtScore(lowest.total) : "—", sub: lowest ? lowest.player : "no data yet" },
+        { label: "Members scored", value: String(scoreData.length), sub: `${scoreData.filter(r => r.total > 0).length} positive · ${scoreData.filter(r => r.total < 0).length} negative` },
+      ];
+    },
     dsformermembers: () => {
       const reported = dsFormerMembersData.filter(a => a.reported > 0);
       const mostPlayed = reported.length ? [...reported].sort((a, b) => b.yes - a.yes)[0] : null;
@@ -4900,7 +5068,7 @@
   // Group navigation: the dashboard opens on a group-picker screen (Alliance 2300 Data /
   // Server 2300 Data / Desert Storm); picking a group filters the tab bar down to just that
   // group's tabs and activates the first one. "← All groups" returns to the picker.
-  const GROUPS = { alliance: ["thp", "kills", "fsp", "techdonation", "techdonationhistory", "techformermembers"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance", "dsformermembers"], waaaaar: ["busterday", "busterhistory", "warzone", "formermembers"] };
+  const GROUPS = { alliance: ["score", "thp", "kills", "fsp", "techdonation", "techdonationhistory", "techformermembers"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance", "dsformermembers"], waaaaar: ["busterday", "busterhistory", "warzone", "formermembers"] };
   const groupSelectEl = document.getElementById("groupSelect");
   const dataViewEl = document.getElementById("dataView");
 
