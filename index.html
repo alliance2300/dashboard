@@ -376,6 +376,12 @@
   .group-card[data-group="waaaaar"] { border-color: var(--accent4-soft); }
   .group-card[data-group="waaaaar"]:hover { border-color: var(--accent4); }
   .group-card[data-group="waaaaar"] .group-card-label { background: var(--accent4-soft); color: var(--accent4); }
+  .group-card[data-group="score"] { grid-column: 1 / -1; background: var(--score-bg); border-color: var(--score-bg); color: var(--score-fg); padding: 22px 56px 22px 24px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18); }
+  .group-card[data-group="score"]:hover, .group-card[data-group="score"]:focus-visible { border-color: var(--score-bg); filter: brightness(1.08); }
+  .group-card[data-group="score"] .group-card-label { background: rgba(255, 255, 255, 0.2); color: var(--score-fg); }
+  .group-card[data-group="score"] h2 { font-size: 24px; }
+  .group-card[data-group="score"] p { color: var(--score-fg); opacity: 0.9; }
+  .group-card[data-group="score"] .group-card-cta, .group-card[data-group="score"] .group-card-arrow, .group-card[data-group="score"]:hover .group-card-arrow { color: var(--score-fg); }
   .group-card h2 { margin: 0 0 6px; font-size: 18px; }
   .group-card p { margin: 0; font-size: 13px; color: var(--text-dim); line-height: 1.5; }
 
@@ -618,6 +624,13 @@
   </div>
 
   <div class="group-select" id="groupSelect">
+    <button class="group-card" type="button" data-group="score">
+      <span class="group-card-arrow" aria-hidden="true">→</span>
+      <span class="group-card-label">★ Alliance Score</span>
+      <h2>Member Score</h2>
+      <p>One score per member: points for showing up in the Buster Day and Tech Donation Top lists and in Desert Storm, penalties for the Bottom lists and no-shows — Warzone Duel absences weigh the most.</p>
+      <span class="group-card-cta">View score →</span>
+    </button>
     <button class="group-card" type="button" data-group="alliance">
       <span class="group-card-arrow" aria-hidden="true">→</span>
       <span class="group-card-label">Alliance 2300 Data</span>
@@ -655,7 +668,7 @@
 
   <div class="panel">
     <div class="tabs" role="tablist">
-      <button class="tab-btn tab-btn-score" role="tab" aria-selected="false" aria-controls="panel-score" id="tab-score" data-tab="score" data-group="alliance">★ Score</button>
+      <button class="tab-btn tab-btn-score" role="tab" aria-selected="false" aria-controls="panel-score" id="tab-score" data-tab="score" data-group="score">★ Score</button>
       <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-thp" id="tab-thp" data-tab="thp" data-group="alliance">THP Ranking</button>
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-kills" id="tab-kills" data-tab="kills" data-group="alliance">Kills Ranking</button>
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fsp" id="tab-fsp" data-tab="fsp" data-group="alliance">FSP Ranking</button>
@@ -5068,7 +5081,7 @@
   // Group navigation: the dashboard opens on a group-picker screen (Alliance 2300 Data /
   // Server 2300 Data / Desert Storm); picking a group filters the tab bar down to just that
   // group's tabs and activates the first one. "← All groups" returns to the picker.
-  const GROUPS = { alliance: ["score", "thp", "kills", "fsp", "techdonation", "techdonationhistory", "techformermembers"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance", "dsformermembers"], waaaaar: ["busterday", "busterhistory", "warzone", "formermembers"] };
+  const GROUPS = { score: ["score"], alliance: ["thp", "kills", "fsp", "techdonation", "techdonationhistory", "techformermembers"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance", "dsformermembers"], waaaaar: ["busterday", "busterhistory", "warzone", "formermembers"] };
   const groupSelectEl = document.getElementById("groupSelect");
   const dataViewEl = document.getElementById("dataView");
 
