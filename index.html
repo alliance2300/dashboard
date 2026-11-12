@@ -638,6 +638,7 @@
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-fsp" id="tab-fsp" data-tab="fsp" data-group="alliance">FSP Ranking</button>
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-techdonation" id="tab-techdonation" data-tab="techdonation" data-group="alliance">Tech Donation</button>
       <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-techdonationhistory" id="tab-techdonationhistory" data-tab="techdonationhistory" data-group="alliance">Donation History</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-techformermembers" id="tab-techformermembers" data-tab="techformermembers" data-group="alliance">No Longer a Member</button>
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-server200" id="tab-server200" data-tab="server200" data-group="server">Server Ranking</button>
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-serverkills" id="tab-serverkills" data-tab="serverkills" data-group="server">Kills Ranking</button>
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-alliances" id="tab-alliances" data-tab="alliances" data-group="server">Alliance Rankings</button>
@@ -1148,6 +1149,36 @@
         <span class="notice-icon" aria-hidden="true">i</span>
         <span>
           Counts every week logged so far for the Tech Donation Top and Bottom lists — click a column header to sort.
+          Players who have left the alliance are listed in the "No Longer a Member" tab next to this one.
+        </span>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-techformermembers" role="tabpanel" aria-labelledby="tab-techformermembers">
+      <div class="panel-head">
+        <h2>No Longer a Member — Tech Donation</h2>
+        <span id="techFormerMembersPanelSub"></span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th class="sortable" data-sort="player" data-default-dir="asc">Player<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="top" data-default-dir="desc">Top<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="bottom" data-default-dir="desc">Bottom<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="points" data-default-dir="desc">Total Points<span class="sort-arrow"></span></th>
+              <th class="sortable" data-sort="last" data-default-dir="desc">Last Donation Week<span class="sort-arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="techFormerMembersRows"></tbody>
+        </table>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          Players who appeared in the Tech Donation lists but have since left the alliance. They are hidden from the
+          Donation History tab, which only counts active members. Click a column header to sort.
         </span>
       </div>
     </div>
@@ -3506,7 +3537,7 @@
     ["2026-09-12","top",15,"Golden P",10571077],
     ["2026-09-12","bottom",80,"Prince Killer",2010769],
     ["2026-09-12","bottom",81,"Bîlbö Bãggińs",2008279],
-    ["2026-09-12","bottom",82,"Blue™",1898454],
+    ["2026-09-12","bottom",82,"Blue ᵀᴹ",1898454],
     ["2026-09-12","bottom",83,"Jollŷ",1896326],
     ["2026-09-12","bottom",84,"Rainbow Darling",1735625],
     ["2026-09-12","bottom",85,"222 J",1408250],
@@ -3571,7 +3602,7 @@
     ["2026-09-26","bottom",87,"WrĂtH",1549000],
     ["2026-09-26","bottom",88,"Sukunaa8",1312829],
     ["2026-09-26","bottom",89,"222 J",1200000],
-    ["2026-09-26","bottom",90,"Blue™",901125],
+    ["2026-09-26","bottom",90,"Blue ᵀᴹ",901125],
     ["2026-09-26","bottom",91,"The Jelly 2",900000],
     ["2026-09-26","bottom",92,"A T h e n a",711000],
     ["2026-09-26","bottom",93,"Mango The Dog",291331],
@@ -3635,10 +3666,10 @@
     ["2026-10-10","bottom",85,"Bauer Sage",1514007],
     ["2026-10-10","bottom",86,"Golden P",1400000],
     ["2026-10-10","bottom",87,"A T h e n a",1241465],
-    ["2026-10-10","bottom",88,"Blue™",900000],
+    ["2026-10-10","bottom",88,"Blue ᵀᴹ",900000],
     ["2026-10-10","bottom",89,"The Lonely Chair",537373],
     ["2026-10-10","bottom",90,"VSîm",170468],
-    ["2026-10-10","bottom",91,"Blue™",0],
+    ["2026-10-10","bottom",91,"Blue ᵀᴹ",0],
     ["2026-10-17","top",1,"JPrison Mike ᴮᴿ",29233838],
     ["2026-10-17","top",2,"Cap Myrtie",26865327],
     ["2026-10-17","top",3,"Nachodaddÿ",26295324],
@@ -3666,9 +3697,9 @@
     ["2026-10-17","bottom",92,"Lil Jadey",1100000],
     ["2026-10-17","bottom",93,"2300™",758124],
     ["2026-10-17","bottom",94,"222 J",477931],
-    ["2026-10-17","bottom",95,"Blue™",376750],
+    ["2026-10-17","bottom",95,"Blue ᵀᴹ",376750],
     ["2026-10-17","bottom",96,"SΔMURΔI",0],
-    ["2026-10-17","bottom",97,"Blue™",0],
+    ["2026-10-17","bottom",97,"Blue ᵀᴹ",0],
     ["2026-10-24","top",1,"BUBU 2300",31189159],
     ["2026-10-24","top",2,"피츄 Pichuu",30708601],
     ["2026-10-24","top",3,"xBesii",25047864],
@@ -3688,14 +3719,14 @@
     ["2026-10-24","bottom",85,"The Lonely Chair",2053125],
     ["2026-10-24","bottom",86,"陰キャ覚醒",2002375],
     ["2026-10-24","bottom",87,"PettyBoop",1815750],
-    ["2026-10-24","bottom",88,"Blue™",1775625],
+    ["2026-10-24","bottom",88,"Blue ᵀᴹ",1775625],
     ["2026-10-24","bottom",89,"ஜLevinaஜ",1760000],
     ["2026-10-24","bottom",90,"Golden P",1658074],
     ["2026-10-24","bottom",91,"Bräd",1600000],
     ["2026-10-24","bottom",92,"TacticalTits",1591440],
     ["2026-10-24","bottom",93,"Bauer Sage",1446000],
     ["2026-10-24","bottom",94,"Pippa Rae",600000],
-    ["2026-10-24","bottom",95,"Blue™",300000],
+    ["2026-10-24","bottom",95,"Blue ᵀᴹ",300000],
     ["2026-10-24","bottom",96,"222 J",217800],
     ["2026-10-24","bottom",97,"WrĂtH",68644],
     ["2026-10-24","bottom",98,"DroneSlutzNHarmony",0],
@@ -3720,7 +3751,7 @@
     ["2026-10-31","bottom",81,"M19ëleven",2565707],
     ["2026-10-31","bottom",82,"B0URNE",2502804],
     ["2026-10-31","bottom",83,"Sîlencer",2394375],
-    ["2026-10-31","bottom",84,"UNCLE JHONSON888",2352543],
+    ["2026-10-31","bottom",84,"Uncle ARass",2352543],
     ["2026-10-31","bottom",85,"222 J",1964241],
     ["2026-10-31","bottom",86,"Jenkszz",1758021],
     ["2026-10-31","bottom",87,"DertliSinek",1715625],
@@ -3756,7 +3787,7 @@
     ["2026-11-07","bottom",89,"Sîlencer",1400000],
     ["2026-11-07","bottom",90,"KzaNissi",1277168],
     ["2026-11-07","bottom",91,"Phxterror",989818],
-    ["2026-11-07","bottom",92,"Blue™",765811],
+    ["2026-11-07","bottom",92,"Blue ᵀᴹ",765811],
     ["2026-11-07","bottom",93,"Golden P",201804],
     ["2026-11-07","bottom",94,"Nextdoor Neighbor",0],
   ];
@@ -4202,7 +4233,7 @@
     ["2026-10-04","bottom",84,"A T h e n a",29250],
     ["2026-10-04","bottom",85,"Lil Jadey",28900],
     ["2026-10-04","bottom",86,"xBesii",26850],
-    ["2026-10-04","bottom",87,"Blue™",25800],
+    ["2026-10-04","bottom",87,"Blue ᵀᴹ",25800],
     ["2026-10-04","bottom",88,"Sukunaa8",25800],
     ["2026-10-04","bottom",89,"Golden P",24350],
     ["2026-10-04","bottom",90,"Bauer Sage",24200],
@@ -4218,10 +4249,10 @@
     ["2026-10-11","top",9,"陰キャ覚醒",62750],
     ["2026-10-11","top",10,"Embrツ",61050],
     ["2026-10-11","bottom",80,"Sukunaa8",26150],
-    ["2026-10-11","bottom",81,"Blue™",25950],
+    ["2026-10-11","bottom",81,"Blue ᵀᴹ",25950],
     ["2026-10-11","bottom",82,"Lil Jadey",24750],
     ["2026-10-11","bottom",83,"Choppa Shocka",23800],
-    ["2026-10-11","bottom",84,"Blue™",22850],
+    ["2026-10-11","bottom",84,"Blue ᵀᴹ",22850],
     ["2026-10-11","bottom",85,"A T h e n a",21650],
     ["2026-10-11","bottom",86,"WrĂtH",18950],
     ["2026-10-11","bottom",87,"The Lonely Chair",17950],
@@ -4245,7 +4276,7 @@
     ["2026-10-18","bottom",88,"Lil Jadey",17600],
     ["2026-10-18","bottom",89,"Sukunaa8",17550],
     ["2026-10-18","bottom",90,"Choppa Shocka",17450],
-    ["2026-10-18","bottom",91,"Blue™",16600],
+    ["2026-10-18","bottom",91,"Blue ᵀᴹ",16600],
     ["2026-10-18","bottom",92,"The Lonely Chair",12250],
     ["2026-11-01","top",1,"ஜLevinaஜ",97350],
     ["2026-11-01","top",2,"M D 티치  Teach",58550],
@@ -4357,6 +4388,7 @@
     const byPlayer = new Map();
     techDonation.forEach(r => {
       const [, tier, , player, points] = r;
+      if (formerMembers.has(player)) return;
       if (!byPlayer.has(player)) byPlayer.set(player, { top: 0, bottom: 0, points: 0 });
       const rec = byPlayer.get(player);
       rec[tier]++;
@@ -4414,6 +4446,68 @@
   document.getElementById("techdonationHistoryPanelSub").textContent =
     `${techDonationHistoryData.length} player(s) tracked · ${techDonationDatesList.length} week(s) logged`;
   renderTechDonationHistoryRows();
+
+  // No Longer a Member (Tech Donation) — everyone in formerMembers, with their Tech Donation tallies and last week.
+  function buildTechFormerMembers() {
+    const byPlayer = new Map();
+    techDonation.forEach(r => {
+      const [date, tier, , player, points] = r;
+      if (!formerMembers.has(player)) return;
+      if (!byPlayer.has(player)) byPlayer.set(player, { top: 0, bottom: 0, points: 0, last: date });
+      const rec = byPlayer.get(player);
+      rec[tier]++;
+      rec.points += points;
+      if (date > rec.last) rec.last = date;
+    });
+    // Players who left but never made a Tech Donation list still belong here (zero tallies, no appearance)
+    formerMembers.forEach(player => {
+      if (!byPlayer.has(player) && leftSince.has(player)) byPlayer.set(player, { top: 0, bottom: 0, points: 0, last: null });
+    });
+    return [...byPlayer.entries()].map(([player, rec]) => ({ player, ...rec }));
+  }
+  const techFormerMembersData = buildTechFormerMembers();
+  const techFormerMembersRowsEl = document.getElementById("techFormerMembersRows");
+  let techFormerSortKey = "last";
+  let techFormerSortDir = "desc";
+
+  function renderTechFormerMembersRows() {
+    const dir = techFormerSortDir === "asc" ? 1 : -1;
+    const key = techFormerSortKey;
+    const sorted = [...techFormerMembersData].sort((a, b) => {
+      if (key === "player") return dir * a.player.localeCompare(b.player);
+      if (key === "last") return (a.last || "") === (b.last || "") ? a.player.localeCompare(b.player) : dir * (a.last || "").localeCompare(b.last || "");
+      if (a[key] === b[key]) return a.player.localeCompare(b.player);
+      return dir * (a[key] - b[key]);
+    });
+    techFormerMembersRowsEl.innerHTML = "";
+    sorted.forEach((r, i) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="col-pos">${i + 1}</td>
+        <td class="col-player">${r.player}</td>
+        <td class="num">${r.top}</td>
+        <td class="num">${r.bottom}</td>
+        <td class="num">${r.points.toLocaleString("en-US")}</td>
+        <td>${r.last || `<span title="Never in a Tech Donation list; left the alliance ${leftSince.get(r.player) || ""}">—</span>`}</td>
+      `;
+      techFormerMembersRowsEl.appendChild(tr);
+    });
+    document.querySelectorAll('#panel-techformermembers thead th[data-sort]').forEach(th => {
+      const arrow = th.querySelector(".sort-arrow");
+      arrow.textContent = th.dataset.sort === techFormerSortKey ? (techFormerSortDir === "asc" ? " ▲" : " ▼") : "";
+    });
+  }
+  document.querySelectorAll('#panel-techformermembers thead th[data-sort]').forEach(th => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.sort;
+      if (techFormerSortKey === key) techFormerSortDir = techFormerSortDir === "asc" ? "desc" : "asc";
+      else { techFormerSortKey = key; techFormerSortDir = th.dataset.defaultDir || "desc"; }
+      renderTechFormerMembersRows();
+    });
+  });
+  document.getElementById("techFormerMembersPanelSub").textContent =
+    `${techFormerMembersData.length} player(s) who left the alliance`;
+  renderTechFormerMembersRows();
 
   // THP → FSP: published formula from lwservers.com (js/lws-math.js, estimateFsp()).
   // Quadratic fit up to 280M THP, linear tail beyond it. THP-only input — never game power.
@@ -4630,6 +4724,15 @@
         { label: "Bottom points (this week)", value: currentBottom.length ? totalBottomPoints.toLocaleString("en-US") : "—", sub: currentBottom.length ? techDonationDateFilterEl.value : "no data yet" },
       ];
     },
+    techformermembers: () => {
+      const mostTop = techFormerMembersData.length ? [...techFormerMembersData].sort((a, b) => b.top - a.top)[0] : null;
+      const mostBottom = techFormerMembersData.length ? [...techFormerMembersData].sort((a, b) => b.bottom - a.bottom)[0] : null;
+      return [
+        { label: "Former members", value: String(techFormerMembersData.length), sub: "tracked in Tech Donation" },
+        { label: "Most Top appearances", value: mostTop && mostTop.top > 0 ? String(mostTop.top) : "—", sub: mostTop && mostTop.top > 0 ? mostTop.player : "no data yet" },
+        { label: "Most Bottom appearances", value: mostBottom && mostBottom.bottom > 0 ? String(mostBottom.bottom) : "—", sub: mostBottom && mostBottom.bottom > 0 ? mostBottom.player : "no data yet" },
+      ];
+    },
     techdonationhistory: () => {
       const mostTop = techDonationHistoryData.length ? [...techDonationHistoryData].sort((a, b) => b.top - a.top)[0] : null;
       const mostBottom = techDonationHistoryData.length ? [...techDonationHistoryData].sort((a, b) => b.bottom - a.bottom)[0] : null;
@@ -4676,7 +4779,7 @@
   // Group navigation: the dashboard opens on a group-picker screen (Alliance 2300 Data /
   // Server 2300 Data / Desert Storm); picking a group filters the tab bar down to just that
   // group's tabs and activates the first one. "← All groups" returns to the picker.
-  const GROUPS = { alliance: ["thp", "kills", "fsp", "techdonation", "techdonationhistory"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance"], waaaaar: ["busterday", "busterhistory", "warzone", "formermembers"] };
+  const GROUPS = { alliance: ["thp", "kills", "fsp", "techdonation", "techdonationhistory", "techformermembers"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance"], waaaaar: ["busterday", "busterhistory", "warzone", "formermembers"] };
   const groupSelectEl = document.getElementById("groupSelect");
   const dataViewEl = document.getElementById("dataView");
 
