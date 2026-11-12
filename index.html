@@ -254,6 +254,10 @@
   #panel-attendance .panel-head h2 { color: var(--accent3); }
   #panel-attendance thead th { color: var(--accent3); }
   #panel-attendance .bar-fill { background: var(--accent3); }
+  #panel-dsformermembers .panel-head { border-bottom-color: var(--accent3); }
+  #panel-dsformermembers .panel-head h2 { color: var(--accent3); }
+  #panel-dsformermembers thead th { color: var(--accent3); }
+  #panel-dsformermembers .bar-fill { background: var(--accent3); }
   #panel-busterday .panel-head { border-bottom-color: var(--accent4); }
   #panel-busterday .panel-head h2 { color: var(--accent4); }
   #panel-busterday thead th { color: var(--accent4); }
@@ -644,6 +648,7 @@
       <button class="tab-btn tab-btn-alt" role="tab" aria-selected="false" aria-controls="panel-alliances" id="tab-alliances" data-tab="alliances" data-group="server">Alliance Rankings</button>
       <button class="tab-btn tab-btn-dsb" role="tab" aria-selected="false" aria-controls="panel-dsb" id="tab-dsb" data-tab="dsb" data-group="dsb">Desert Storm</button>
       <button class="tab-btn tab-btn-dsb" role="tab" aria-selected="false" aria-controls="panel-attendance" id="tab-attendance" data-tab="attendance" data-group="dsb">Attendance</button>
+      <button class="tab-btn tab-btn-dsb" role="tab" aria-selected="false" aria-controls="panel-dsformermembers" id="tab-dsformermembers" data-tab="dsformermembers" data-group="dsb">No Longer a Member</button>
       <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-busterday" id="tab-busterday" data-tab="busterday" data-group="waaaaar">Buster Day</button>
       <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-busterhistory" id="tab-busterhistory" data-tab="busterhistory" data-group="waaaaar">History</button>
       <button class="tab-btn tab-btn-war" role="tab" aria-selected="false" aria-controls="panel-warzone" id="tab-warzone" data-tab="warzone" data-group="waaaaar">Warzone Duel</button>
@@ -921,6 +926,38 @@
           Tallies every roster spot in the Desert Storm log across every date and team so far, regardless of the filters on
           that tab. <b>No-shows</b> counts rows marked Participated = No — a player assigned to a spot who didn't actually
           play. Rows still marked Pending aren't counted either way yet. Sorted by most times participated.
+        </span>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-dsformermembers" role="tabpanel" aria-labelledby="tab-dsformermembers">
+      <div class="panel-head">
+        <h2>No Longer a Member — Desert Storm</h2>
+        <span id="dsFormerMembersPanelSub"></span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-pos">#</th>
+              <th class="sortable" data-sort="player" data-default-dir="asc">Player<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="yes" data-default-dir="desc">Participated<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="no" data-default-dir="desc">No-shows<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="reported" data-default-dir="desc">Reported<span class="sort-arrow"></span></th>
+              <th class="num sortable" data-sort="rate" data-default-dir="desc">Rate<span class="sort-arrow"></span></th>
+              <th class="bar-cell"></th>
+              <th class="sortable" data-sort="last" data-default-dir="desc">Last Desert Storm<span class="sort-arrow"></span></th>
+            </tr>
+          </thead>
+          <tbody id="dsFormerMembersRows"></tbody>
+        </table>
+      </div>
+      <div class="notice" style="margin: 12px 18px; margin-bottom: 0;">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <span>
+          Players who appeared in the Desert Storm log but have since left the alliance (same list as the other
+          "No Longer a Member" tabs). Names the Desert Storm log spells differently are matched to their later name.
+          Tallies work like the Attendance tab. Click a column header to sort.
         </span>
       </div>
     </div>
@@ -4505,6 +4542,82 @@
     `${techFormerMembersData.length} player(s) who left the alliance`;
   renderTechFormerMembersRows();
 
+  // No Longer a Member (Desert Storm) — former members found in the desertStorm log (read-only: the log itself is
+  // never edited). The Desert Storm log sometimes spells a name differently from the roster, so these aliases map
+  // such spellings to the former member's current name.
+  const dsFormerAliases = {
+    "Sțríker": "Střiķer", "MangoTheDog": "Mango The Dog", "NextDoorNeighbor": "Nextdoor Neighbor",
+    "Bilbō Bagginŝ": "Bîlbö Bãggińs", "Sukuna80": "Sukunaa8", "undercovermario": "itsamemarioandpeach",
+    "ID Lemongrass ᵀᴹ": "NotSly", "Pink kitty Kat": "PinKittyKat", "bubu": "ʚbubuɞ", "ƆbubuᴄC": "ʚbubuɞ",
+    "TATli": "TATIi",
+  };
+  function buildDsFormerMembers() {
+    const byPlayer = new Map();
+    desertStorm.forEach(r => {
+      const raw = r[4];
+      const player = dsFormerAliases[raw] || raw;
+      if (!formerMembers.has(player)) return;
+      const participated = r[8];
+      if (!byPlayer.has(player)) byPlayer.set(player, { yes: 0, no: 0, pending: 0, last: r[0] });
+      const rec = byPlayer.get(player);
+      if (participated === true) rec.yes++;
+      else if (participated === false) rec.no++;
+      else rec.pending++;
+      if (r[0] > rec.last) rec.last = r[0];
+    });
+    return [...byPlayer.entries()].map(([player, rec]) => ({ player, ...rec, reported: rec.yes + rec.no }));
+  }
+  const dsFormerMembersData = buildDsFormerMembers();
+  const dsFormerMembersRowsEl = document.getElementById("dsFormerMembersRows");
+  let dsFormerSortKey = "yes";
+  let dsFormerSortDir = "desc";
+  const dsFormerRate = a => (a.reported ? a.yes / a.reported : -1);
+
+  function renderDsFormerMembersRows() {
+    const dir = dsFormerSortDir === "asc" ? 1 : -1;
+    const key = dsFormerSortKey;
+    const sorted = [...dsFormerMembersData].sort((a, b) => {
+      if (key === "player") return dir * a.player.localeCompare(b.player);
+      if (key === "last") return a.last === b.last ? a.player.localeCompare(b.player) : dir * a.last.localeCompare(b.last);
+      const av = key === "rate" ? dsFormerRate(a) : a[key];
+      const bv = key === "rate" ? dsFormerRate(b) : b[key];
+      if (av === bv) return a.player.localeCompare(b.player);
+      return dir * (av - bv);
+    });
+    dsFormerMembersRowsEl.innerHTML = "";
+    sorted.forEach((a, i) => {
+      const rateText = a.reported ? `${Math.round(dsFormerRate(a) * 100)}%` : "—";
+      const ratePct = a.reported ? dsFormerRate(a) * 100 : 0;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="col-pos">${i + 1}</td>
+        <td class="col-player">${a.player}</td>
+        <td class="num participated-yes">${a.yes}</td>
+        <td class="num participated-no">${a.no}</td>
+        <td class="num">${a.reported}</td>
+        <td class="num">${rateText}</td>
+        <td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:${Math.max(ratePct, a.reported ? 3 : 0)}%"></div></div></td>
+        <td>${a.last}</td>
+      `;
+      dsFormerMembersRowsEl.appendChild(tr);
+    });
+    document.querySelectorAll('#panel-dsformermembers thead th[data-sort]').forEach(th => {
+      const arrow = th.querySelector(".sort-arrow");
+      arrow.textContent = th.dataset.sort === dsFormerSortKey ? (dsFormerSortDir === "asc" ? " ▲" : " ▼") : "";
+    });
+  }
+  document.querySelectorAll('#panel-dsformermembers thead th[data-sort]').forEach(th => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.sort;
+      if (dsFormerSortKey === key) dsFormerSortDir = dsFormerSortDir === "asc" ? "desc" : "asc";
+      else { dsFormerSortKey = key; dsFormerSortDir = th.dataset.defaultDir || "desc"; }
+      renderDsFormerMembersRows();
+    });
+  });
+  document.getElementById("dsFormerMembersPanelSub").textContent =
+    `${dsFormerMembersData.length} player(s) who left the alliance`;
+  renderDsFormerMembersRows();
+
   // THP → FSP: published formula from lwservers.com (js/lws-math.js, estimateFsp()).
   // Quadratic fit up to 280M THP, linear tail beyond it. THP-only input — never game power.
   const FSP_QUAD_LINEAR = 0.4258;
@@ -4720,6 +4833,16 @@
         { label: "Bottom points (this week)", value: currentBottom.length ? totalBottomPoints.toLocaleString("en-US") : "—", sub: currentBottom.length ? techDonationDateFilterEl.value : "no data yet" },
       ];
     },
+    dsformermembers: () => {
+      const reported = dsFormerMembersData.filter(a => a.reported > 0);
+      const mostPlayed = reported.length ? [...reported].sort((a, b) => b.yes - a.yes)[0] : null;
+      const mostAbsences = reported.length ? [...reported].sort((a, b) => b.no - a.no)[0] : null;
+      return [
+        { label: "Former members", value: String(dsFormerMembersData.length), sub: "tracked in Desert Storm" },
+        { label: "Most battles played", value: mostPlayed ? String(mostPlayed.yes) : "—", sub: mostPlayed ? mostPlayed.player : "no data yet" },
+        { label: "Most no-shows", value: mostAbsences && mostAbsences.no > 0 ? String(mostAbsences.no) : "—", sub: mostAbsences && mostAbsences.no > 0 ? mostAbsences.player : "no data yet" },
+      ];
+    },
     techformermembers: () => {
       const mostTop = techFormerMembersData.length ? [...techFormerMembersData].sort((a, b) => b.top - a.top)[0] : null;
       const mostBottom = techFormerMembersData.length ? [...techFormerMembersData].sort((a, b) => b.bottom - a.bottom)[0] : null;
@@ -4775,7 +4898,7 @@
   // Group navigation: the dashboard opens on a group-picker screen (Alliance 2300 Data /
   // Server 2300 Data / Desert Storm); picking a group filters the tab bar down to just that
   // group's tabs and activates the first one. "← All groups" returns to the picker.
-  const GROUPS = { alliance: ["thp", "kills", "fsp", "techdonation", "techdonationhistory", "techformermembers"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance"], waaaaar: ["busterday", "busterhistory", "warzone", "formermembers"] };
+  const GROUPS = { alliance: ["thp", "kills", "fsp", "techdonation", "techdonationhistory", "techformermembers"], server: ["server200", "serverkills", "alliances"], dsb: ["dsb", "attendance", "dsformermembers"], waaaaar: ["busterday", "busterhistory", "warzone", "formermembers"] };
   const groupSelectEl = document.getElementById("groupSelect");
   const dataViewEl = document.getElementById("dataView");
 
