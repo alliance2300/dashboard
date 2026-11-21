@@ -3517,7 +3517,8 @@
     `${new Set(desertStorm.map(r => r[4])).size} players · ${[...new Set(desertStorm.map(r => `${r[0]}|${r[2]}`))].length} battle(s) logged`;
 
   const attendanceRowsEl = document.getElementById("attendanceRows");
-  const attendanceData = buildAttendance();
+  // Filled further down (after formerMembers / dsFormerAliases exist): Attendance lists current members only.
+  const attendanceData = [];
   let attendanceSortKey = "no";
   let attendanceSortDir = "desc";
 
@@ -4733,6 +4734,11 @@
     return [...byPlayer.entries()].map(([player, rec]) => ({ player, ...rec, reported: rec.yes + rec.no }));
   }
   const dsFormerMembersData = buildDsFormerMembers();
+  // Attendance = current members only; players who left are shown in the Desert Storm "No Longer a Member" tab.
+  attendanceData.push(...buildAttendance().filter(a => !formerMembers.has(dsFormerAliases[a.player] || a.player)));
+  document.getElementById("attendancePanelSub").textContent =
+    `${attendanceData.length} current players · ${[...new Set(desertStorm.map(r => `${r[0]}|${r[2]}`))].length} battle(s) logged`;
+  renderAttendanceRows();
   const dsFormerMembersRowsEl = document.getElementById("dsFormerMembersRows");
   let dsFormerSortKey = "yes";
   let dsFormerSortDir = "desc";
